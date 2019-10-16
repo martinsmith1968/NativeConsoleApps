@@ -1,0 +1,71 @@
+﻿#pragma once
+#include "stdafx.h"
+
+#ifndef DNX_APP_OPTION
+#define DNX_APP_OPTION
+
+#include "DNXOptionType.h"
+#include "DNXValueType.h"
+
+// ReSharper disable CppInconsistentNaming
+
+using namespace std;
+using namespace DNX::App;
+
+namespace DNX {
+    namespace App {
+        //--------------------------------------------------------------------------
+        // Class: AppOption
+        //--------------------------------------------------------------------------
+        class AppOption {
+            OptionType _optionType;
+            ValueType _valueType;
+            string _shortName;
+            string _longName;
+            string _description;
+            string _defaultValue;
+            bool _required;
+            int _position;
+            list<string> _valueList{};
+
+        protected:
+            OptionTypeText OptionTypeTextHelper;
+
+        public:
+            bool IsEmpty() const;
+
+            OptionType GetOptionType() const;
+            ValueType GetValueType() const;
+            string GetShortName() const;
+            string GetLongName() const;
+            string GetDescription() const;
+            string GetDefaultValue() const;
+            bool GetRequired() const;
+            int GetPosition() const;
+            list<string> GetValueList() const;
+
+            bool HasLongName() const;
+            string GetNameDescription() const;
+
+            AppOption();
+
+            AppOption(
+                OptionType optionType,
+                ValueType valueType,
+                int position,
+                string shortName,
+                string longName = "",
+                string description = "",
+                string defaultValue = "",
+                bool required = false,
+                list<string> valueList = list<string>()
+            );
+
+            static AppOption& Empty();
+            static bool CompareByPosition(const AppOption& first, const AppOption& second);
+            static bool CompareByTypeAndPosition(const AppOption& first, const AppOption& second);
+        };
+    }
+}
+
+#endif // DNX_APP_OPTION
