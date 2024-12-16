@@ -24,9 +24,9 @@ namespace DNX {
             string GetName() const;
             bool GetValue() const;
 
-            AppOptionsSwitchValue(string name, bool value);
+            AppOptionsSwitchValue(const string& name, bool value);
 
-            static AppOptionsSwitchValue ParseSwitchDetails(string optionName);
+            static AppOptionsSwitchValue ParseSwitchDetails(const string& optionName);
         };
     }
 }

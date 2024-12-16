@@ -20,22 +20,22 @@ namespace DNX {
         //--------------------------------------------------------------------------
         class ValueConverter {
         public:
-            static bool IsValueValid(string value, ValueType valueType);
+            static bool IsValueValid(const string& value, ValueType valueType);
 
-            static bool IsChar(string value);
-            static bool IsBool(string value);
-            static bool IsInt(string value);
-            static bool IsDouble(string value);
-            static bool IsEnum(string value);
-            static bool IsDate(string value);
-            static bool IsDateTime(string value);
+            static bool IsChar(const string& value);
+            static bool IsBool(const string& value);
+            static bool IsInt(const string& value);
+            static bool IsDouble(const string& value);
+            static bool IsEnum(const string& value);
+            static bool IsDate(const string& value);
+            static bool IsDateTime(const string& value);
 
-            static char ToChar(string value);
-            static bool ToBool(string value);
-            static int ToInt(string value);
-            static double ToDouble(string value);
-            static bool ToDate(string value, tm* date);
-            static bool ToDateTime(string value, tm* datetime);
+            static char ToChar(const string& value);
+            static bool ToBool(const string& value);
+            static int ToInt(const string& value);
+            static double ToDouble(const string& value);
+            static bool ToDate(const string& value, tm* date);
+            static bool ToDateTime(const string& value, tm* datetime);
         };
     }
 }

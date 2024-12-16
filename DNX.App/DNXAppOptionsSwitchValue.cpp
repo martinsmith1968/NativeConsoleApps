@@ -14,12 +14,12 @@ bool AppOptionsSwitchValue::GetValue() const {
     return _value;
 }
 
-AppOptionsSwitchValue::AppOptionsSwitchValue(const string name, const bool value) {
+AppOptionsSwitchValue::AppOptionsSwitchValue(const string& name, const bool value) {
     _name  = name;
     _value = value;
 }
 
-AppOptionsSwitchValue AppOptionsSwitchValue::ParseSwitchDetails(const string optionName) {
+AppOptionsSwitchValue AppOptionsSwitchValue::ParseSwitchDetails(const string& optionName) {
     auto realName = optionName;
     auto value = true;
 

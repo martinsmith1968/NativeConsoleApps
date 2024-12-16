@@ -8,11 +8,11 @@ using namespace std;
 namespace DNX {
     namespace Utils {
         namespace ListUtils {
-            list<string> ToList(const char* arr[]) {
+            list<string> ToList(const char* array[]) {
                 list<string> list;
 
-                for (auto i = 0; i < sizeof(arr); ++i) {
-                    list.push_back(arr[i]);
+                for (auto i = 0; i < sizeof(array); ++i) {
+                    list.push_back(array[i]);
                 }
 
                 return list;

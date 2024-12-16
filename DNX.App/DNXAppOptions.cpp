@@ -24,7 +24,7 @@ void AppOptions::PostParseValidate() {
 
 }
 
-void AppOptions::AddError(const string text) {
+void AppOptions::AddError(const string& text) {
     _errors.push_back(text);
 }
 
@@ -34,7 +34,7 @@ list<AppOption> AppOptions::GetOptions() {
     return GetOptionsByTypes(types);
 }
 
-AppOption& AppOptions::GetOptionByLongName(const string longName) {
+AppOption& AppOptions::GetOptionByLongName(const string& longName) {
     for (auto iter = _options.begin(); iter != _options.end(); ++iter) {
         if (iter->second.HasLongName() && iter->second.GetLongName() == longName) {
             return iter->second;
@@ -44,14 +44,14 @@ AppOption& AppOptions::GetOptionByLongName(const string longName) {
     return AppOption::Empty();
 }
 
-AppOption& AppOptions::GetOptionByShortName(const string shortName) {
+AppOption& AppOptions::GetOptionByShortName(const string& shortName) {
     auto iter = _options.find(shortName);
     return iter == _options.end()
         ? AppOption::Empty()
         : iter->second;
 }
 
-AppOption& AppOptions::GetOptionByName(const string name) {
+AppOption& AppOptions::GetOptionByName(const string& name) {
     auto& property = GetOptionByShortName(name);
     if (!property.IsEmpty())
         return property;
@@ -71,7 +71,7 @@ list<AppOption> AppOptions::GetOptionsByType(const OptionType optionType) {
     return filtered;
 }
 
-list<AppOption> AppOptions::GetOptionsByTypes(const list<OptionType> optionTypes) {
+list<AppOption> AppOptions::GetOptionsByTypes(const list<OptionType>& optionTypes) {
     list<AppOption> filtered;
 
     for (auto iter = _options.begin(); iter != _options.end(); ++iter) {
@@ -97,7 +97,7 @@ list<AppOption> AppOptions::GetRequiredOptions() {
     return filtered;
 }
 
-string AppOptions::GetOptionValue(const string name) {
+string AppOptions::GetOptionValue(const string& name) {
     const auto option = GetOptionByName(name);
     if (option.IsEmpty())
         throw exception((string("Unknown Option: ") + name).c_str());
@@ -109,7 +109,7 @@ string AppOptions::GetOptionValue(const string name) {
     return option.GetDefaultValue();
 }
 
-void AppOptions::SetOptionValue(const string name, const string value) {
+void AppOptions::SetOptionValue(const string& name, const string& value) {
     const auto option = GetOptionByName(name);
     if (option.IsEmpty())
         throw exception((string("Unknown Option: ") + name).c_str());
@@ -117,7 +117,7 @@ void AppOptions::SetOptionValue(const string name, const string value) {
     _values[option.GetShortName()] = value;
 }
 
-bool AppOptions::HasOptionValue(const string name) {
+bool AppOptions::HasOptionValue(const string& name) {
     const auto option = GetOptionByName(name);
     if (option.IsEmpty())
         throw exception((string("Unknown Option: ") + name).c_str());
@@ -128,13 +128,13 @@ bool AppOptions::HasOptionValue(const string name) {
 void AppOptions::AddOptionWithValues(
     const OptionType optionType,
     const ValueType valueType,
-    const string shortName,
-    const string longName,
-    const string defaultValue,
-    const string description,
+    const string& shortName,
+    const string& longName,
+    const string& defaultValue,
+    const string& description,
     const bool required,
     const int position,
-    const string valueListText
+    const string& valueListText
 )
 {
     auto valueList = list<string>();
@@ -149,13 +149,13 @@ void AppOptions::AddOptionWithValues(
 void AppOptions::AddOption(
     const OptionType optionType,
     const ValueType valueType,
-    const string shortName,
-    const string longName,
-    const string defaultValue,
-    const string description,
+    const string& shortName,
+    const string& longName,
+    const string& defaultValue,
+    const string& description,
     const bool required,
     const int position,
-    const list<string> valueList
+    const list<string>& valueList
 )
 {
     if (!GetOptionByShortName(shortName).IsEmpty())

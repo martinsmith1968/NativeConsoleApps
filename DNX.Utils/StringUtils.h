@@ -23,13 +23,13 @@ namespace DNX {
             string ToLower(string text);
             string ToUpper(string text);
 
-            string Left(string text, size_t length);
-            string Right(string text, size_t length);
+            string Left(const string& text, size_t length);
+            string Right(const string& text, size_t length);
 
             string BoolToString(bool value);
 
             list<string> SplitText(const string& str, char splitChar = ',', char trimChar = NULL);
-            string JoinText(const list<string>& list, const string& delim);
+            string JoinText(const list<string>& list, const string& delimiter);
 
             bool StartsWith(const string& str, const string& prefix);
             bool EndsWith(const string& str, const string& suffix);

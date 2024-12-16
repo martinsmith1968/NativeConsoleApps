@@ -60,11 +60,11 @@ string StringUtils::ToUpper(string text) {
     return text;
 }
 
-string StringUtils::Left(string text, const size_t length) {
+string StringUtils::Left(const string& text, const size_t length) {
     return text.substr(0, length);
 }
 
-string StringUtils::Right(string text, const size_t length) {
+string StringUtils::Right(const string& text, const size_t length) {
     return text.substr(text.length() - length, string::npos);
 }
 
@@ -96,14 +96,14 @@ list<string> StringUtils::SplitText(const string& str, const char splitChar, con
     return list;
 }
 
-string StringUtils::JoinText(const list<string>& list, const string& delim)
+string StringUtils::JoinText(const list<string>& list, const string& delimiter)
 {
     ostringstream ss;
 
     for (auto iter = list.begin(); iter != list.end(); ++iter)
     {
         if (iter != list.begin()) {
-            ss << delim;
+            ss << delimiter;
         }
 
         ss << *iter;

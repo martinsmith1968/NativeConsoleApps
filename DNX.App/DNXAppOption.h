@@ -53,12 +53,12 @@ namespace DNX {
                 OptionType optionType,
                 ValueType valueType,
                 int position,
-                string shortName,
-                string longName = "",
-                string description = "",
-                string defaultValue = "",
+                const string& shortName,
+                const string& longName = "",
+                const string& description = "",
+                const string& defaultValue = "",
                 bool required = false,
-                list<string> valueList = list<string>()
+                const list<string>& valueList = list<string>()
             );
 
             static AppOption& Empty();

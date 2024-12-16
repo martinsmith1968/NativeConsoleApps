@@ -30,42 +30,42 @@ namespace DNX {
 
             void virtual PostParseValidate();
 
-            void AddError(string text);
+            void AddError(const string& text);
             void AddOptionWithValues(
                 OptionType optionType,
                 ValueType valueType,
-                string shortName,
-                string longName = "",
-                string defaultValue = "",
-                string description = "",
+                const string& shortName,
+                const string& longName = "",
+                const string& defaultValue = "",
+                const string& description = "",
                 bool required = false,
                 int position = 0,
-                string valueListText = ""
+                const string& valueListText = ""
             );
             void AddOption(
                 OptionType optionType,
                 ValueType valueType,
-                string shortName,
-                string longName = "",
-                string defaultValue = "",
-                string description = "",
+                const string& shortName,
+                const string& longName = "",
+                const string& defaultValue = "",
+                const string& description = "",
                 bool required = false,
                 int position = 0,
-                list<string> valueList = list<string>()
+                const list<string>& valueList = list<string>()
             );
 
             list<AppOption> GetOptions();
-            AppOption& GetOptionByLongName(string longName);
-            AppOption& GetOptionByShortName(string shortName);
-            AppOption& GetOptionByName(string name);
+            AppOption& GetOptionByLongName(const string& longName);
+            AppOption& GetOptionByShortName(const string& shortName);
+            AppOption& GetOptionByName(const string& name);
             list<AppOption> GetOptionsByType(OptionType optionType);
-            list<AppOption> GetOptionsByTypes(list<OptionType> optionTypes);
+            list<AppOption> GetOptionsByTypes(const list<OptionType>& optionTypes);
 
             list<AppOption> GetRequiredOptions();
 
-            string GetOptionValue(string name);
-            void SetOptionValue(string name, string value);
-            bool HasOptionValue(string name);
+            string GetOptionValue(const string& name);
+            void SetOptionValue(const string& name, const string& value);
+            bool HasOptionValue(const string& name);
 
             friend class AppOptionsParser;
 

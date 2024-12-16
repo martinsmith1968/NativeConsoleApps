@@ -69,12 +69,12 @@ AppOption::AppOption(
     const OptionType optionType,
     const ValueType valueType,
     const int position,
-    const string shortName,
-    const string longName,
-    const string description,
-    const string defaultValue,
+    const string& shortName,
+    const string& longName,
+    const string& description,
+    const string& defaultValue,
     const bool required,
-    const list<string> valueList
+    const list<string>& valueList
 )
 {
     _optionType    = optionType;
