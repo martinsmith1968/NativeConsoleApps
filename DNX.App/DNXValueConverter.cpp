@@ -12,7 +12,7 @@ using namespace DNX::Utils::StringUtils;
 // ReSharper disable CppInconsistentNaming
 // ReSharper disable IdentifierTypo
 
-bool ValueConverter::IsValueValid(const string value, const ValueType valueType)
+bool ValueConverter::IsValueValid(const string& value, const ValueType valueType)
 {
     switch (valueType)
     {
@@ -37,18 +37,18 @@ bool ValueConverter::IsValueValid(const string value, const ValueType valueType)
     }
 }
 
-bool ValueConverter::IsChar(const string value)
+bool ValueConverter::IsChar(const string& value)
 {
     return !value.empty() && value.length() == 1;
 }
 
-bool ValueConverter::IsBool(const string value)
+bool ValueConverter::IsBool(const string& value)
 {
     return !value.empty()
         && (ToLower(value) == "true" || ToLower(value) == "false");
 }
 
-bool ValueConverter::IsInt(const string value)
+bool ValueConverter::IsInt(const string& value)
 {
     if (value.empty() || ((!isdigit(value[0])) && (value[0] != '-') && (value[0] != '+')))
         return false;
@@ -59,7 +59,7 @@ bool ValueConverter::IsInt(const string value)
     return (p != value.c_str());
 }
 
-bool ValueConverter::IsDouble(const string value)
+bool ValueConverter::IsDouble(const string& value)
 {
     if (value.empty() || ((!isdigit(value[0])) && (value[0] != '-') && (value[0] != '+')))
         return false;
@@ -70,29 +70,29 @@ bool ValueConverter::IsDouble(const string value)
     return (p != value.c_str());
 }
 
-bool ValueConverter::IsEnum(const string value)
+bool ValueConverter::IsEnum(const string& value)
 {
     return !value.empty() || IsInt(value);
 }
 
-bool ValueConverter::IsDate(const string value)
+bool ValueConverter::IsDate(const string& value)
 {
     tm temp;
     return ToDate(value, &temp);
 }
 
-bool ValueConverter::IsDateTime(const string value)
+bool ValueConverter::IsDateTime(const string& value)
 {
     tm temp;
     return ToDateTime(value, &temp);
 }
 
-char ValueConverter::ToChar(const string value)
+char ValueConverter::ToChar(const string& value)
 {
     return value.at(0);
 }
 
-bool ValueConverter::ToBool(const string value)
+bool ValueConverter::ToBool(const string& value)
 {
     if (ToLower(value) == "true")
         return true;
@@ -102,12 +102,12 @@ bool ValueConverter::ToBool(const string value)
     throw exception((string("Invalid boolean value: ") + value).c_str());
 }
 
-int ValueConverter::ToInt(const string value)
+int ValueConverter::ToInt(const string& value)
 {
     return stoi(value);
 }
 
-double ValueConverter::ToDouble(const string value)
+double ValueConverter::ToDouble(const string& value)
 {
     return stod(value);
 }
@@ -145,7 +145,7 @@ list<string> time_formats
     "%X",
 };
 
-bool ValueConverter::ToDate(const string value, tm* date)
+bool ValueConverter::ToDate(const string& value, tm* date)
 {
     tm parsed;
 
@@ -162,7 +162,7 @@ bool ValueConverter::ToDate(const string value, tm* date)
     return false;
 }
 
-bool ValueConverter::ToDateTime(const string value, tm* datetime)
+bool ValueConverter::ToDateTime(const string& value, tm* datetime)
 {
     tm parsed;
 

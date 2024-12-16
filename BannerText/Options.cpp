@@ -10,6 +10,7 @@ using namespace DNX::App;
 using namespace DNX::Utils::StringUtils;
 
 // ReSharper disable CppInconsistentNaming
+// ReSharper disable StringLiteralTypo
 
 enum class TextAlignmentType
 {

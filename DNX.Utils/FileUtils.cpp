@@ -12,7 +12,7 @@ using namespace DNX::Utils;
 //--------------------------------------------------------------------------
 // Class: FileUtils
 //--------------------------------------------------------------------------
-string FileUtils::GetFileNameOnly(const string filePath)
+string FileUtils::GetFileNameOnly(const string& filePath)
 {
     auto fileName = GetFileNameAndExtension(filePath);
 
@@ -25,7 +25,7 @@ string FileUtils::GetFileNameOnly(const string filePath)
     return fileName;
 }
 
-string FileUtils::GetFileNameAndExtension(const string filePath)
+string FileUtils::GetFileNameAndExtension(const string& filePath)
 {
     auto fileName = filePath;
 
@@ -38,7 +38,7 @@ string FileUtils::GetFileNameAndExtension(const string filePath)
     return fileName;
 }
 
-string FileUtils::ChangeFileExtension(const string filePath, const string fileExtension)
+string FileUtils::ChangeFileExtension(const string& filePath, const string& fileExtension)
 {
     auto fileName = filePath;
 

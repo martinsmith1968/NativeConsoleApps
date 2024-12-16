@@ -29,7 +29,7 @@ void AppOptionsParser::ParseLocalOptionsFile(AppOptions& options)
     ParseOptionsFile(options, localOptionsFileName);
 }
 
-void AppOptionsParser::ParseOptionsFile(AppOptions& options, const string fileName)
+void AppOptionsParser::ParseOptionsFile(AppOptions& options, const string& fileName)
 {
     string optionName = "";
     auto parameter    = 0;
@@ -203,7 +203,7 @@ void AppOptionsParser::ParseSingleArg(string arg, AppOptions& options, string& o
     optionName = "";
 }
 
-list<string> AppOptionsParser::ReadLinesFromFile(const string fileName, AppOptions& options)
+list<string> AppOptionsParser::ReadLinesFromFile(const string& fileName, AppOptions& options)
 {
     list<string> lines;
 
@@ -363,7 +363,7 @@ void AppOptionsParser::ShowErrors(const AppOptions& options)
     }
 }
 
-bool AppOptionsParser::HandleParameter(AppOptions& options, const int position, string value)
+bool AppOptionsParser::HandleParameter(AppOptions& options, const int position, const string& value)
 {
     const auto optionName = to_string(position);
 
@@ -383,7 +383,7 @@ bool AppOptionsParser::HandleParameter(AppOptions& options, const int position, 
     return true;
 }
 
-void AppOptionsParser::HandleOption(AppOptions& options, const string optionName, const string value)
+void AppOptionsParser::HandleOption(AppOptions& options, const string& optionName, const string& value)
 {
     const auto option = options.GetOptionByShortName(optionName);
     if (option.IsEmpty())
@@ -399,7 +399,7 @@ void AppOptionsParser::HandleOption(AppOptions& options, const string optionName
     options.SetOptionValue(optionName, value);
 }
 
-bool AppOptionsParser::HandleSwitch(AppOptions& options, const string optionName, const bool switchOn)
+bool AppOptionsParser::HandleSwitch(AppOptions& options, const string& optionName, const bool switchOn)
 {
     const auto option = options.GetOptionByShortName(optionName);
     if (option.IsEmpty())
