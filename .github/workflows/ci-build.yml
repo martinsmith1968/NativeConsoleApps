@@ -187,13 +187,22 @@ jobs:
       run: |
         Copy-Item "README.md" "Output\\${{ env.BUILD_PLATFORM }}\\${{ env.BUILD_CONFIG }}"
 
+    - name: Compress Artifact
+      uses: OctopusDeploy/create-zip-package-action@v3
+      with:
+        package_id: ${{ env.PROJECT_NAME }}.${{ env.BUILD_PLATFORM }}
+        version: v${{ needs.setup.outputs.executable_version }}
+        output_folder: Output
+        base_path: Output/${{ env.BUILD_PLATFORM }}/${{ env.BUILD_CONFIG }}
+        files: |
+          *.exe
+          *.md
+
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v4
       with:
         name: build_output
-        path: |
-          Output\\${{ env.BUILD_PLATFORM }}\\${{ env.BUILD_CONFIG }}\\*.md
-          Output\\${{ env.BUILD_PLATFORM }}\\${{ env.BUILD_CONFIG }}\\*.exe
+        path: Output\\*.zip
         if-no-files-found: error
 
 
@@ -255,3 +264,4 @@ jobs:
         draft: ${{ needs.setup.outputs.release_is_draft }}
         prerelease: ${{ needs.setup.outputs.release_is_prerelease }}
         removeArtifacts: true
+        artifacts: '**/*.zip'
