@@ -183,13 +183,18 @@ jobs:
     - name: Build (${{ env.BUILD_CONFIG }})
       run: msbuild NativeConsoleApplications.sln -t:Rebuild -p:Configuration=${{ env.BUILD_CONFIG }} -p:"Platform=${{ env.BUILD_PLATFORM }}" -p:"Version=${{ needs.setup.outputs.product_version }}"
 
+    - name: Add files to output folder
+      run: |
+        Set-Location "${{ env.PROJECT_NAME}}\\${{ env.PROJECT_NAME}}\\"
+
+        Copy-Item "README.md" "Output\\${{ env.BUILD_PLATFORM }}\\${{ env.BUILD_CONFIG }}"
+
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v4
       with:
         name: build_output
         path: |
-          README.md
-          Output\\${{ env.BUILD_PLATFORM }}\\${{ env.BUILD_CONFIG }}\\*.exe
+          Output\\${{ env.BUILD_PLATFORM }}\\${{ env.BUILD_CONFIG }}\\*
         if-no-files-found: error
 
 
