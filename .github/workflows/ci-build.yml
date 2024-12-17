@@ -3,7 +3,8 @@ run-name: CIBuild_${{ github.event_name }}_${{ github.ref_name }}_${{ github.run
 
 env:
   PRIMARY_BRANCH_NAME: master
-  APP_MAJOR_VERSION: 1.1
+  APP_MAJOR_VERSION: 1
+  APP_MINOR_VERSION: 2
   PROJECT_NAME: NativeConsoleApps
   BUILD_CONFIG: Release
   BUILD_PLATFORM: x64
@@ -36,7 +37,9 @@ jobs:
 
     steps:
     - name: Get Current Build Date
-      run: echo "build_date=$(date +'%y%j')" >> $GITHUB_ENV
+      run: |
+        echo "build_date=$(date +'%y%j')" >> $GITHUB_ENV
+        echo "build_year=$(date +'%Y')" >> $GITHUB_ENV
 
     - name: Evaluate pipeline conditions
       run: |
@@ -111,21 +114,19 @@ jobs:
         echo "release_is_prerelease=${release_is_prerelease}" >> $GITHUB_ENV
 
     - name: Set Product Version
-      run: echo "product_version=${{ env.APP_MAJOR_VERSION }}" >> $GITHUB_ENV
+      run: echo "product_version=${{ env.APP_MAJOR_VERSION }}.${{ env.APP_MINOR_VERSION }}" >> $GITHUB_ENV
 
-    - name: Set Assembly Version
-      run: echo "assembly_version=${{ env.APP_MAJOR_VERSION }}.${{ env.build_date }}.${{ github.run_number }}${{ github.run_attempt }}" >> $GITHUB_ENV
-
-    - name: Set Package Version
-      run: echo "package_version=${{ env.assembly_version }}${{ env.package_suffix }}" >> $GITHUB_ENV
+    - name: Set Executable Version
+      run: echo "executable_version=${{ env.APP_MAJOR_VERSION }}.${{ env.APP_MINOR_VERSION }}.${{ env.build_date }}.${{ github.run_number }}${{ github.run_attempt }}" >> $GITHUB_ENV
 
     - name: Show Configuration
       run: env | sort
 
     outputs:
-      assembly_version: ${{ env.assembly_version }}
+      build_date: ${{ env.build_date }}
+      build_year: ${{ env.build_year }}
+      executable_version: ${{ env.executable_version }}
       product_version: ${{ env.product_version }}
-      package_version: ${{ env.package_version }}
       should_tag: ${{ env.should_tag }}
       should_publish: ${{ env.should_publish }}
       should_release: ${{ env.should_release }}
@@ -146,19 +147,53 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
+    - name: Write Version Header file
+      run: |
+        Write-Host "Starting in : $((Get-Location).Path)"
+        Write-Host ""
+
+        $filenames = @( "BannerText/Version.h", "PauseN/Version.h" )
+
+        foreach ($filename in $filenames) {
+            Write-Host "------------------------------------------------------------"
+            Write-Host "Handling: ${filename}"
+
+            Write-Host ""
+            Write-Host "Before"
+            Get-Content $filename
+
+            ''                                                                  | Out-File $filename
+            '#pragma once'                                                      | Add-Content $filename
+            ''                                                                  | Add-Content $filename
+            '#define VERSION_MAJOR       ${{ env.APP_MAJOR_VERSION }}'          | Add-Content $filename
+            '#define VERSION_MINOR       ${{ env.APP_MINOR_VERSION }}'          | Add-Content $filename
+            '#define VERSION_REVISION    ${{ needs.setup.outputs.build_date }}' | Add-Content $filename
+            '#define VERSION_BUILD       ${{ github.run_number }}'              | Add-Content $filename
+            ''                                                                  | Add-Content $filename
+            '#define COPYRIGHT_YEAR      ${{ needs.setup.outputs.build_year }}' | Add-Content $filename
+
+            Write-Host ""
+            Write-Host "After"
+            Get-Content $filename
+        }
+
     - name: Setup msbuild
       uses: microsoft/setup-msbuild@v2
 
     - name: Build (${{ env.BUILD_CONFIG }})
       run: msbuild NativeConsoleApplications.sln -t:Rebuild -p:Configuration=${{ env.BUILD_CONFIG }} -p:"Platform=${{ env.BUILD_PLATFORM }}" -p:"Version=${{ needs.setup.outputs.product_version }}"
 
+    - name: Add files to output folder
+      run: |
+        Copy-Item "README.md" "Output\\${{ env.BUILD_PLATFORM }}\\${{ env.BUILD_CONFIG }}"
+
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v4
       with:
         name: build_output
         path: |
-            README.md
-            "${{ env.BUILD_PLATFORM }}\\${{ env.BUILD_CONFIG }}\\*.exe"
+          Output\\${{ env.BUILD_PLATFORM }}\\${{ env.BUILD_CONFIG }}\\*.md
+          Output\\${{ env.BUILD_PLATFORM }}\\${{ env.BUILD_CONFIG }}\\*.exe
         if-no-files-found: error
 
 
@@ -182,7 +217,7 @@ jobs:
         github_repo: ${{ github.repository }}
         git_commit_sha: ${{ github.sha }}
         git_tag_prefix: "v"
-        version: ${{ needs.setup.outputs.assembly_version }}
+        version: ${{ needs.setup.outputs.executable_version }}
 
 
   ##########################################################
@@ -214,8 +249,8 @@ jobs:
     - name: Create Release
       uses: ncipollo/release-action@v1
       with:
-        tag: v${{ needs.setup.outputs.assembly_version }}
-        name: Release ${{ needs.setup.outputs.assembly_version }}
+        tag: v${{ needs.setup.outputs.executable_version }}
+        name: Release ${{ needs.setup.outputs.executable_version }}
         body: ${{ steps.build_changelog.outputs.changelog }}
         draft: ${{ needs.setup.outputs.release_is_draft }}
         prerelease: ${{ needs.setup.outputs.release_is_prerelease }}

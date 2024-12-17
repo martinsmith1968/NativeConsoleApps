@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "../DNX.App/DNXAppDetails.h"
-#include "Version.h"
+#include "AppInfo.h"
 
 using namespace DNX::App;
 
