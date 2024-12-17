@@ -254,4 +254,4 @@ jobs:
         body: ${{ steps.build_changelog.outputs.changelog }}
         draft: ${{ needs.setup.outputs.release_is_draft }}
         prerelease: ${{ needs.setup.outputs.release_is_prerelease }}
-        removeArtifacts: true
+        #removeArtifacts: true
