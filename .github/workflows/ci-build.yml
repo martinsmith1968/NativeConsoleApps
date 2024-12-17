@@ -185,8 +185,6 @@ jobs:
 
     - name: Add files to output folder
       run: |
-        Set-Location "${{ env.PROJECT_NAME}}\\${{ env.PROJECT_NAME}}\\"
-
         Copy-Item "README.md" "Output\\${{ env.BUILD_PLATFORM }}\\${{ env.BUILD_CONFIG }}"
 
     - name: Upload Build Artifact
