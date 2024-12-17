@@ -3,7 +3,8 @@ run-name: CIBuild_${{ github.event_name }}_${{ github.ref_name }}_${{ github.run
 
 env:
   PRIMARY_BRANCH_NAME: master
-  APP_MAJOR_VERSION: 1.1
+  APP_MAJOR_VERSION: 1
+  APP_MINOR_VERSION: 2
   PROJECT_NAME: NativeConsoleApps
   BUILD_CONFIG: Release
   BUILD_PLATFORM: x64
@@ -36,7 +37,9 @@ jobs:
 
     steps:
     - name: Get Current Build Date
-      run: echo "build_date=$(date +'%y%j')" >> $GITHUB_ENV
+      run: |
+        echo "build_date=$(date +'%y%j')" >> $GITHUB_ENV
+        echo "build_year=$(date +'%Y')" >> $GITHUB_ENV
 
     - name: Evaluate pipeline conditions
       run: |
@@ -111,21 +114,36 @@ jobs:
         echo "release_is_prerelease=${release_is_prerelease}" >> $GITHUB_ENV
 
     - name: Set Product Version
-      run: echo "product_version=${{ env.APP_MAJOR_VERSION }}" >> $GITHUB_ENV
+      run: echo "product_version=${{ env.APP_MAJOR_VERSION }}.${{ env.APP_MINOR_VERSION }}" >> $GITHUB_ENV
 
-    - name: Set Assembly Version
-      run: echo "assembly_version=${{ env.APP_MAJOR_VERSION }}.${{ env.build_date }}.${{ github.run_number }}${{ github.run_attempt }}" >> $GITHUB_ENV
+    - name: Set Executable Version
+      run: echo "executable_version=${{ env.APP_MAJOR_VERSION }}.${{ env.APP_MINOR_VERSION }}.${{ env.build_date }}.${{ github.run_number }}${{ github.run_attempt }}" >> $GITHUB_ENV
 
-    - name: Set Package Version
-      run: echo "package_version=${{ env.assembly_version }}${{ env.package_suffix }}" >> $GITHUB_ENV
+    - name: Write Version Header file
+      run: |
+        filename="BannerText/Version.h"
+
+        echo "Before"
+        cat $filename
+
+        echo '#pragma once' > $filename
+        echo '' >> $filename
+        echo '#define VERSION_MAJOR       ${{ env.APP_MAJOR_VERSION }}' >> $filename
+        echo '#define VERSION_MINOR       ${{ env.APP_MINOR_VERSION }}' >> $filename
+        echo '#define VERSION_REVISION    ${{ env.build_date }}' >> $filename
+        echo '#define VERSION_BUILD       ${{ github.run_number }}' >> $filename
+        echo '' >> $filename >> $filename
+        echo '#define COPYRIGHT_YEAR      ${{ env.build_year }}' >> $filename
+
+        echo "After"
+        cat $filename
 
     - name: Show Configuration
       run: env | sort
 
     outputs:
-      assembly_version: ${{ env.assembly_version }}
+      executable_version: ${{ env.executable_version }}
       product_version: ${{ env.product_version }}
-      package_version: ${{ env.package_version }}
       should_tag: ${{ env.should_tag }}
       should_publish: ${{ env.should_publish }}
       should_release: ${{ env.should_release }}
@@ -182,7 +200,7 @@ jobs:
         github_repo: ${{ github.repository }}
         git_commit_sha: ${{ github.sha }}
         git_tag_prefix: "v"
-        version: ${{ needs.setup.outputs.assembly_version }}
+        version: ${{ needs.setup.outputs.executable_version }}
 
 
   ##########################################################
@@ -214,8 +232,8 @@ jobs:
     - name: Create Release
       uses: ncipollo/release-action@v1
       with:
-        tag: v${{ needs.setup.outputs.assembly_version }}
-        name: Release ${{ needs.setup.outputs.assembly_version }}
+        tag: v${{ needs.setup.outputs.executable_version }}
+        name: Release ${{ needs.setup.outputs.executable_version }}
         body: ${{ steps.build_changelog.outputs.changelog }}
         draft: ${{ needs.setup.outputs.release_is_draft }}
         prerelease: ${{ needs.setup.outputs.release_is_prerelease }}
