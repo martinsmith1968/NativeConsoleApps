@@ -14,7 +14,7 @@ env:
 on:
   push:
     branches:
-      - ${{ env.PRIMARY_BRANCH_NAME }}
+      - master
       - rc/**
       - feature/**
       - task/**
@@ -22,7 +22,7 @@ on:
 
   pull_request:
     branches:
-      - ${{ env.PRIMARY_BRANCH_NAME }}
+      - master
 
   workflow_dispatch:
 
@@ -136,15 +136,15 @@ jobs:
   ## Build C++
   build-windows:
     name: Build - Windows
-    
+
     runs-on: windows-latest
-    
+
     steps:
     - name: Checkout
       uses: actions/checkout@v4
 
     - name: Setup msbuild
-      uses: microsoft/setup-msbuild@v2    
+      uses: microsoft/setup-msbuild@v2
 
     - name: Build (${{ env.BUILD_CONFIG }})
       run: msbuild NativeConsoleApplications.sln -t:Rebuild -p:Configuration=${{ env.BUILD_CONFIG }} -p:"Platform=${{ env.BUILD_PLATFORM }}" -p:"Version=${{ needs.setup.outputs.product_version }}"
