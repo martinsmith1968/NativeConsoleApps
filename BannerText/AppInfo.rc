@@ -1,5 +1,6 @@
 #include <windows.h>
 #include "AppInfo.h"
+#include "BuildInfo.h"
 
 VS_VERSION_INFO VERSIONINFO
 FILEVERSION VERSION_MAJOR, VERSION_MINOR, VERSION_REVISION, VERSION_BUILD
@@ -26,6 +27,7 @@ BEGIN
             VALUE "OriginalFilename", VER_ORIGINAL_FILENAME_STR
             VALUE "ProductName",      VER_PRODUCTNAME_STR
             VALUE "ProductVersion",   VER_PRODUCT_VERSION_STR
+            VALUE "Comments",         VER_COMMENTS
         END
     END
 END
