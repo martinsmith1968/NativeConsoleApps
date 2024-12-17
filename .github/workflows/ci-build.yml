@@ -1,0 +1,215 @@
+name: CI Build
+run-name: CIBuild_${{ github.event_name }}_${{ github.ref_name }}_${{ github.run_number }}.${{ github.run_attempt }}
+
+env:
+  PRIMARY_BRANCH_NAME: master
+  PKG_MAJOR_VERSION: 1.0
+  PROJECT_NAME: NativeConsoleApps
+  BUILD_CONFIG: Release
+  BUILD_PLATFORM: x64
+  BRANCH_PREFIX_RELEASE_CANDIDATE: rc/
+  BRANCH_PREFIX_PUBLISH_CANDIDATE: beta/
+  BRANCH_NAME_BENCHMARK_CANDIDATE: benchmark
+
+on:
+  push:
+    branches:
+      - ${{ env.PRIMARY_BRANCH_NAME }}
+      - rc/**
+      - feature/**
+      - task/**
+      - spike/**
+
+  pull_request:
+    branches:
+      - ${{ env.PRIMARY_BRANCH_NAME }}
+
+  workflow_dispatch:
+
+jobs:
+  ##########################################################
+  ## Pipeline Configuration and Setup
+  setup:
+    name: Setup Pipeline
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Get Current Build Date
+      run: echo "build_date=$(date +'%y%j')" >> $GITHUB_ENV
+
+    - name: Evaluate pipeline conditions
+      run: |
+        is_primary_branch=false
+        is_pull_request_build=false
+        is_release_candidate_branch=false
+        is_publish_candidate_branch=false
+
+        # Primary Branch ?
+        if [ "${{ github.ref }}" == 'refs/heads/${{ env.PRIMARY_BRANCH_NAME }}' ]
+        then
+          is_primary_branch=true
+        fi
+
+        # Pull Request ?
+        if [ "${{ github.event_name }}" == "pull_request" ]
+        then
+          is_pull_request_build=true
+        fi
+
+        # If Release Candidate branch ?
+        if [[ "${{ github.ref }}" == refs/heads/${{ env.BRANCH_PREFIX_RELEASE_CANDIDATE }}* ]]
+        then
+          is_release_candidate_branch=true
+        fi
+
+        # Is Publish Candidate branch ?
+        if [[ "${{ github.ref }}" == refs/heads/${{ env.BRANCH_PREFIX_PUBLISH_CANDIDATE }}* ]]
+        then
+          is_publish_candidate_branch=true
+        fi
+
+        # Set for later steps
+        echo "is_primary_branch=${is_primary_branch}" >> $GITHUB_ENV
+        echo "is_pull_request_build=${is_pull_request_build}" >> $GITHUB_ENV
+        echo "is_release_candidate_branch=${is_release_candidate_branch}" >> $GITHUB_ENV
+        echo "is_publish_candidate_branch=${is_publish_candidate_branch}" >> $GITHUB_ENV
+
+    - name: Determine Tagging
+      run: |
+        should_tag=false
+
+        if $is_primary_branch
+        then
+            should_tag=true
+        fi
+
+        echo "should_tag=${should_tag}" >> $GITHUB_ENV
+
+    - name: Determine GitHub Releasing
+      run: |
+        should_release=false
+        release_is_draft=false
+        release_is_prerelease=false
+
+        if $is_primary_branch
+        then
+            should_release=true
+        elif $is_release_candidate_branch
+        then
+            should_release=true
+            release_is_draft=true
+
+            if $is_pull_request_build; then
+              release_is_draft=false
+              release_is_prerelease=true
+            fi
+        fi
+
+        echo "should_release=${should_release}" >> $GITHUB_ENV
+        echo "release_is_draft=${release_is_draft}" >> $GITHUB_ENV
+        echo "release_is_prerelease=${release_is_prerelease}" >> $GITHUB_ENV
+
+    - name: Set Product Version
+      run: echo "product_version=${{ env.PKG_MAJOR_VERSION }}" >> $GITHUB_ENV
+
+    - name: Set Assembly Version
+      run: echo "assembly_version=${{ env.PKG_MAJOR_VERSION }}.${{ env.build_date }}.${{ github.run_number }}${{ github.run_attempt }}" >> $GITHUB_ENV
+
+    - name: Set Package Version
+      run: echo "package_version=${{ env.assembly_version }}${{ env.package_suffix }}" >> $GITHUB_ENV
+
+    - name: Show Configuration
+      run: env | sort
+
+    outputs:
+      assembly_version: ${{ env.assembly_version }}
+      product_version: ${{ env.product_version }}
+      package_version: ${{ env.package_version }}
+      should_tag: ${{ env.should_tag }}
+      should_publish: ${{ env.should_publish }}
+      should_release: ${{ env.should_release }}
+      release_is_draft: ${{ env.release_is_draft }}
+      release_is_prerelease: ${{ env.release_is_prerelease }}
+
+  ##########################################################
+  ## Build C++
+  build-windows:
+    name: Build - Windows
+    
+    runs-on: windows-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup msbuild
+      uses: microsoft/setup-msbuild@v2    
+
+    - name: Build (${{ env.BUILD_CONFIG }})
+      run: msbuild NativeConsoleApplications.sln -t:Rebuild -p:Configuration=${{ env.BUILD_CONFIG }} -p:"Platform=${{ env.BUILD_PLATFORM }}" -p:"Version=${{ needs.setup.outputs.product_version }}"
+
+    - name: Upload Build Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: build_output
+        path: "${{ env.BUILD_PLATFORM }}\\${{ env.BUILD_CONFIG }}\\*.exe"
+        if-no-files-found: error
+
+  ##########################################################
+  ## Tag in git
+  tag:
+    name: Tag in GitHub
+    if: needs.setup.outputs.should_tag == 'true'
+
+    needs:
+      - setup
+      - build-windows
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Tag git
+      uses: pkgdeps/git-tag-action@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        github_repo: ${{ github.repository }}
+        git_commit_sha: ${{ github.sha }}
+        git_tag_prefix: "v"
+        version: ${{ needs.setup.outputs.assembly_version }}
+
+  ##########################################################
+  ## Generate a GitHub Release
+  release:
+    name: Create GitHub Release
+    if: needs.setup.outputs.should_release == 'true'
+
+    needs:
+      - setup
+      - build-windows
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - uses: actions/download-artifact@v4
+      with:
+        name: build_output
+        path: build
+
+    - name: Build Changelog
+      uses: mikepenz/release-changelog-builder-action@v5
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Create Release
+      uses: ncipollo/release-action@v1
+      with:
+        tag: v${{ needs.setup.outputs.assembly_version }}
+        name: Release ${{ needs.setup.outputs.assembly_version }}
+        body: ${{ steps.build_changelog.outputs.changelog }}
+        draft: ${{ needs.setup.outputs.release_is_draft }}
+        prerelease: ${{ needs.setup.outputs.release_is_prerelease }}
+        removeArtifacts: true
