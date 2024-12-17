@@ -199,7 +199,7 @@ jobs:
         output_folder: Output
         base_path: .
         files: |
-          Output\\${{ env.BUILD_PLATFORM }}\\${{ env.BUILD_CONFIG }}\\*.exe
+          **\\Output\\${{ env.BUILD_PLATFORM }}\\${{ env.BUILD_CONFIG }}\\*.exe
           README.md
 
     - name: Upload Build Artifact
