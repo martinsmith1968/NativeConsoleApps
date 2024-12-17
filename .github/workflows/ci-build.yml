@@ -187,13 +187,17 @@ jobs:
       run: |
         Copy-Item "README.md" "Output\\${{ env.BUILD_PLATFORM }}\\${{ env.BUILD_CONFIG }}"
 
+    - name: Compress Artifact
+      uses: vimtor/action-zip@v1.2
+      with:
+        files: Output\\${{ env.BUILD_PLATFORM }}\\${{ env.BUILD_CONFIG }}\\
+        dest: Output\\${{ env.PROJECT_NAME }}.${{ env.BUILD_PLATFORM }}.v${{ needs.setup.outputs.executable_version }}.zip
+
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v4
       with:
         name: build_output
-        path: |
-          Output\\${{ env.BUILD_PLATFORM }}\\${{ env.BUILD_CONFIG }}\\*.md
-          Output\\${{ env.BUILD_PLATFORM }}\\${{ env.BUILD_CONFIG }}\\*.exe
+        path: Output\\*.zip
         if-no-files-found: error
 
 
@@ -254,4 +258,5 @@ jobs:
         body: ${{ steps.build_changelog.outputs.changelog }}
         draft: ${{ needs.setup.outputs.release_is_draft }}
         prerelease: ${{ needs.setup.outputs.release_is_prerelease }}
-        #removeArtifacts: true
+        removeArtifacts: true
+        artifacts: '**/*.zip'
