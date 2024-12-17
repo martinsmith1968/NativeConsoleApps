@@ -197,6 +197,7 @@ jobs:
         package_id: ${{ env.PROJECT_NAME }}.${{ env.BUILD_PLATFORM }}.v${{ needs.setup.outputs.executable_version }}.zip
         version: '1.0.0'
         output_folder: Output
+        base_path: .
         files: |
           README.md
           Output\\${{ env.BUILD_PLATFORM }}\\${{ env.BUILD_CONFIG }}\\*.exe
