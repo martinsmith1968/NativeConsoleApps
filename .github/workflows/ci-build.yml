@@ -119,28 +119,6 @@ jobs:
     - name: Set Executable Version
       run: echo "executable_version=${{ env.APP_MAJOR_VERSION }}.${{ env.APP_MINOR_VERSION }}.${{ env.build_date }}.${{ github.run_number }}${{ github.run_attempt }}" >> $GITHUB_ENV
 
-    - name: Write Version Header file
-      run: |
-        echo "PWD = $PWD"
-        ls -la
-
-        filename="BannerText/Version.h"
-
-        echo "Before"
-        cat $filename
-
-        echo '#pragma once' > $filename
-        echo '' >> $filename
-        echo '#define VERSION_MAJOR       ${{ env.APP_MAJOR_VERSION }}' >> $filename
-        echo '#define VERSION_MINOR       ${{ env.APP_MINOR_VERSION }}' >> $filename
-        echo '#define VERSION_REVISION    ${{ env.build_date }}' >> $filename
-        echo '#define VERSION_BUILD       ${{ github.run_number }}' >> $filename
-        echo '' >> $filename >> $filename
-        echo '#define COPYRIGHT_YEAR      ${{ env.build_year }}' >> $filename
-
-        echo "After"
-        cat $filename
-
     - name: Show Configuration
       run: env | sort
 
@@ -166,6 +144,28 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v4
+
+    - name: Write Version Header file
+      run: |
+        echo "PWD = $PWD"
+        ls -la
+
+        filename="BannerText/Version.h"
+
+        echo "Before"
+        cat $filename
+
+        echo '#pragma once' > $filename
+        echo '' >> $filename
+        echo '#define VERSION_MAJOR       ${{ env.APP_MAJOR_VERSION }}' >> $filename
+        echo '#define VERSION_MINOR       ${{ env.APP_MINOR_VERSION }}' >> $filename
+        echo '#define VERSION_REVISION    ${{ env.build_date }}' >> $filename
+        echo '#define VERSION_BUILD       ${{ github.run_number }}' >> $filename
+        echo '' >> $filename >> $filename
+        echo '#define COPYRIGHT_YEAR      ${{ env.build_year }}' >> $filename
+
+        echo "After"
+        cat $filename
 
     - name: Setup msbuild
       uses: microsoft/setup-msbuild@v2
