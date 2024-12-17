@@ -152,7 +152,7 @@ jobs:
         Write-Host "Starting in : $((Get-Location).Path)"
         Write-Host ""
 
-        $filenames = @( "BannerText/Version.h" )
+        $filenames = @( "BannerText/Version.h", "PauseN/Version.h" )
 
         foreach ($filename in $filenames) {
             Write-Host "------------------------------------------------------------"
