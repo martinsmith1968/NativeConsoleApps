@@ -183,14 +183,16 @@ jobs:
     - name: Build (${{ env.BUILD_CONFIG }})
       run: msbuild NativeConsoleApplications.sln -t:Rebuild -p:Configuration=${{ env.BUILD_CONFIG }} -p:"Platform=${{ env.BUILD_PLATFORM }}" -p:"Version=${{ needs.setup.outputs.product_version }}"
 
-    - name: Add files to output folder
-      run: |
-        Copy-Item "README.md" "Output\\${{ env.BUILD_PLATFORM }}\\${{ env.BUILD_CONFIG }}"
+    #- name: Add files to output folder
+    #  run: |
+    #    Copy-Item "README.md" "Output\\${{ env.BUILD_PLATFORM }}\\${{ env.BUILD_CONFIG }}"
 
     - name: Compress Artifact
       uses: vimtor/action-zip@v1.2
       with:
-        files: Output\\${{ env.BUILD_PLATFORM }}\\${{ env.BUILD_CONFIG }}\\
+        files: |
+          Output\\${{ env.BUILD_PLATFORM }}\\${{ env.BUILD_CONFIG }}\\*.exe
+          README.md
         dest: Output\\${{ env.PROJECT_NAME }}.${{ env.BUILD_PLATFORM }}.v${{ needs.setup.outputs.executable_version }}.zip
 
     - name: Upload Build Artifact
