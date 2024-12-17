@@ -149,7 +149,11 @@ jobs:
 
     - name: Write Version Header file
       run: |
-        $filename="BannerText/Version.h"
+        Get-Location
+
+        $filenames = "BannerText/Version.h"
+
+        $filename = "BannerText/Version.h"
 
         Write-Host "Before"
         Get-Content $filename
@@ -178,7 +182,8 @@ jobs:
       with:
         name: build_output
         path: |
-          "${{ env.BUILD_PLATFORM }}\\${{ env.BUILD_CONFIG }}\\*.exe"
+          ${{ env.PROJECT_NAME }}\\${{ env.PROJECT_NAME }}\\README.md
+          ${{ env.PROJECT_NAME }}\\${{ env.PROJECT_NAME }}\\Output\\${{ env.BUILD_PLATFORM }}\\${{ env.BUILD_CONFIG }}\\*.exe
         if-no-files-found: error
 
 
