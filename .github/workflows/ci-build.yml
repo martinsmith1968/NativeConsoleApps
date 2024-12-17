@@ -147,25 +147,23 @@ jobs:
 
     - name: Write Version Header file
       run: |
-        echo "PWD = $PWD"
-        ls -la
+        $filename="BannerText/Version.h"
 
-        filename="BannerText/Version.h"
+        Write-Host "Before"
+        Get-Content $filename
 
-        echo "Before"
-        cat $filename
+        ''                                                          | Out-File $filename
+        '#pragma once'                                              | Add-Content $filename
+        ''                                                          | Add-Content $filename
+        '#define VERSION_MAJOR       ${{ env.APP_MAJOR_VERSION }}'  | Add-Content $filename
+        '#define VERSION_MINOR       ${{ env.APP_MINOR_VERSION }}'  | Add-Content $filename
+        '#define VERSION_REVISION    ${{ env.build_date }}'         | Add-Content $filename
+        '#define VERSION_BUILD       ${{ github.run_number }}'      | Add-Content $filename
+        ''                                                          | Add-Content $filename
+        '#define COPYRIGHT_YEAR      ${{ env.build_year }}'         | Add-Content $filename
 
-        echo '#pragma once' > $filename
-        echo '' >> $filename
-        echo '#define VERSION_MAJOR       ${{ env.APP_MAJOR_VERSION }}' >> $filename
-        echo '#define VERSION_MINOR       ${{ env.APP_MINOR_VERSION }}' >> $filename
-        echo '#define VERSION_REVISION    ${{ env.build_date }}' >> $filename
-        echo '#define VERSION_BUILD       ${{ github.run_number }}' >> $filename
-        echo '' >> $filename >> $filename
-        echo '#define COPYRIGHT_YEAR      ${{ env.build_year }}' >> $filename
-
-        echo "After"
-        cat $filename
+        Write-Host "After"
+        Get-Content $filename
 
     - name: Setup msbuild
       uses: microsoft/setup-msbuild@v2
