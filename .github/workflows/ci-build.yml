@@ -14,7 +14,7 @@ env:
 on:
   push:
     branches:
-      - ${{ env.PRIMARY_BRANCH_NAME }}
+      - master
       - rc/**
       - feature/**
       - task/**
@@ -22,7 +22,7 @@ on:
 
   pull_request:
     branches:
-      - ${{ env.PRIMARY_BRANCH_NAME }}
+      - master
 
   workflow_dispatch:
 
@@ -132,19 +132,22 @@ jobs:
       release_is_draft: ${{ env.release_is_draft }}
       release_is_prerelease: ${{ env.release_is_prerelease }}
 
+
   ##########################################################
-  ## Build C++
+  ## Build for Windows
   build-windows:
     name: Build - Windows
-    
+
+    needs: setup
+
     runs-on: windows-latest
-    
+
     steps:
     - name: Checkout
       uses: actions/checkout@v4
 
     - name: Setup msbuild
-      uses: microsoft/setup-msbuild@v2    
+      uses: microsoft/setup-msbuild@v2
 
     - name: Build (${{ env.BUILD_CONFIG }})
       run: msbuild NativeConsoleApplications.sln -t:Rebuild -p:Configuration=${{ env.BUILD_CONFIG }} -p:"Platform=${{ env.BUILD_PLATFORM }}" -p:"Version=${{ needs.setup.outputs.product_version }}"
@@ -155,6 +158,7 @@ jobs:
         name: build_output
         path: "${{ env.BUILD_PLATFORM }}\\${{ env.BUILD_CONFIG }}\\*.exe"
         if-no-files-found: error
+
 
   ##########################################################
   ## Tag in git
@@ -177,6 +181,7 @@ jobs:
         git_commit_sha: ${{ github.sha }}
         git_tag_prefix: "v"
         version: ${{ needs.setup.outputs.assembly_version }}
+
 
   ##########################################################
   ## Generate a GitHub Release
