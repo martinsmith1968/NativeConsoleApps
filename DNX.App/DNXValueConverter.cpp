@@ -1,7 +1,7 @@
 ﻿#include "stdafx.h"
 #include "DNXValueConverter.h"
 #include <iostream>
-#include <time.h>
+#include <ctime>
 #include <iomanip>
 #include <sstream>
 

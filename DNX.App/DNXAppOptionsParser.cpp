@@ -1,4 +1,5 @@
-﻿#include "DNXAppOptionsParser.h"
+﻿#include "stdafx.h"
+#include "DNXAppOptionsParser.h"
 #include "../DNX.Utils/FileUtils.h"
 
 #include <filesystem>
