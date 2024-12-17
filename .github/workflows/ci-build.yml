@@ -192,7 +192,8 @@ jobs:
       with:
         name: build_output
         path: |
-          Output\\${{ env.BUILD_PLATFORM }}\\${{ env.BUILD_CONFIG }}\\*
+          Output\\${{ env.BUILD_PLATFORM }}\\${{ env.BUILD_CONFIG }}\\*.md
+          Output\\${{ env.BUILD_PLATFORM }}\\${{ env.BUILD_CONFIG }}\\*.exe
         if-no-files-found: error
 
 
