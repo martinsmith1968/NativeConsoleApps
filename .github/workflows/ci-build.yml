@@ -121,6 +121,9 @@ jobs:
 
     - name: Write Version Header file
       run: |
+        echo "PWD = $PWD"
+        ls -la
+
         filename="BannerText/Version.h"
 
         echo "Before"
