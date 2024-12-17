@@ -188,12 +188,18 @@ jobs:
     #    Copy-Item "README.md" "Output\\${{ env.BUILD_PLATFORM }}\\${{ env.BUILD_CONFIG }}"
 
     - name: Compress Artifact
-      uses: vimtor/action-zip@v1.2
+    #  uses: vimtor/action-zip@v1.2
+    #  with:
+    #    files: Output\\${{ env.BUILD_PLATFORM }}\\${{ env.BUILD_CONFIG }}\\*.exe README.md
+    #    dest: Output\\${{ env.PROJECT_NAME }}.${{ env.BUILD_PLATFORM }}.v${{ needs.setup.outputs.executable_version }}.zip
+      uses: OctopusDeploy/create-zip-package-action@v3
       with:
+        package_id: ${{ env.PROJECT_NAME }}.${{ env.BUILD_PLATFORM }}.v${{ needs.setup.outputs.executable_version }}.zip
+        version: '1.0.0'
+        output_folder: Output
         files: |
-          Output\\${{ env.BUILD_PLATFORM }}\\${{ env.BUILD_CONFIG }}\\*.exe
           README.md
-        dest: Output\\${{ env.PROJECT_NAME }}.${{ env.BUILD_PLATFORM }}.v${{ needs.setup.outputs.executable_version }}.zip
+          Output\\${{ env.BUILD_PLATFORM }}\\${{ env.BUILD_CONFIG }}\\*.exe
 
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v4
