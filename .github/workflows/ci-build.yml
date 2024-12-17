@@ -194,13 +194,13 @@ jobs:
     #    dest: Output\\${{ env.PROJECT_NAME }}.${{ env.BUILD_PLATFORM }}.v${{ needs.setup.outputs.executable_version }}.zip
       uses: OctopusDeploy/create-zip-package-action@v3
       with:
-        package_id: ${{ env.PROJECT_NAME }}.${{ env.BUILD_PLATFORM }}.v${{ needs.setup.outputs.executable_version }}.zip
-        version: '1.0.0'
+        package_id: ${{ env.PROJECT_NAME }}.${{ env.BUILD_PLATFORM }}
+        version: v${{ needs.setup.outputs.executable_version }}
         output_folder: Output
         base_path: .
         files: |
           README.md
-          Output\\${{ env.BUILD_PLATFORM }}\\${{ env.BUILD_CONFIG }}\\*.exe
+          **\\Output\\${{ env.BUILD_PLATFORM }}\\${{ env.BUILD_CONFIG }}\\*.exe
 
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v4
