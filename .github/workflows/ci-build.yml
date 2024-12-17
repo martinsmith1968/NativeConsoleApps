@@ -3,7 +3,7 @@ run-name: CIBuild_${{ github.event_name }}_${{ github.ref_name }}_${{ github.run
 
 env:
   PRIMARY_BRANCH_NAME: master
-  PKG_MAJOR_VERSION: 1.0
+  APP_MAJOR_VERSION: 1.1
   PROJECT_NAME: NativeConsoleApps
   BUILD_CONFIG: Release
   BUILD_PLATFORM: x64
@@ -111,10 +111,10 @@ jobs:
         echo "release_is_prerelease=${release_is_prerelease}" >> $GITHUB_ENV
 
     - name: Set Product Version
-      run: echo "product_version=${{ env.PKG_MAJOR_VERSION }}" >> $GITHUB_ENV
+      run: echo "product_version=${{ env.APP_MAJOR_VERSION }}" >> $GITHUB_ENV
 
     - name: Set Assembly Version
-      run: echo "assembly_version=${{ env.PKG_MAJOR_VERSION }}.${{ env.build_date }}.${{ github.run_number }}${{ github.run_attempt }}" >> $GITHUB_ENV
+      run: echo "assembly_version=${{ env.APP_MAJOR_VERSION }}.${{ env.build_date }}.${{ github.run_number }}${{ github.run_attempt }}" >> $GITHUB_ENV
 
     - name: Set Package Version
       run: echo "package_version=${{ env.assembly_version }}${{ env.package_suffix }}" >> $GITHUB_ENV
@@ -156,7 +156,9 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: build_output
-        path: "${{ env.BUILD_PLATFORM }}\\${{ env.BUILD_CONFIG }}\\*.exe"
+        path: |
+            README.md
+            "${{ env.BUILD_PLATFORM }}\\${{ env.BUILD_CONFIG }}\\*.exe"
         if-no-files-found: error
 
 
