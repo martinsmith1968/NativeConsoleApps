@@ -154,15 +154,15 @@ jobs:
         Write-Host "Before"
         Get-Content $filename
 
-        ''                                                                      | Out-File $filename
-        '#pragma once'                                                          | Add-Content $filename
-        ''                                                                      | Add-Content $filename
-        '#define VERSION_MAJOR       ${{ env.APP_MAJOR_VERSION }}'              | Add-Content $filename
-        '#define VERSION_MINOR       ${{ env.APP_MINOR_VERSION }}'              | Add-Content $filename
-        '#define VERSION_REVISION    ${{ needs.setup.outputs.build_date }}'     | Add-Content $filename
-        '#define VERSION_BUILD       ${{ github.run_number }}'                  | Add-Content $filename
-        ''                                                                      | Add-Content $filename
-        '#define COPYRIGHT_YEAR      ${{ needs.setup.outputs.build_year }}'     | Add-Content $filename
+        ''                                                                  | Out-File $filename
+        '#pragma once'                                                      | Add-Content $filename
+        ''                                                                  | Add-Content $filename
+        '#define VERSION_MAJOR       ${{ env.APP_MAJOR_VERSION }}'          | Add-Content $filename
+        '#define VERSION_MINOR       ${{ env.APP_MINOR_VERSION }}'          | Add-Content $filename
+        '#define VERSION_REVISION    ${{ needs.setup.outputs.build_date }}' | Add-Content $filename
+        '#define VERSION_BUILD       ${{ github.run_number }}'              | Add-Content $filename
+        ''                                                                  | Add-Content $filename
+        '#define COPYRIGHT_YEAR      ${{ needs.setup.outputs.build_year }}' | Add-Content $filename
 
         Write-Host "After"
         Get-Content $filename
@@ -178,8 +178,7 @@ jobs:
       with:
         name: build_output
         path: |
-            README.md
-            "${{ env.BUILD_PLATFORM }}\\${{ env.BUILD_CONFIG }}\\*.exe"
+          "${{ env.BUILD_PLATFORM }}\\${{ env.BUILD_CONFIG }}\\*.exe"
         if-no-files-found: error
 
 
