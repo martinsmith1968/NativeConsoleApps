@@ -32,10 +32,12 @@ namespace DNX {
 
             static list<string> ReadLinesFromFile(const string& fileName, AppOptions& options);
 
+            static void ShowBlankLines(const int count);
+
         public:
             static void Parse(int argc, char* argv[], AppOptions& options);
             static void ShowUsage(AppOptions& options, const AppDetails& appDetails);
-            static void ShowErrors(const AppOptions& options);
+            static void ShowErrors(const AppOptions& options, const int blankLinesBefore = 0, const int blankLinesAfter = 0);
         };
     }
 }

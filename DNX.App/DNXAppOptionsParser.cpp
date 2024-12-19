@@ -233,6 +233,14 @@ list<string> AppOptionsParser::ReadLinesFromFile(const string& fileName, AppOpti
     return lines;
 }
 
+void AppOptionsParser::ShowBlankLines(const int count)
+{
+    for (auto iter = 0; iter < count; ++iter)
+    {
+        cout << endl;
+    }
+}
+
 void AppOptionsParser::ShowUsage(AppOptions& options, const AppDetails& appDetails)
 {
     auto parameters = options.GetOptionsByType(OptionType::PARAMETER);
@@ -355,13 +363,17 @@ void AppOptionsParser::ShowUsage(AppOptions& options, const AppDetails& appDetai
     }
 }
 
-void AppOptionsParser::ShowErrors(const AppOptions& options)
+void AppOptionsParser::ShowErrors(const AppOptions& options, const int blankLinesBefore, const int blankLinesAfter)
 {
+    ShowBlankLines(blankLinesBefore);
+
     auto errors = options.GetErrors();
     for (auto iter = errors.begin(); iter != errors.end(); ++iter)
     {
         cout << "Error: " << *iter << endl;
     }
+
+    ShowBlankLines(blankLinesAfter);
 }
 
 bool AppOptionsParser::HandleParameter(AppOptions& options, const int position, const string& value)
