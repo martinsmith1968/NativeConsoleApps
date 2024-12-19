@@ -31,6 +31,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".build", ".build", "{38B555
 		.github\workflows\ci-build.yml = .github\workflows\ci-build.yml
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{DAC083BB-2D6B-433B-B819-9826085AE3AB}"
+	ProjectSection(SolutionItems) = preProject
+		Common\Version.h = Common\Version.h
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
