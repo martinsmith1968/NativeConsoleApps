@@ -9,7 +9,6 @@ env:
   BUILD_CONFIG: Release
   BUILD_PLATFORM: x64
   BRANCH_PREFIX_RELEASE_CANDIDATE: rc/
-  BRANCH_PREFIX_PUBLISH_CANDIDATE: beta/
   BRANCH_NAME_BENCHMARK_CANDIDATE: benchmark
 
 on:
@@ -46,7 +45,6 @@ jobs:
         is_primary_branch=false
         is_pull_request_build=false
         is_release_candidate_branch=false
-        is_publish_candidate_branch=false
 
         # Primary Branch ?
         if [ "${{ github.ref }}" == 'refs/heads/${{ env.PRIMARY_BRANCH_NAME }}' ]
@@ -66,17 +64,10 @@ jobs:
           is_release_candidate_branch=true
         fi
 
-        # Is Publish Candidate branch ?
-        if [[ "${{ github.ref }}" == refs/heads/${{ env.BRANCH_PREFIX_PUBLISH_CANDIDATE }}* ]]
-        then
-          is_publish_candidate_branch=true
-        fi
-
         # Set for later steps
         echo "is_primary_branch=${is_primary_branch}" >> $GITHUB_ENV
         echo "is_pull_request_build=${is_pull_request_build}" >> $GITHUB_ENV
         echo "is_release_candidate_branch=${is_release_candidate_branch}" >> $GITHUB_ENV
-        echo "is_publish_candidate_branch=${is_publish_candidate_branch}" >> $GITHUB_ENV
 
     - name: Determine Tagging
       run: |
@@ -91,33 +82,33 @@ jobs:
 
     - name: Determine GitHub Releasing
       run: |
-        should_release=false
-        release_is_draft=false
+        should_release=true
+        release_is_draft=true
         release_is_prerelease=false
+        release_modifier='-ci'
 
-        if $is_primary_branch
+        if $is_release_candidate_branch
         then
             should_release=true
-        elif $is_release_candidate_branch
-        then
+            release_modifier='-alpha'
+        fi
+        if $is_pull_request_build; then
             should_release=true
-            release_is_draft=true
-
-            if $is_pull_request_build; then
-              release_is_draft=false
-              release_is_prerelease=true
-            fi
+            release_is_draft=false
+            release_is_prerelease=true
+            release_modifier='-beta'
         fi
 
         echo "should_release=${should_release}" >> $GITHUB_ENV
         echo "release_is_draft=${release_is_draft}" >> $GITHUB_ENV
         echo "release_is_prerelease=${release_is_prerelease}" >> $GITHUB_ENV
+        echo "release_modifier=${release_modifier}" >> $GITHUB_ENV
 
     - name: Set Product Version
       run: echo "product_version=${{ env.APP_MAJOR_VERSION }}.${{ env.APP_MINOR_VERSION }}" >> $GITHUB_ENV
 
     - name: Set Executable Version
-      run: echo "executable_version=${{ env.APP_MAJOR_VERSION }}.${{ env.APP_MINOR_VERSION }}.${{ env.build_date }}.${{ github.run_number }}${{ github.run_attempt }}" >> $GITHUB_ENV
+      run: echo "executable_version=${{ env.APP_MAJOR_VERSION }}.${{ env.APP_MINOR_VERSION }}.${{ env.build_date }}.${{ github.run_number }}${{ github.run_attempt }}${{ env.release_modifier }}" >> $GITHUB_ENV
 
     - name: Show Configuration
       run: env | sort
@@ -128,10 +119,10 @@ jobs:
       executable_version: ${{ env.executable_version }}
       product_version: ${{ env.product_version }}
       should_tag: ${{ env.should_tag }}
-      should_publish: ${{ env.should_publish }}
       should_release: ${{ env.should_release }}
       release_is_draft: ${{ env.release_is_draft }}
       release_is_prerelease: ${{ env.release_is_prerelease }}
+      release_modifier: ${{ env.release_modifier }}
 
 
   ##########################################################
@@ -162,15 +153,17 @@ jobs:
             Write-Host "Before"
             Get-Content $filename
 
-            ''                                                                  | Out-File $filename
-            '#pragma once'                                                      | Add-Content $filename
-            ''                                                                  | Add-Content $filename
-            '#define VERSION_MAJOR       ${{ env.APP_MAJOR_VERSION }}'          | Add-Content $filename
-            '#define VERSION_MINOR       ${{ env.APP_MINOR_VERSION }}'          | Add-Content $filename
-            '#define VERSION_REVISION    ${{ needs.setup.outputs.build_date }}' | Add-Content $filename
-            '#define VERSION_BUILD       ${{ github.run_number }}'              | Add-Content $filename
-            ''                                                                  | Add-Content $filename
-            '#define COPYRIGHT_YEAR      ${{ needs.setup.outputs.build_year }}' | Add-Content $filename
+            ''                                                                          | Out-File $filename
+            '#pragma once'                                                              | Add-Content $filename
+            ''                                                                          | Add-Content $filename
+            '#define VERSION_MAJOR       ${{ env.APP_MAJOR_VERSION }}'                  | Add-Content $filename
+            '#define VERSION_MINOR       ${{ env.APP_MINOR_VERSION }}'                  | Add-Content $filename
+            '#define VERSION_REVISION    ${{ needs.setup.outputs.build_date }}'         | Add-Content $filename
+            '#define VERSION_BUILD       ${{ github.run_number }}'                      | Add-Content $filename
+            ''                                                                          | Add-Content $filename
+            '#define VERSION_MODIFIER    ${{ needs.setup.output.release_modifier }}'    | Add-Content $filename
+            ''                                                                          | Add-Content $filename
+            '#define COPYRIGHT_YEAR      ${{ needs.setup.outputs.build_year }}'         | Add-Content $filename
 
             Write-Host ""
             Write-Host "After"
