@@ -33,6 +33,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".build", ".build", "{38B555
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{DAC083BB-2D6B-433B-B819-9826085AE3AB}"
 	ProjectSection(SolutionItems) = preProject
+		Common\AppInfo.h = Common\AppInfo.h
+		Common\BuildInfo.h = Common\BuildInfo.h
+		Common\Macros.h = Common\Macros.h
 		Common\Version.h = Common\Version.h
 	EndProjectSection
 EndProject
