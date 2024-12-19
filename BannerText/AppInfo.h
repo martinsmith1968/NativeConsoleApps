@@ -3,7 +3,7 @@
 // ReSharper disable IdentifierTypo
 
 #include "BuildInfo.h"
-#include "Version.h"
+#include "..\Common\Version.h"
 #include "Macros.h"
 
 #define VER_PRODUCTNAME_STR         "BannerText"

@@ -24,9 +24,6 @@
     <ClInclude Include="AppInfo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Version.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="BuildInfo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
