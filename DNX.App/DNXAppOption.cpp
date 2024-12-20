@@ -6,7 +6,8 @@ using namespace DNX::App;
 
 // ReSharper disable CppInconsistentNaming
 
-bool AppOption::IsEmpty() const {
+bool AppOption::IsEmpty() const
+{
     return _position < 0;
 }
 
@@ -63,7 +64,9 @@ string AppOption::GetNameDescription() const
         description += ": ";
     }
 
-    description += _shortName;
+    description += _optionType == OptionType::PARAMETER
+        ? _longName
+        : _shortName;
 
     return description;
 }
@@ -88,16 +91,17 @@ AppOption::AppOption(
     const list<string>& valueList
 )
 {
-    _optionType    = optionType;
-    _valueType     = valueType;
-    _shortName     = shortName;
-    _longName      = longName;
-    _description   = description;
-    _defaultValue  = defaultValue;
-    _required      = required;
-    _position      = position;
+    _optionType   = optionType;
+    _valueType    = valueType;
+    _shortName    = shortName;
+    _longName     = longName;
+    _description  = description;
+    _defaultValue = defaultValue;
+    _required     = required;
+    _position     = position;
 
-    if (!valueList.empty()) {
+    if (!valueList.empty())
+    {
         _valueList = valueList;
     }
 }
@@ -115,7 +119,8 @@ bool AppOption::CompareByPosition(const AppOption& first, const AppOption& secon
 
 bool AppOption::CompareByTypeAndPosition(const AppOption& first, const AppOption& second)
 {
-    if (first.GetOptionType() != second.GetOptionType()) {
+    if (first.GetOptionType() != second.GetOptionType())
+    {
         return first.GetOptionType() < second.GetOptionType();
     }
 
