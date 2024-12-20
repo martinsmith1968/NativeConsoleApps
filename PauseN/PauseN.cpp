@@ -5,43 +5,74 @@
 #include <iostream>
 #include <regex>
 #include <thread>
-#include "AppInfo.cpp"
-#include "Options.cpp"
-#include "../DNX.Utils/StringUtils.h"
-#include "../DNX.App/DNXAppOptions.h"
-#include "../DNX.App/DNXAppOptionsParser.h"
-#include "../DNX.App/DNXAppOptionsParser.cpp"
 
+#include "AppInfo.h"
+#include "Options.cpp"
+#include "../DNX.Utils/ProcessUtils.h"
+#include "../DNX.Utils/StringUtils.h"
+#include "../DNX.App/DNXAppArgumentsParser.h"
+
+using namespace std;
 using namespace DNX::App;
-using namespace StringUtils;
+using namespace DNX::Utils;
 
 // ReSharper disable CppInconsistentNaming
+
+//------------------------------------------------------------------------------
+// Declarations
+namespace PauseN {
+    static void Execute(Options& options);  // NOLINT(misc-use-anonymous-namespace)
+};
 
 //------------------------------------------------------------------------------
 // main
 int main(const int argc, char* argv[])
 {
-    const AppInfo appInfo;
-
-    Options options;
-    AppOptionsParser::Parse(argc, argv, options);
-
-    if (options.IsHelp())
+    try
     {
-        AppOptionsParser::ShowUsage(options, appInfo);
-        return 1;
-    }
-    if (!options.IsValid())
-    {
-        AppOptionsParser::ShowUsage(options, appInfo);
-        AppOptionsParser::ShowErrors(options, 1);
-        return 2;
-    }
+        const AppInfo appInfo;
 
+        auto x1 = ProcessUtils::GetExecutableFileName();
+
+        Options options;
+        AppArgumentsParser::Parse(argc, argv, options);
+
+        if (options.IsHelp())
+        {
+            AppArgumentsParser::ShowUsage(options, appInfo);
+            return 1;
+        }
+        if (!options.IsValid())
+        {
+            AppArgumentsParser::ShowUsage(options, appInfo);
+            AppArgumentsParser::ShowErrors(options, 1);
+            return 2;
+        }
+
+        PauseN::Execute(options);
+
+        return 0;
+    }
+    catch (exception& ex)
+    {
+        cerr << "Error: " << ex.what() << endl;
+        return 99;
+    }
+    catch (...)
+    {
+        cerr << "Error: Unknown error occurred" << endl;
+        return 98;
+    }
+}
+
+//------------------------------------------------------------------------------
+// Execute
+void PauseN::Execute(Options& options)
+{
     cout << options.GetFormattedMessageText();
 
     const auto start_time = time(nullptr);
-    const auto exit_time  = start_time + options.GetTimeoutSeconds();
+    const auto exit_time = start_time + options.GetTimeoutSeconds();
     const auto sleep_time = std::chrono::milliseconds(options.GetSleepMilliseconds());
 
     do
@@ -53,10 +84,7 @@ int main(const int argc, char* argv[])
         }
 
         std::this_thread::sleep_for(sleep_time);
-    }
-    while (time(nullptr) < exit_time || options.GetTimeoutSeconds() == 0);
+    } while (time(nullptr) < exit_time || options.GetTimeoutSeconds() == 0);
 
     cout << endl;
-
-    return 0;
 }
