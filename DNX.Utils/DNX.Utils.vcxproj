@@ -160,6 +160,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AggregateException.h" />
     <ClCompile Include="FileUtils.cpp" />
     <ClCompile Include="ListUtils.cpp" />
     <ClCompile Include="ProcessUtils.cpp" />

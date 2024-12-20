@@ -55,12 +55,12 @@ int main(const int argc, char* argv[])
     }
     catch (exception& ex)
     {
-        cerr << "Error: " << ex.what() << endl;
+        cerr << "ERROR: " << ex.what() << endl;
         return 99;
     }
     catch (...)
     {
-        cerr << "Error: Unknown error occurred" << endl;
+        cerr << "ERROR: Unknown error occurred" << endl;
         return 98;
     }
 }
