@@ -1,7 +1,6 @@
-﻿#ifndef DNX_UTILS_LISTUTILS
-#define DNX_UTILS_LISTUTILS
-
+﻿#pragma once
 #include "stdafx.h"
+
 #include <list>
 #include <string>
 
@@ -16,5 +15,3 @@ namespace DNX {
         }
     }
 }
-
-#endif // DNX_UTILS_LISTUTILS

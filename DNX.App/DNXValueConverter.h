@@ -1,17 +1,12 @@
 ﻿#pragma once
 #include "stdafx.h"
-
-#ifndef DNX_APP_VALUE_CONVERTER
-#define DNX_APP_VALUE_CONVERTER
-
 #include <string>
+
 #include "DNXValueType.h"
-#include "../DNX.Utils/StringUtils.h"
 
 // ReSharper disable CppInconsistentNaming
 
 using namespace std;
-using namespace DNX::Utils::StringUtils;
 
 namespace DNX {
     namespace App {
@@ -19,6 +14,9 @@ namespace DNX {
         // Class: ValueConverter
         //--------------------------------------------------------------------------
         class ValueConverter {
+            static list<string> date_formats;
+            static list<string> time_formats;
+
         public:
             static bool IsValueValid(const string& value, ValueType valueType);
 
@@ -39,5 +37,3 @@ namespace DNX {
         };
     }
 }
-
-#endif // DNX_APP_VALUE_CONVERTER

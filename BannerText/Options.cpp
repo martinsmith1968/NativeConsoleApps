@@ -1,13 +1,12 @@
-﻿#pragma once
+#pragma once
 #include "stdafx.h"
-
 #include <string>
 #include "../DNX.Utils/StringUtils.h"
 #include "../DNX.App/DNXAppOptions.h"
 
 using namespace std;
 using namespace DNX::App;
-using namespace DNX::Utils::StringUtils;
+using namespace DNX::Utils;
 
 // ReSharper disable CppInconsistentNaming
 // ReSharper disable StringLiteralTypo

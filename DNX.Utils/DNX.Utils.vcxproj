@@ -154,6 +154,7 @@
     <ClInclude Include="EnumUtils.h" />
     <ClInclude Include="FileUtils.h" />
     <ClInclude Include="ListUtils.h" />
+    <ClInclude Include="ProcessUtils.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="StringUtils.h" />
     <ClInclude Include="targetver.h" />
@@ -161,6 +162,7 @@
   <ItemGroup>
     <ClCompile Include="FileUtils.cpp" />
     <ClCompile Include="ListUtils.cpp" />
+    <ClCompile Include="ProcessUtils.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

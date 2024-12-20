@@ -5,7 +5,8 @@ using namespace DNX::App;
 
 // ReSharper disable CppInconsistentNaming
 
-OptionTypeText::OptionTypeText() {
+OptionTypeText::OptionTypeText()
+{
     SetText(OptionType::PARAMETER, "Parameter");
     SetText(OptionType::OPTION, "Option");
     SetText(OptionType::SWITCH, "+/-");

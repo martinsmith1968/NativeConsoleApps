@@ -1,7 +1,11 @@
 ﻿#include "stdafx.h"
 #include "StringUtils.h"
 
+#include <algorithm>
+
 // ReSharper disable CppInconsistentNaming
+// ReSharper disable CppClangTidyMiscUseAnonymousNamespace
+// ReSharper disable CppClangTidyMiscUseInternalLinkage
 
 using namespace std;
 using namespace DNX::Utils;
@@ -48,19 +52,22 @@ string StringUtils::ReplaceString(string subject, const string& search, const st
     return subject;
 }
 
-string StringUtils::ToLower(string text) {
-    transform(text.begin(), text.end(), text.begin(), ::tolower);
+string StringUtils::ToLower(const string& text) {
+    string copy = text;
+    transform(copy.begin(), copy.end(), copy.begin(), ::tolower);
 
-    return text;
+    return copy;
 }
 
-string StringUtils::ToUpper(string text) {
-    transform(text.begin(), text.end(), text.begin(), ::toupper);
+string StringUtils::ToUpper(const string& text) {
+    string copy = text;
+    transform(copy.begin(), copy.end(), copy.begin(), ::toupper);
 
-    return text;
+    return copy;
 }
 
-string StringUtils::Left(const string& text, const size_t length) {
+string StringUtils::Left(const string& text, const size_t length)
+{
     return text.substr(0, length);
 }
 
@@ -68,10 +75,12 @@ string StringUtils::Right(const string& text, const size_t length) {
     return text.substr(text.length() - length, string::npos);
 }
 
-string StringUtils::BoolToString(const bool value) {
-    return value
-        ? "true"
-        : "false";
+string StringUtils::BoolToString(const bool value, const string& trueValue, const string& falseValue)
+{
+    if (value)
+        return trueValue;
+    else
+        return falseValue;
 }
 
 list<string> StringUtils::SplitText(const string& str, const char splitChar, const char trimChar) {
@@ -134,7 +143,7 @@ string StringUtils::RemoveStartsWith(const string& str, const string& prefix) {
     if (str.length() < prefix.length())
         return str;
 
-    auto trimmedStr = str;
+    string trimmedStr = str;
     while (StartsWith(trimmedStr, prefix)) {
         trimmedStr = trimmedStr == prefix
             ? ""
@@ -148,7 +157,7 @@ string StringUtils::RemoveEndsWith(const string& str, const string& suffix) {
     if (str.length() < suffix.length())
         return str;
 
-    auto trimmedStr = str;
+    string trimmedStr = str;
     while (EndsWith(trimmedStr, suffix)) {
         trimmedStr = trimmedStr == suffix
             ? ""

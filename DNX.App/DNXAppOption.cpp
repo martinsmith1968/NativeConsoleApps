@@ -10,40 +10,51 @@ bool AppOption::IsEmpty() const {
     return _position < 0;
 }
 
-OptionType AppOption::GetOptionType() const {
+OptionType AppOption::GetOptionType() const
+{
     return _optionType;
 }
 
-ValueType AppOption::GetValueType() const {
+ValueType AppOption::GetValueType() const
+{
     return _valueType;
 }
-string AppOption::GetShortName() const {
+string AppOption::GetShortName() const
+{
     return _shortName;
 }
-string AppOption::GetLongName() const {
+string AppOption::GetLongName() const
+{
     return _longName;
 }
-string AppOption::GetDescription() const {
+string AppOption::GetDescription() const
+{
     return _description;
 }
-string AppOption::GetDefaultValue() const {
+string AppOption::GetDefaultValue() const
+{
     return _defaultValue;
 }
-bool AppOption::GetRequired() const {
+bool AppOption::GetRequired() const
+{
     return _required;
 }
-int AppOption::GetPosition() const {
+int AppOption::GetPosition() const
+{
     return _position;
 }
-list<string> AppOption::GetValueList() const {
+list<string> AppOption::GetValueList() const
+{
     return _valueList;
 }
 
-bool AppOption::HasLongName() const {
+bool AppOption::HasLongName() const
+{
     return !_longName.empty();
 }
 
-string AppOption::GetNameDescription() const {
+string AppOption::GetNameDescription() const
+{
     string description;
 
     description += OptionTypeTextHelper.GetText(_optionType);
@@ -92,11 +103,13 @@ AppOption::AppOption(
 }
 
 static AppOption _empty;
-AppOption& AppOption::Empty() {
+AppOption& AppOption::Empty()
+{
     return _empty;
 }
 
-bool AppOption::CompareByPosition(const AppOption& first, const AppOption& second) {
+bool AppOption::CompareByPosition(const AppOption& first, const AppOption& second)
+{
     return first.GetPosition() < second.GetPosition();
 }
 

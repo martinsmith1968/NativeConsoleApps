@@ -1,10 +1,10 @@
 #include "stdafx.h"
-#include "DNXProcessDetails.h"
+#include "ProcessUtils.h"
 
 #include <Windows.h>
 
 using namespace std;
-using namespace DNX::App;
+using namespace DNX::Utils;
 
 // ReSharper disable CppInconsistentNaming
 
@@ -12,7 +12,7 @@ using namespace DNX::App;
 /// Gets the name of the executable file.
 /// </summary>
 /// <returns>string.</returns>
-string ProcessDetails::GetExecutableFileName()
+string ProcessUtils::GetExecutableFileName()
 {
     wchar_t buffer[MAX_PATH];
     auto length = GetModuleFileName(nullptr, buffer, MAX_PATH);

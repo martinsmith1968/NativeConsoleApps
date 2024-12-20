@@ -1,9 +1,6 @@
 ﻿#pragma once
 #include "stdafx.h"
 
-#ifndef DNX_APP_APP_DETAILS
-#define DNX_APP_APP_DETAILS
-
 #include <string>
 
 // ReSharper disable CppInconsistentNaming
@@ -34,5 +31,3 @@ namespace DNX {
         };
     }
 }
-
-#endif // DNX_APP_APP_DETAILS

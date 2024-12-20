@@ -1,9 +1,6 @@
 ﻿#pragma once
 #include "stdafx.h"
 
-#ifndef DNX_APP_OPTION
-#define DNX_APP_OPTION
-
 #include "DNXOptionType.h"
 #include "DNXValueType.h"
 
@@ -67,5 +64,3 @@ namespace DNX {
         };
     }
 }
-
-#endif // DNX_APP_OPTION

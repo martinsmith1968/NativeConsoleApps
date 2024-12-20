@@ -1,9 +1,8 @@
-﻿#pragma once
-#include "DNXAppDetails.h"
+#pragma once
+#include "stdafx.h"
+#include <string>
 #include "DNXAppOptions.h"
-
-#ifndef DNX_APP_OPTIONS_PARSER
-#define DNX_APP_OPTIONS_PARSER
+#include "DNXAppDetails.h"
 
 using namespace std;
 
@@ -12,13 +11,13 @@ using namespace std;
 namespace DNX {
     namespace App {
         //--------------------------------------------------------------------------
-        // Class: AppOptionsParser
+        // Class: AppArgumentsParser
         //--------------------------------------------------------------------------
-        class AppOptionsParser {
+        class AppArgumentsParser {
             static void ParseDefaultOptionsFile(AppOptions& options);
             static void ParseLocalOptionsFile(AppOptions& options);
             static void ParseOptionsFile(AppOptions& options, const string& fileName);
-            static void ReadOptions(int argc, char** argv, AppOptions& options, const bool processOptionsFiles);
+            static void ReadOptions(const int argc, char* argv[], AppOptions& options, const bool processOptionsFiles);
             static void ParseOptions(int argc, char** argv, AppOptions& options);
 
             static bool HandleParameter(AppOptions& options, int position, const string& value);
@@ -36,11 +35,8 @@ namespace DNX {
 
         public:
             static void Parse(int argc, char* argv[], AppOptions& options);
-            static void ShowUsage(AppOptions& options, const AppDetails& appDetails);
+            static void ShowUsage(const AppOptions& options, const AppDetails& appDetails);
             static void ShowErrors(const AppOptions& options, const int blankLinesBefore = 0, const int blankLinesAfter = 0);
         };
     }
 }
-
-
-#endif // DNX_APP_OPTIONS_PARSER

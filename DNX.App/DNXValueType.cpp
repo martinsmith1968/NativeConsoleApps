@@ -3,7 +3,8 @@
 
 using namespace DNX::App;
 
-ValueTypeText::ValueTypeText() {
+ValueTypeText::ValueTypeText()
+{
     SetText(ValueType::CHAR, "Char");
     SetText(ValueType::STRING, "Text");
     SetText(ValueType::BOOL, "+/-");

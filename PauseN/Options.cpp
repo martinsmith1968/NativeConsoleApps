@@ -8,6 +8,8 @@
 
 // ReSharper disable CppInconsistentNaming
 
+using namespace DNX::Utils;
+
 //------------------------------------------------------------------------------
 // AppOptions
 class Options final : public AppOptions
@@ -45,8 +47,8 @@ public:
 
     string GetFormattedMessageText()
     {
-        return ReplaceString(
-            ReplaceString(
+        return StringUtils::ReplaceString(
+            StringUtils::ReplaceString(
                 GetMessageText(),
                 "{timeout}",
                 std::to_string(GetTimeoutSeconds())

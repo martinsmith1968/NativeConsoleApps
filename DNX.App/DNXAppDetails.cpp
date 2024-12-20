@@ -1,6 +1,6 @@
 ﻿#include "stdafx.h"
 #include "DNXAppDetails.h"
-#include "DNXProcessDetails.h"
+#include "../DNX.Utils/ProcessUtils.h"
 #include "../DNX.Utils/FileUtils.h"
 
 #include <sstream>
@@ -15,7 +15,8 @@ AppDetails::AppDetails() = default;
 
 AppDetails::~AppDetails() = default;
 
-string AppDetails::GetHeaderLine() const {
+string AppDetails::GetHeaderLine() const
+{
     ostringstream text;
 
     text << Name;
@@ -33,7 +34,7 @@ string AppDetails::GetHeaderLine() const {
 
 string AppDetails::GetApplicationName()
 {
-    const auto executableName = ProcessDetails::GetExecutableFileName();
+    const auto executableName = ProcessUtils::GetExecutableFileName();
 
     const auto fileName = FileUtils::GetFileNameOnly(executableName);
 
@@ -42,7 +43,7 @@ string AppDetails::GetApplicationName()
 
 string AppDetails::GetDefaultOptionsFileName()
 {
-    const auto executableName = ProcessDetails::GetExecutableFileName();
+    const auto executableName = ProcessUtils::GetExecutableFileName();
 
     auto defaultOptionsFileName = FileUtils::ChangeFileExtension(executableName, "options");
 

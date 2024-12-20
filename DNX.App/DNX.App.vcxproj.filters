@@ -36,16 +36,13 @@
     <ClInclude Include="DNXAppOption.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DNXAppOptionsParser.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="DNXAppOptionsSwitchValue.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DNXValueType.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DNXProcessDetails.h">
+    <ClInclude Include="DNXAppArgumentsParser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -74,13 +71,8 @@
     <ClCompile Include="DNXValueType.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DNXProcessDetails.cpp">
+    <ClCompile Include="DNXAppArgumentsParser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="DNXAppOptionsParser.cpp">
-      <Filter>Source Files</Filter>
-    </None>
   </ItemGroup>
 </Project>

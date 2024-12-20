@@ -1,5 +1,7 @@
 ﻿#include "stdafx.h"
 #include "DNXValueConverter.h"
+#include "../DNX.Utils/StringUtils.h"
+
 #include <iostream>
 #include <ctime>
 #include <iomanip>
@@ -7,7 +9,7 @@
 
 using namespace std;
 using namespace DNX::App;
-using namespace DNX::Utils::StringUtils;
+using namespace DNX::Utils;
 
 // ReSharper disable CppInconsistentNaming
 // ReSharper disable IdentifierTypo
@@ -45,7 +47,7 @@ bool ValueConverter::IsChar(const string& value)
 bool ValueConverter::IsBool(const string& value)
 {
     return !value.empty()
-        && (ToLower(value) == "true" || ToLower(value) == "false");
+        && (StringUtils::ToLower(value) == "true" || StringUtils::ToLower(value) == "false");
 }
 
 bool ValueConverter::IsInt(const string& value)
@@ -94,9 +96,9 @@ char ValueConverter::ToChar(const string& value)
 
 bool ValueConverter::ToBool(const string& value)
 {
-    if (ToLower(value) == "true")
+    if (StringUtils::ToLower(value) == "true")
         return true;
-    if (ToLower(value) == "false")
+    if (StringUtils::ToLower(value) == "false")
         return false;
 
     throw exception((string("Invalid boolean value: ") + value).c_str());
@@ -113,7 +115,7 @@ double ValueConverter::ToDouble(const string& value)
 }
 
 // From : https://stackoverflow.com/questions/321849/strptime-equivalent-on-windows
-extern "C" char* strptime(const char* s, const char* f, struct tm* tm)
+extern "C" static char* strptime(const char* s, const char* f, struct tm* tm)
 {
     // Isn't the C++ standard lib nice? std::get_time is defined such that its
     // format parameters are the exact same as strptime. Of course, we have to
@@ -132,14 +134,14 @@ extern "C" char* strptime(const char* s, const char* f, struct tm* tm)
     return const_cast<char*>(s + input.tellg());
 }
 
-list<string> date_formats
+list<string> ValueConverter::date_formats
 {
     "%Y-%m-%d",
     "%Y-%b-%d",
     "%x",
 };
 
-list<string> time_formats
+list<string> ValueConverter::time_formats
 {
     "%H:%M",
     "%X",

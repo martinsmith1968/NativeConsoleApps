@@ -1,12 +1,9 @@
 ﻿#pragma once
 #include "stdafx.h"
-
-#ifndef DNX_APP_OPTIONS
-#define DNX_APP_OPTIONS
-
 #include <list>
 #include <map>
 #include <string>
+
 #include "DNXOptionType.h"
 #include "DNXAppOption.h"
 #include "DNXValueConverter.h"
@@ -58,8 +55,8 @@ namespace DNX {
             AppOption& GetOptionByLongName(const string& longName);
             AppOption& GetOptionByShortName(const string& shortName);
             AppOption& GetOptionByName(const string& name);
-            list<AppOption> GetOptionsByType(OptionType optionType);
-            list<AppOption> GetOptionsByTypes(const list<OptionType>& optionTypes);
+            list<AppOption> GetOptionsByType(OptionType optionType) const;
+            list<AppOption> GetOptionsByTypes(const list<OptionType>& optionTypes) const;
 
             list<AppOption> GetRequiredOptions();
 
@@ -67,7 +64,7 @@ namespace DNX {
             void SetOptionValue(const string& name, const string& value);
             bool HasOptionValue(const string& name);
 
-            friend class AppOptionsParser;
+            friend class AppArgumentsParser;
 
         public:
             AppOptions();
@@ -83,5 +80,3 @@ namespace DNX {
         };
     }
 }
-
-#endif // DNX_APP_OPTIONS

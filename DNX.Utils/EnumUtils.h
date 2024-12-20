@@ -1,9 +1,6 @@
 ﻿#pragma once
 #include "stdafx.h"
 
-#ifndef DNX_UTILS_ENUM_UTILS
-#define DNX_UTILS_ENUM_UTILS
-
 #include <list>
 #include <map>
 #include <string>
@@ -68,5 +65,3 @@ namespace DNX {
         }
     }
 }
-
-#endif

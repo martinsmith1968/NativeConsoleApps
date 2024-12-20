@@ -1,12 +1,10 @@
 ﻿#pragma once
 #include "stdafx.h"
 
-#ifndef DNX_APP_VALUE_TYPE
-#define DNX_APP_VALUE_TYPE
-
 #include "../DNX.Utils/EnumUtils.h"
 
 // ReSharper disable CppInconsistentNaming
+// ReSharper disable CppClangTidyPerformanceEnumSize
 
 using namespace DNX::Utils::EnumUtils;
 
@@ -38,5 +36,3 @@ namespace DNX {
         static ValueTypeText ValueTypeTextConverter;
     }
 }
-
-#endif // DNX_APP_VALUE_TYPE

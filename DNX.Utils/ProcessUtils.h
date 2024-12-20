@@ -1,26 +1,22 @@
 #pragma once
 #include "stdafx.h"
-#include <string>
 
-#ifndef DNX_APP_PROCESS_DETAILS
-#define DNX_APP_PROCESS_DETAILS
+#include <string>
 
 // ReSharper disable CppInconsistentNaming
 
 using namespace std;
 
 namespace DNX {
-    namespace App {
+    namespace Utils {
 
         //--------------------------------------------------------------------------
-        // Class: ProcessDetails
+        // Class: ProcessUtils
         //--------------------------------------------------------------------------
-        class ProcessDetails {
+        class ProcessUtils {
         public:
             static string GetExecutableFileName();
         };
 
     }
 }
-
-#endif // DNX_APP_PROCESS_DETAILS

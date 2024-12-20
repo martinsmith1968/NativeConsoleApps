@@ -1,8 +1,6 @@
-﻿#ifndef DNX_UTILS_STRINGUTILS
-#define DNX_UTILS_STRINGUTILS
-
+﻿#pragma once
 #include "stdafx.h"
-#include <algorithm>
+
 #include <list>
 #include <sstream>
 #include <string>
@@ -13,33 +11,32 @@ using namespace std;
 
 namespace DNX {
     namespace Utils {
-        namespace StringUtils {
-            string Trim(const string& str, char removeChar = ' ');
-            string LTrim(const string& str, char removeChar = ' ');
-            string RTrim(const string& str, char removeChar = ' ');
+        class StringUtils {
+        public:
+            static string Trim(const string& str, const char removeChar = ' ');
+            static string LTrim(const string& str, const char removeChar = ' ');
+            static string RTrim(const string& str, const char removeChar = ' ');
 
-            string ReplaceString(string subject, const string& search, const string& replace);
+            static string ReplaceString(string subject, const string& search, const string& replace);
 
-            string ToLower(string text);
-            string ToUpper(string text);
+            static string ToLower(const string& text);
+            static string ToUpper(const string& text);
 
-            string Left(const string& text, size_t length);
-            string Right(const string& text, size_t length);
+            static string Left(const string& text, const size_t length);
+            static string Right(const string& text, const size_t length);
 
-            string BoolToString(bool value);
+            static string BoolToString(const bool value, const string& trueValue = "true", const string& falseValue = "false");
 
-            list<string> SplitText(const string& str, char splitChar = ',', char trimChar = NULL);
-            string JoinText(const list<string>& list, const string& delimiter);
+            static list<string> SplitText(const string& str, const char splitChar = ',', const char trimChar = NULL);
+            static string JoinText(const list<string>& list, const string& delimiter);
 
-            bool StartsWith(const string& str, const string& prefix);
-            bool EndsWith(const string& str, const string& suffix);
-            bool StartsAndEndsWith(const string& str, const string& prefixAndSuffix);
+            static bool StartsWith(const string& str, const string& prefix);
+            static bool EndsWith(const string& str, const string& suffix);
+            static bool StartsAndEndsWith(const string& str, const string& prefixAndSuffix);
 
-            string RemoveStartsWith(const string& str, const string& prefix);
-            string RemoveEndsWith(const string& str, const string& suffix);
-            string RemoveStartsAndEndsWith(const string& str, const string& prefixAndSuffix);
-        }
+            static string RemoveStartsWith(const string& str, const string& prefix);
+            static string RemoveEndsWith(const string& str, const string& suffix);
+            static string RemoveStartsAndEndsWith(const string& str, const string& prefixAndSuffix);
+        };
     }
 }
-
-#endif // DNX_UTILS_STRINGUTILS

@@ -1,12 +1,10 @@
 ﻿#pragma once
 #include "stdafx.h"
 
-#ifndef DNX_APP_OPTION_TYPE
-#define DNX_APP_OPTION_TYPE
-
 #include "../DNX.Utils/EnumUtils.h"
 
 // ReSharper disable CppInconsistentNaming
+// ReSharper disable CppClangTidyPerformanceEnumSize
 
 using namespace DNX::Utils::EnumUtils;
 
@@ -32,5 +30,3 @@ namespace DNX {
         };
     }
 }
-
-#endif // DNX_APP_OPTION_TYPE

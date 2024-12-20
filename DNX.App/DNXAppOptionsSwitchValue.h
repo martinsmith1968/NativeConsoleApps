@@ -1,11 +1,7 @@
 ﻿#pragma once
 #include "stdafx.h"
 
-#ifndef DNX_APP_OPTIONS_SWITCH_VALUE
-#define DNX_APP_OPTIONS_SWITCH_VALUE
-
 #include <string>
-#include "../DNX.Utils/StringUtils.h"
 
 // ReSharper disable CppInconsistentNaming
 
@@ -30,5 +26,3 @@ namespace DNX {
         };
     }
 }
-
-#endif // DNX_APP_OPTIONS_SWITCH_VALUE

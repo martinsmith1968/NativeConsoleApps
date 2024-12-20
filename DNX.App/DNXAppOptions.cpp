@@ -2,6 +2,7 @@
 #include "DNXAppOptions.h"
 #include "DNXAppDetails.h"
 #include "../DNX.Utils/FileUtils.h"
+#include "../DNX.Utils/StringUtils.h"
 
 using namespace std;
 using namespace DNX::App;
@@ -12,31 +13,36 @@ using namespace DNX::Utils;
 const string HelpShortCode = "?";
 const string UseDefaultOptionsFileShortCode = "@";
 
-AppOptions::AppOptions() {
-
+AppOptions::AppOptions()
+{
     const auto useDefaultOptionsFileDesc = "Use Default Options File (" + FileUtils::GetFileNameAndExtension(AppDetails::GetDefaultOptionsFileName()) + ")";
 
     AddOption(OptionType::SWITCH, ValueType::BOOL, HelpShortCode,                   "help",                     "false", "Show Help screen",        false, INT_MAX);
     AddOption(OptionType::SWITCH, ValueType::BOOL, UseDefaultOptionsFileShortCode,  "use-default-options-file", "true",  useDefaultOptionsFileDesc, false, INT_MAX - 1);
 }
 
-void AppOptions::PostParseValidate() {
-
+void AppOptions::PostParseValidate()
+{
 }
 
-void AppOptions::AddError(const string& text) {
+void AppOptions::AddError(const string& text)
+{
     _errors.push_back(text);
 }
 
-list<AppOption> AppOptions::GetOptions() {
+list<AppOption> AppOptions::GetOptions()
+{
     const auto types = OptionTypeText.GetAllValues();
 
     return GetOptionsByTypes(types);
 }
 
-AppOption& AppOptions::GetOptionByLongName(const string& longName) {
-    for (auto iter = _options.begin(); iter != _options.end(); ++iter) {
-        if (iter->second.HasLongName() && iter->second.GetLongName() == longName) {
+AppOption& AppOptions::GetOptionByLongName(const string& longName)
+{
+    for (auto iter = _options.begin(); iter != _options.end(); ++iter)
+    {
+        if (iter->second.HasLongName() && iter->second.GetLongName() == longName)
+        {
             return iter->second;
         }
     }
@@ -44,14 +50,16 @@ AppOption& AppOptions::GetOptionByLongName(const string& longName) {
     return AppOption::Empty();
 }
 
-AppOption& AppOptions::GetOptionByShortName(const string& shortName) {
-    auto iter = _options.find(shortName);
+AppOption& AppOptions::GetOptionByShortName(const string& shortName)
+{
+    const auto iter = _options.find(shortName);
     return iter == _options.end()
         ? AppOption::Empty()
         : iter->second;
 }
 
-AppOption& AppOptions::GetOptionByName(const string& name) {
+AppOption& AppOptions::GetOptionByName(const string& name)
+{
     auto& property = GetOptionByShortName(name);
     if (!property.IsEmpty())
         return property;
@@ -59,11 +67,14 @@ AppOption& AppOptions::GetOptionByName(const string& name) {
     return GetOptionByLongName(name);
 }
 
-list<AppOption> AppOptions::GetOptionsByType(const OptionType optionType) {
+list<AppOption> AppOptions::GetOptionsByType(const OptionType optionType) const
+{
     list<AppOption> filtered;
 
-    for (auto iter = _options.begin(); iter != _options.end(); ++iter) {
-        if (iter->second.GetOptionType() == optionType) {
+    for (auto iter = _options.begin(); iter != _options.end(); ++iter)
+    {
+        if (iter->second.GetOptionType() == optionType)
+        {
             filtered.push_back(iter->second);
         }
     }
@@ -71,12 +82,15 @@ list<AppOption> AppOptions::GetOptionsByType(const OptionType optionType) {
     return filtered;
 }
 
-list<AppOption> AppOptions::GetOptionsByTypes(const list<OptionType>& optionTypes) {
+list<AppOption> AppOptions::GetOptionsByTypes(const list<OptionType>& optionTypes) const
+{
     list<AppOption> filtered;
 
-    for (auto iter = _options.begin(); iter != _options.end(); ++iter) {
+    for (auto iter = _options.begin(); iter != _options.end(); ++iter)
+    {
         const auto found = std::find(std::begin(optionTypes), std::end(optionTypes), iter->second.GetOptionType()) != std::end(optionTypes);
-        if (found) {
+        if (found)
+        {
             filtered.push_back(iter->second);
         }
     }
@@ -84,12 +98,15 @@ list<AppOption> AppOptions::GetOptionsByTypes(const list<OptionType>& optionType
     return filtered;
 }
 
-list<AppOption> AppOptions::GetRequiredOptions() {
+list<AppOption> AppOptions::GetRequiredOptions()
+{
     list<AppOption> filtered;
 
     auto typeList = GetOptions();
-    for (auto iter = typeList.begin(); iter != typeList.end(); ++iter) {
-        if (iter->GetRequired()) {
+    for (auto iter = typeList.begin(); iter != typeList.end(); ++iter)
+    {
+        if (iter->GetRequired())
+        {
             filtered.push_back(*iter);
         }
     }
@@ -97,8 +114,9 @@ list<AppOption> AppOptions::GetRequiredOptions() {
     return filtered;
 }
 
-string AppOptions::GetOptionValue(const string& name) {
-    const auto option = GetOptionByName(name);
+string AppOptions::GetOptionValue(const string& name)
+{
+    const auto& option = GetOptionByName(name);
     if (option.IsEmpty())
         throw exception((string("Unknown Option: ") + name).c_str());
 
@@ -109,16 +127,18 @@ string AppOptions::GetOptionValue(const string& name) {
     return option.GetDefaultValue();
 }
 
-void AppOptions::SetOptionValue(const string& name, const string& value) {
-    const auto option = GetOptionByName(name);
+void AppOptions::SetOptionValue(const string& name, const string& value)
+{
+    const auto& option = GetOptionByName(name);
     if (option.IsEmpty())
         throw exception((string("Unknown Option: ") + name).c_str());
 
     _values[option.GetShortName()] = value;
 }
 
-bool AppOptions::HasOptionValue(const string& name) {
-    const auto option = GetOptionByName(name);
+bool AppOptions::HasOptionValue(const string& name)
+{
+    const auto& option = GetOptionByName(name);
     if (option.IsEmpty())
         throw exception((string("Unknown Option: ") + name).c_str());
 
@@ -139,8 +159,9 @@ void AppOptions::AddOptionWithValues(
 {
     auto valueList = list<string>();
 
-    if (!valueListText.empty()) {
-        valueList = SplitText(valueListText, ',');
+    if (!valueListText.empty())
+    {
+        valueList = StringUtils::SplitText(valueListText, ',');
     }
 
     AddOption(optionType, valueType, shortName, longName, defaultValue, description, required, position, valueList);
@@ -163,28 +184,32 @@ void AppOptions::AddOption(
     if (!GetOptionByLongName(longName).IsEmpty())
         throw exception((string("Option already exists: ") + longName).c_str());
 
-    auto realPosition = position;
-    auto realShortName = shortName;
+    int realPosition = position;
+    string realShortName = shortName;
 
-    if (optionType == OptionType::PARAMETER) {
+    if (optionType == OptionType::PARAMETER)
+    {
         realPosition = static_cast<int>(GetOptionsByType(OptionType::PARAMETER).size() + 1);
         realShortName = to_string(position);
 
-        if (longName.empty()) {
+        if (longName.empty())
+        {
             throw exception((string("Parameter must have a long name: ") + shortName).c_str());
         }
     }
-    else {
+    else
+    {
         if (ValueConverter::IsInt(shortName))
             throw exception((string("Invalid Option Name: ") + shortName).c_str());
 
-        if (position == 0) {
+        if (position == 0)
+        {
             const auto types = {OptionType::OPTION, OptionType::SWITCH };
             realPosition = static_cast<int>(GetOptionsByTypes(types).size() + 1);
         }
     }
 
-    auto option = AppOption(optionType, valueType, realPosition, realShortName, longName, description, defaultValue, required, valueList);
+    const auto option = AppOption(optionType, valueType, realPosition, realShortName, longName, description, defaultValue, required, valueList);
 
     _options[option.GetShortName()] = option;
 }
@@ -195,22 +220,26 @@ void AppOptions::Reset()
     _errors.clear();
 }
 
-list<string> AppOptions::GetErrors() const {
+list<string> AppOptions::GetErrors() const
+{
     return _errors;
 }
 
-bool AppOptions::IsValid() const {
+bool AppOptions::IsValid() const
+{
     return _errors.empty();
 }
 
-bool AppOptions::IsHelp() {
+bool AppOptions::IsHelp()
+{
     const auto value = GetOptionValue(HelpShortCode);
     return ValueConverter::IsBool(value)
         ? ValueConverter::ToBool(value)
         : false;
 }
 
-bool AppOptions::IsUsingDefaultOptionsFile() {
+bool AppOptions::IsUsingDefaultOptionsFile()
+{
     const auto value = GetOptionValue(UseDefaultOptionsFileShortCode);
     return ValueConverter::IsBool(value)
         ? ValueConverter::ToBool(value)

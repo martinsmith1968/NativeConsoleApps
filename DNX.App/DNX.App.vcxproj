@@ -151,25 +151,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="DNXAppArgumentsParser.h" />
     <ClInclude Include="DNXAppDetails.h" />
     <ClInclude Include="DNXAppOption.h" />
-    <ClInclude Include="DNXAppOptionsParser.h" />
     <ClInclude Include="DNXAppOptions.h" />
     <ClInclude Include="DNXAppOptionsSwitchValue.h" />
     <ClInclude Include="DNXOptionType.h" />
-    <ClInclude Include="DNXProcessDetails.h" />
     <ClInclude Include="DNXValueConverter.h" />
     <ClInclude Include="DNXValueType.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DNXAppArgumentsParser.cpp" />
     <ClCompile Include="DNXAppDetails.cpp" />
     <ClCompile Include="DNXAppOption.cpp" />
     <ClCompile Include="DNXAppOptions.cpp" />
     <ClCompile Include="DNXAppOptionsSwitchValue.cpp" />
     <ClCompile Include="DNXOptionType.cpp" />
-    <ClCompile Include="DNXProcessDetails.cpp" />
     <ClCompile Include="DNXValueConverter.cpp" />
     <ClCompile Include="DNXValueType.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -183,9 +182,6 @@
     <ProjectReference Include="..\DNX.Utils\DNX.Utils.vcxproj">
       <Project>{bd755021-f792-4b24-91f6-4352a88ef567}</Project>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="DNXAppOptionsParser.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
