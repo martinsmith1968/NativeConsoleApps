@@ -12,7 +12,7 @@ using namespace std;
 namespace DNX {
     namespace Utils {
         namespace ListUtils {
-            list<string> ToList(const char* array[]);
+            static list<string> ToList(const char* array[]);
         }
     }
 }

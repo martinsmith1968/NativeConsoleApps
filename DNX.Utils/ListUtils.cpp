@@ -5,18 +5,15 @@ using namespace std;
 
 // ReSharper disable CppInconsistentNaming
 
-namespace DNX {
-    namespace Utils {
-        namespace ListUtils {
-            list<string> ToList(const char* array[]) {
-                list<string> list;
+using namespace std;
+using namespace DNX::Utils;
 
-                for (auto i = 0; i < sizeof(array); ++i) {
-                    list.push_back(array[i]);
-                }
+static list<string> ListUtils::ToList(const char* array[]) {
+    list<string> list;
 
-                return list;
-            }
-        }
+    for (auto i = 0; i < sizeof(array); ++i) {
+        list.push_back(array[i]);
     }
+
+    return list;
 }

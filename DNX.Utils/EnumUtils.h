@@ -22,7 +22,7 @@ namespace DNX {
                 map<T, string> _map;
 
             protected:
-                void SetText(const T value, const string text) {
+                void SetText(const T value, const string& text) {
                     _map[value] = text;
                 }
 
@@ -36,7 +36,7 @@ namespace DNX {
                     return nullptr;
                 }
 
-                T GetValue(const string text) const {
+                T GetValue(const string& text) const {
                     for (auto iter = _map.begin(); iter != _map.end(); ++iter) {
                         if (iter->second == text) {
                             return iter->first;
