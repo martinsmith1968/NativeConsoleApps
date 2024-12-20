@@ -161,7 +161,6 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AppInfo.cpp" />
     <ClCompile Include="Options.cpp" />
     <ClCompile Include="BannerText.cpp" />
     <ClCompile Include="stdafx.cpp">
