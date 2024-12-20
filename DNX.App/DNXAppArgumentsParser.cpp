@@ -452,7 +452,10 @@ void AppArgumentsParser::ValidateValues(AppOptions& options)
         const auto optionValue = options.GetOptionValue(iter->GetShortName());
         if (!ValueConverter::IsValueValid(optionValue, iter->GetValueType()))
         {
-            options.AddError(iter->GetNameDescription() + " value is invalid (" + optionValue + ")");
+            if (!(iter->GetRequired() && optionValue.empty()))
+            {
+                options.AddError(iter->GetNameDescription() + " value is invalid (" + optionValue + ")");
+            }
         }
     }
 }
