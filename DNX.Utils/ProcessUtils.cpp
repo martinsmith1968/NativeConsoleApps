@@ -15,9 +15,9 @@ using namespace DNX::Utils;
 string ProcessUtils::GetExecutableFileName()
 {
     wchar_t buffer[MAX_PATH];
-    auto length = GetModuleFileName(nullptr, buffer, MAX_PATH);
+    const auto length = GetModuleFileName(nullptr, buffer, MAX_PATH);
 
-    wstring ws(buffer);
+    wstring ws(buffer, length);
 
     string str(ws.begin(), ws.end());
 

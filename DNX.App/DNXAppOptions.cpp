@@ -30,7 +30,7 @@ void AppOptions::AddError(const string& text)
     _errors.push_back(text);
 }
 
-list<AppOption> AppOptions::GetOptions()
+list<AppOption> AppOptions::GetOptions() const
 {
     const auto types = OptionTypeText.GetAllValues();
 

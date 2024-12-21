@@ -280,7 +280,7 @@ void AppArgumentsParser::ShowUsage(const AppOptions& options, const AppDetails& 
     }
     cout << std::endl;
     cout << "Usage:" << std::endl;
-    cout << appDetails.Name << parameterText << std::endl;
+    cout << AppDetails::GetApplicationName() << parameterText << std::endl;
 
     if (hasOptions)
     {

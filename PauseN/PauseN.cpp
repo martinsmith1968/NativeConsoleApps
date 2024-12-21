@@ -8,7 +8,6 @@
 
 #include "AppInfo.h"
 #include "Options.h"
-#include "../DNX.Utils/ProcessUtils.h"
 #include "../DNX.Utils/StringUtils.h"
 #include "../DNX.App/DNXAppArgumentsParser.h"
 
@@ -31,8 +30,6 @@ int main(const int argc, char* argv[])
     try
     {
         const AppInfo appInfo;
-
-        auto x1 = ProcessUtils::GetExecutableFileName();
 
         Options options;
         AppArgumentsParser::Parse(argc, argv, options);

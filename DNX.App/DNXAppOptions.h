@@ -52,7 +52,7 @@ namespace DNX {
                 const list<string>& valueList = list<string>()
             );
 
-            list<AppOption> GetOptions();
+            list<AppOption> GetOptions() const;
             AppOption& GetOptionByLongName(const string& longName);
             AppOption& GetOptionByShortName(const string& shortName);
             AppOption& GetOptionByName(const string& name);
