@@ -1,5 +1,6 @@
 #pragma once
 #include "stdafx.h"
+#include <algorithm>
 #include <string>
 #include "../DNX.Utils/StringUtils.h"
 #include "../DNX.App/DNXAppOptions.h"
@@ -10,6 +11,7 @@ using namespace DNX::Utils;
 
 // ReSharper disable CppInconsistentNaming
 // ReSharper disable StringLiteralTypo
+// ReSharper disable CppClangTidyModernizeReturnBracedInitList
 
 enum class TextAlignmentType : uint8_t
 {
@@ -47,7 +49,7 @@ class Options final : public AppOptions
         AddOption(OptionType::OPTION, ValueType::INT, "tpgs", "title-prefix-gap-size", "2", "Set Title Prefix Gap Size", false);
         AddOption(OptionType::OPTION, ValueType::INT, "tsgs", "title-suffix-gap-size", "2", "Set Title Suffix Gap Size", false);
         AddOption(OptionType::OPTION, ValueType::ENUM, "ta", "text-alignment", "CENTER", "Set Text Alignment", false, 0, TextAlignmentTypeTextConverter.GetAllText());
-        AddOption(OptionType::OPTION, ValueType::INT, "minl", "min-total-length", "0", "Set Minimum Total line length", false); // TODO: Default "" and allow optionals to validate
+        AddOption(OptionType::OPTION, ValueType::INT, "minl", "min-total-length", "0", "Set Minimum Total line length", false);
         AddOption(OptionType::OPTION, ValueType::INT, "maxl", "max-total-length", "0", "Set Maximum Total line length", false);
         AddOption(OptionType::SWITCH, ValueType::BOOL, "x", "debug", "false", "Turn debugging on/off", false);
     }
@@ -142,7 +144,7 @@ class Options final : public AppOptions
         return lines;
     }
 
-    string GetFormattedTextLine(const string text)
+    string GetFormattedTextLine(const string& text)
     {
         auto prefixGapSize    = GetTitlePrefixGapSize();
         auto suffixGapSize    = GetTitleSuffixGapSize();
@@ -192,18 +194,12 @@ class Options final : public AppOptions
 
         if (GetMinimumTotalLength() > 0)
         {
-            if (lineLength < GetMinimumTotalLength())
-            {
-                lineLength = GetMinimumTotalLength();
-            }
+            lineLength = std::max(lineLength, GetMinimumTotalLength());
         }
 
         if (GetMaximumTotalLength() > 0)
         {
-            if (lineLength > GetMaximumTotalLength())
-            {
-                lineLength = GetMaximumTotalLength();
-            }
+            lineLength = std::min(lineLength, GetMaximumTotalLength());
         }
 
         return lineLength;

@@ -47,16 +47,16 @@ public:
 
     string GetFormattedMessageText()
     {
-        return StringUtils::ReplaceString(
-            StringUtils::ReplaceString(
-                GetMessageText(),
-                "{timeout}",
-                std::to_string(GetTimeoutSeconds())
-                ),
-            "{sleep}",
-            std::to_string(GetSleepMilliseconds()
-            )
-        );
+        auto replace_timeout = [](Options& options, const string& text)
+            {
+                return StringUtils::ReplaceString(text, "{timeout}", std::to_string(options.GetTimeoutSeconds()));
+            };
+        auto replace_sleep= [](Options& options, const string& text)
+            {
+                return StringUtils::ReplaceString(text, "{sleep}", std::to_string(options.GetSleepMilliseconds()));
+            };
+
+        return replace_sleep(*this, replace_timeout(*this, GetMessageText()));
     }
 
     void PostParseValidate() override
