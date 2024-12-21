@@ -7,7 +7,7 @@
 #include <thread>
 
 #include "AppInfo.h"
-#include "Options.cpp"
+#include "Options.h"
 #include "../DNX.Utils/ProcessUtils.h"
 #include "../DNX.Utils/StringUtils.h"
 #include "../DNX.App/DNXAppArgumentsParser.h"

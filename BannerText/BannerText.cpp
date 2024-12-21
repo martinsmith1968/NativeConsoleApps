@@ -4,7 +4,7 @@
 #include <string>
 
 #include "AppInfo.h"
-#include "Options.cpp"
+#include "Options.h"
 #include "../DNX.Utils/StringUtils.h"
 #include "../DNX.App/DNXAppArgumentsParser.h"
 
@@ -91,4 +91,3 @@ void BannerText::Execute(Options& options)
         }
     }
 }
-
