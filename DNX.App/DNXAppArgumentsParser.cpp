@@ -4,6 +4,7 @@
 #include "../DNX.Utils/FileUtils.h"
 #include "../DNX.Utils/StringUtils.h"
 
+#include <algorithm>
 #include <iostream>
 #include <fstream>
 #include <iomanip>
@@ -15,6 +16,8 @@ using namespace DNX::App;
 using namespace DNX::Utils;
 
 // ReSharper disable CppInconsistentNaming
+// ReSharper disable CppClangTidyPerformanceAvoidEndl
+// ReSharper disable CppClangTidyBugproneNarrowingConversions
 
 void AppArgumentsParser::ParseDefaultOptionsFile(AppOptions& options)
 {
@@ -32,10 +35,9 @@ void AppArgumentsParser::ParseLocalOptionsFile(AppOptions& options)
 
 void AppArgumentsParser::ParseOptionsFile(AppOptions& options, const string& fileName)
 {
-    string optionName = "";
-
     if (FileUtils::FileExists(fileName))
     {
+        string optionName;
         auto parameter = 0;
         const auto arg = "@" + fileName;
 
@@ -45,11 +47,11 @@ void AppArgumentsParser::ParseOptionsFile(AppOptions& options, const string& fil
 
 void AppArgumentsParser::ParseOptions(const int argc, char** argv, AppOptions& options)
 {
-    string optionName;
-    auto parameter = 0;
-
     for (auto i = 1; i < argc; ++i)
     {
+        string optionName;
+        auto parameter = 0;
+
         const string arg = argv[i];
 
         // Process this argument
@@ -85,7 +87,7 @@ void AppArgumentsParser::Parse(const int argc, char* argv[], AppOptions& options
     options.PostParseValidate();
 }
 
-void AppArgumentsParser::ParseSingleArg(string arg, AppOptions& options, string& optionName, int& parameter)
+void AppArgumentsParser::ParseSingleArg(const string& arg, AppOptions& options, string& optionName, int& parameter)
 {
     // Handle file name options
     if (StringUtils::StartsWith(arg, "@"))
@@ -100,7 +102,7 @@ void AppArgumentsParser::ParseSingleArg(string arg, AppOptions& options, string&
 
             if (StringUtils::StartsWith(line, "-") || StringUtils::StartsWith(line, "/"))
             {
-                const auto spacePos = line.find(" ");
+                const auto spacePos = line.find(' ');
                 const auto hasSpace = spacePos != string::npos;
 
                 const auto argName = hasSpace
@@ -139,7 +141,7 @@ void AppArgumentsParser::ParseSingleArg(string arg, AppOptions& options, string&
     {
         auto argNameAndValue = StringUtils::RemoveStartsWith(arg, "--");
 
-        const auto equalsPos = argNameAndValue.find("=");
+        const auto equalsPos = argNameAndValue.find('=');
         const auto hasValue = equalsPos != string::npos;
 
         const auto argName = hasValue
@@ -224,7 +226,7 @@ list<string> AppArgumentsParser::ReadLinesFromFile(const string& fileName, AppOp
             in.close();
         }
     }
-    catch (exception ex)
+    catch (exception& ex)
     {
         options.AddError(ex.what());
         lines.clear();
@@ -305,10 +307,7 @@ void AppArgumentsParser::ShowUsage(const AppOptions& options, const AppDetails& 
             }
             optionDesc += " " + ValueTypeTextConverter.GetText(iter->GetValueType());
 
-            if (optionDesc.length() > maxOptionDescriptionLength)
-            {
-                maxOptionDescriptionLength = optionDesc.length();
-            }
+            maxOptionDescriptionLength = std::max(optionDesc.length(), maxOptionDescriptionLength);
 
             auto textDesc = iter->GetDescription();
 
@@ -316,7 +315,7 @@ void AppArgumentsParser::ShowUsage(const AppOptions& options, const AppDetails& 
 
             if (iter->GetRequired())
             {
-                textDescParts.push_back("Required");
+                textDescParts.emplace_back("Required");
             }
             if (!iter->GetDefaultValue().empty())
             {
@@ -356,7 +355,9 @@ void AppArgumentsParser::ShowUsage(const AppOptions& options, const AppDetails& 
 
         for (auto iter = optionDescriptions.begin(); iter != optionDescriptions.end(); ++iter)
         {
-            std::cout << std::left << std::setfill(' ') << std::setw(maxOptionDescriptionLength + 2) << std::get<1>(*iter)
+            streamsize paddedWidth = maxOptionDescriptionLength + 2;
+
+            std::cout << std::left << std::setfill(' ') << std::setw(paddedWidth) << std::get<1>(*iter)
                 << std::get<2>(*iter)
                 << std::endl;
         }

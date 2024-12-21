@@ -27,7 +27,7 @@ namespace DNX {
             static void ValidateRequired(AppOptions& options);
             static void ValidateValues(AppOptions& options);
 
-            static void ParseSingleArg(string arg, AppOptions& options, string& optionName, int& parameter);
+            static void ParseSingleArg(const string& arg, AppOptions& options, string& optionName, int& parameter);
 
             static list<string> ReadLinesFromFile(const string& fileName, AppOptions& options);
 

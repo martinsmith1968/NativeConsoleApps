@@ -106,10 +106,11 @@ AppOption::AppOption(
     }
 }
 
-static AppOption _empty;
 AppOption& AppOption::Empty()
 {
-    return _empty;
+    static AppOption empty_instance;
+
+    return empty_instance;
 }
 
 bool AppOption::CompareByPosition(const AppOption& first, const AppOption& second)
