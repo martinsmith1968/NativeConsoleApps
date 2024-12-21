@@ -13,7 +13,8 @@ namespace DNX {
         //--------------------------------------------------------------------------
         // Class: AppArgumentsParser
         //--------------------------------------------------------------------------
-        class AppArgumentsParser {
+        class AppArgumentsParser
+        {
             static void ParseDefaultOptionsFile(AppOptions& options);
             static void ParseLocalOptionsFile(AppOptions& options);
             static void ParseOptionsFile(AppOptions& options, const string& fileName);

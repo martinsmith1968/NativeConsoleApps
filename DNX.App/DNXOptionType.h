@@ -13,7 +13,8 @@ namespace DNX {
         //--------------------------------------------------------------------------
         // Enum: OptionType
         //--------------------------------------------------------------------------
-        enum class OptionType {
+        enum class OptionType : uint8_t
+        {
             PARAMETER,
             OPTION,
             SWITCH

@@ -11,7 +11,8 @@ using namespace std;
 
 namespace DNX {
     namespace Utils {
-        class StringUtils {
+        class StringUtils
+        {
         public:
             static string Trim(const string& str, const char removeChar = ' ');
             static string LTrim(const string& str, const char removeChar = ' ');

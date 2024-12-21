@@ -13,7 +13,8 @@ namespace DNX {
         //--------------------------------------------------------------------------
         // Enum: ValueType
         //--------------------------------------------------------------------------
-        enum class ValueType {
+        enum class ValueType : uint8_t
+        {
             CHAR,
             STRING,
             BOOL,

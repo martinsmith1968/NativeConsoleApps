@@ -13,7 +13,8 @@ namespace DNX {
         //--------------------------------------------------------------------------
         // Class: ValueConverter
         //--------------------------------------------------------------------------
-        class ValueConverter {
+        class ValueConverter
+        {
             static list<string> date_formats;
             static list<string> time_formats;
 

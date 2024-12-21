@@ -11,7 +11,7 @@ using namespace DNX::Utils;
 // ReSharper disable CppInconsistentNaming
 // ReSharper disable StringLiteralTypo
 
-enum class TextAlignmentType
+enum class TextAlignmentType : uint8_t
 {
     LEFT,
     RIGHT,

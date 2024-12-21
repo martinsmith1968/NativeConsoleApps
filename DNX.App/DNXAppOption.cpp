@@ -60,7 +60,8 @@ string AppOption::GetNameDescription() const
 
     description += OptionTypeTextHelper.GetText(_optionType);
 
-    if (!description.empty()) {
+    if (!description.empty())
+    {
         description += ": ";
     }
 

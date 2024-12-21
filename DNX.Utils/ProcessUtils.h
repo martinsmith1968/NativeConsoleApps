@@ -13,7 +13,8 @@ namespace DNX {
         //--------------------------------------------------------------------------
         // Class: ProcessUtils
         //--------------------------------------------------------------------------
-        class ProcessUtils {
+        class ProcessUtils
+        {
         public:
             static string GetExecutableFileName();
         };

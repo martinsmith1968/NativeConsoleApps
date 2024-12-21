@@ -40,7 +40,8 @@ string StringUtils::RTrim(const string& str, const char removeChar)
     return str.substr(0, str.length() - last);
 }
 
-string StringUtils::ReplaceString(string subject, const string& search, const string& replace) {
+string StringUtils::ReplaceString(string subject, const string& search, const string& replace)
+{
     size_t pos = 0;
 
     while ((pos = subject.find(search, pos)) != string::npos)
@@ -52,14 +53,16 @@ string StringUtils::ReplaceString(string subject, const string& search, const st
     return subject;
 }
 
-string StringUtils::ToLower(const string& text) {
+string StringUtils::ToLower(const string& text)
+{
     string copy = text;
     transform(copy.begin(), copy.end(), copy.begin(), ::tolower);
 
     return copy;
 }
 
-string StringUtils::ToUpper(const string& text) {
+string StringUtils::ToUpper(const string& text)
+{
     string copy = text;
     transform(copy.begin(), copy.end(), copy.begin(), ::toupper);
 
@@ -71,7 +74,8 @@ string StringUtils::Left(const string& text, const size_t length)
     return text.substr(0, length);
 }
 
-string StringUtils::Right(const string& text, const size_t length) {
+string StringUtils::Right(const string& text, const size_t length)
+{
     return text.substr(text.length() - length, string::npos);
 }
 
@@ -83,7 +87,8 @@ string StringUtils::BoolToString(const bool value, const string& trueValue, cons
         return falseValue;
 }
 
-list<string> StringUtils::SplitText(const string& str, const char splitChar, const char trimChar) {
+list<string> StringUtils::SplitText(const string& str, const char splitChar, const char trimChar)
+{
     stringstream ss(str);
 
     list<string> list;
@@ -93,11 +98,13 @@ list<string> StringUtils::SplitText(const string& str, const char splitChar, con
         string piece;
         getline(ss, piece, splitChar);
 
-        if (trimChar != NULL) {
+        if (trimChar != NULL)
+        {
             piece = Trim(piece, trimChar);
         }
 
-        if (!piece.empty()) {
+        if (!piece.empty())
+        {
             list.push_back(piece);
         }
     }
@@ -111,7 +118,8 @@ string StringUtils::JoinText(const list<string>& list, const string& delimiter)
 
     for (auto iter = list.begin(); iter != list.end(); ++iter)
     {
-        if (iter != list.begin()) {
+        if (iter != list.begin())
+        {
             ss << delimiter;
         }
 
@@ -121,30 +129,35 @@ string StringUtils::JoinText(const list<string>& list, const string& delimiter)
     return ss.str();
 }
 
-bool StringUtils::StartsWith(const string& str, const string& prefix) {
+bool StringUtils::StartsWith(const string& str, const string& prefix)
+{
     if (str.length() < prefix.length())
         return false;
 
     return Left(str, prefix.length()) == prefix;
 }
 
-bool StringUtils::EndsWith(const string& str, const string& suffix) {
+bool StringUtils::EndsWith(const string& str, const string& suffix)
+{
     if (str.length() < suffix.length())
         return false;
 
     return Right(str, suffix.length()) == suffix;
 }
 
-bool StringUtils::StartsAndEndsWith(const string& str, const string& prefixAndSuffix) {
+bool StringUtils::StartsAndEndsWith(const string& str, const string& prefixAndSuffix)
+{
     return StartsWith(str, prefixAndSuffix) && EndsWith(str, prefixAndSuffix);
 }
 
-string StringUtils::RemoveStartsWith(const string& str, const string& prefix) {
+string StringUtils::RemoveStartsWith(const string& str, const string& prefix)
+{
     if (str.length() < prefix.length())
         return str;
 
     string trimmedStr = str;
-    while (StartsWith(trimmedStr, prefix)) {
+    while (StartsWith(trimmedStr, prefix))
+    {
         trimmedStr = trimmedStr == prefix
             ? ""
             : trimmedStr.substr(prefix.length(), string::npos);
@@ -153,12 +166,14 @@ string StringUtils::RemoveStartsWith(const string& str, const string& prefix) {
     return trimmedStr;
 }
 
-string StringUtils::RemoveEndsWith(const string& str, const string& suffix) {
+string StringUtils::RemoveEndsWith(const string& str, const string& suffix)
+{
     if (str.length() < suffix.length())
         return str;
 
     string trimmedStr = str;
-    while (EndsWith(trimmedStr, suffix)) {
+    while (EndsWith(trimmedStr, suffix))
+    {
         trimmedStr = trimmedStr == suffix
             ? ""
             : trimmedStr.substr(0, trimmedStr.length() - suffix.length());
@@ -167,6 +182,7 @@ string StringUtils::RemoveEndsWith(const string& str, const string& suffix) {
     return trimmedStr;
 }
 
-string StringUtils::RemoveStartsAndEndsWith(const string& str, const string& prefixAndSuffix) {
+string StringUtils::RemoveStartsAndEndsWith(const string& str, const string& prefixAndSuffix)
+{
     return RemoveStartsWith(RemoveEndsWith(str, prefixAndSuffix), prefixAndSuffix);
 }

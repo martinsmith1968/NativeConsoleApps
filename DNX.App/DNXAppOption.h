@@ -14,7 +14,8 @@ namespace DNX {
         //--------------------------------------------------------------------------
         // Class: AppOption
         //--------------------------------------------------------------------------
-        class AppOption {
+        class AppOption
+        {
             OptionType _optionType;
             ValueType _valueType;
             string _shortName;

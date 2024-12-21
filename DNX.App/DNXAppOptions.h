@@ -17,7 +17,8 @@ namespace DNX {
         //--------------------------------------------------------------------------
         // Class: AppOptions
         //--------------------------------------------------------------------------
-        class AppOptions {
+        class AppOptions
+        {
             map<string, AppOption> _options{};
             map<string, string> _values{};
             list<string> _errors{};

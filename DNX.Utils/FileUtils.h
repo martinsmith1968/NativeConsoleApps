@@ -12,7 +12,8 @@ namespace DNX {
         //--------------------------------------------------------------------------
         // Class: FileUtils
         //--------------------------------------------------------------------------
-        class FileUtils {
+        class FileUtils
+        {
         public:
             static string GetFileNameOnly(const string& filePath);
             static string GetFileNameAndExtension(const string& filePath);

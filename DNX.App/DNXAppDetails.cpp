@@ -21,11 +21,13 @@ string AppDetails::GetHeaderLine() const
 
     text << Name;
 
-    if (!Version.empty()) {
+    if (!Version.empty())
+    {
         text << " v" << Version;
     }
 
-    if (!Description.empty()) {
+    if (!Description.empty())
+    {
         text << " - " << Description;
     }
 
