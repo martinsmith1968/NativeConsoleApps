@@ -40,6 +40,90 @@ string StringUtils::RTrim(const string& str, const char removeChar)
     return str.substr(0, str.length() - last);
 }
 
+string StringUtils::Trim(const string& str, const string& prefix_suffix)
+{
+    return RTrim(LTrim(str, prefix_suffix), prefix_suffix);
+}
+
+string StringUtils::LTrim(const string& str, const string& prefix)
+{
+    auto result = str;
+    while (StartsWith(result, prefix))
+        result = Right(result, result.length() - prefix.length());
+
+    return result;
+}
+
+string StringUtils::RTrim(const string& str, const string& suffix)
+{
+    auto result = str;
+    while (EndsWith(result, suffix))
+        result = Left(result, result.length() - suffix.length());
+
+    return result;
+}
+
+string StringUtils::Before(const string& str, const string& find)
+{
+    if (str.empty() || find.empty())
+        return "";
+
+    const auto pos = str.find(find);
+    if (pos == string::npos)
+        return "";
+
+    return Left(str, pos);
+}
+
+string StringUtils::After(const string& str, const string& find)
+{
+    if (str.empty() || find.empty())
+        return "";
+
+    const auto pos = str.find(find);
+    if (pos == string::npos)
+        return "";
+
+    return Right(str, str.length() - pos - find.length());
+
+}
+
+string StringUtils::BeforeLast(const string& str, const string& find)
+{
+    if (str.empty() || find.empty())
+        return "";
+
+    const auto pos = str.find_last_of(find);
+    if (pos == string::npos)
+        return "";
+
+    return Left(str, pos);
+}
+
+string StringUtils::AfterLast(const string& str, const string& find)
+{
+    if (str.empty() || find.empty())
+        return "";
+
+    const auto pos = str.find_last_of(find);
+    if (pos == string::npos)
+        return "";
+
+    return Right(str, str.length() - pos - find.length());
+
+}
+
+string StringUtils::Between(const string& str, const string& first, const string& second)
+{
+    return BeforeLast(After(str, first), second);
+}
+
+string StringUtils::BetweenInner(const string& str, const string& first, const string& second)
+{
+    return Before(AfterLast(str, first), second);
+}
+
+
 string StringUtils::ReplaceString(string subject, const string& search, const string& replace)
 {
     size_t pos = 0;
@@ -53,10 +137,19 @@ string StringUtils::ReplaceString(string subject, const string& search, const st
     return subject;
 }
 
+string StringUtils::Repeat(const string& subject, const int count)
+{
+    // Source : https://stackoverflow.com/questions/166630/how-can-i-repeat-a-string-a-variable-number-of-times-in-c
+    std::ostringstream os;
+    for (int i = 0; i < count; i++)
+        os << subject;
+    return os.str();
+}
+
 string StringUtils::ToLower(const string& text)
 {
     string copy = text;
-    transform(copy.begin(), copy.end(), copy.begin(), ::tolower);
+    transform(copy.begin(), copy.end(), copy.begin(), tolower);
 
     return copy;
 }
@@ -64,7 +157,7 @@ string StringUtils::ToLower(const string& text)
 string StringUtils::ToUpper(const string& text)
 {
     string copy = text;
-    transform(copy.begin(), copy.end(), copy.begin(), ::toupper);
+    transform(copy.begin(), copy.end(), copy.begin(), toupper);
 
     return copy;
 }

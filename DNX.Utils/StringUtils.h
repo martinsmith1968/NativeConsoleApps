@@ -18,7 +18,20 @@ namespace DNX {
             static string LTrim(const string& str, const char removeChar = ' ');
             static string RTrim(const string& str, const char removeChar = ' ');
 
+            static string Trim(const string& str, const string& prefix_suffix);
+            static string LTrim(const string& str, const string& prefix);
+            static string RTrim(const string& str, const string& suffix);
+
+            static string Before(const string& str, const string& find);
+            static string After(const string& str, const string& find);
+            static string BeforeLast(const string& str, const string& find);
+            static string AfterLast(const string& str, const string& find);
+
+            static string Between(const string& str, const string& first, const string& second);
+            static string BetweenInner(const string& str, const string& first, const string& second);
+
             static string ReplaceString(string subject, const string& search, const string& replace);
+            static string Repeat(const string& subject, const int count);
 
             static string ToLower(const string& text);
             static string ToUpper(const string& text);
