@@ -37,7 +37,7 @@ string StringUtils::RTrim(const string& str, const char removeChar)
         return str;
     }
 
-    return str.substr(0, str.length() - last);
+    return str.substr(0, last + 1);
 }
 
 string StringUtils::Trim(const string& str, const string& prefix_suffix)
