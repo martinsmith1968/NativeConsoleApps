@@ -184,7 +184,17 @@ jobs:
       run: msbuild NativeConsoleApplications.sln -t:Rebuild -p:Configuration=${{ env.BUILD_CONFIG }} -p:"Platform=${{ env.BUILD_PLATFORM }}" -p:"Version=${{ needs.setup.outputs.product_version }}"
 
     - name: Run Tests
-      uses: arvsrao/googletest-action@master
+      run: |
+        $folder = ".\Output.Tests\${{ env.BUILD_PLATFORM }}\${{ env.BUILD_CONFIG }}\"
+
+        $filenames = Get-ChildItem -Path $folder -filter *.exe
+
+        foreach ($filename in $filenames) {
+            Write-Host "------------------------------------------------------------"
+            Write-Host "Testing: ${filename}"
+
+            & $filename
+        }
 
     - name: Add files to output folder
       run: |
