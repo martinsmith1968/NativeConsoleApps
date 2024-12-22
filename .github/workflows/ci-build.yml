@@ -175,7 +175,7 @@ jobs:
       uses: Nuget/setup-nuget@v2
 
     - name: Restore nuget packages
-      run: nuget restore ${{ env.PROJECT_NAME }}/${{ env.PROJECT_NAME }}.sln
+      run: nuget restore ${{ env.PROJECT_NAME }}/${{ env.PROJECT_NAME }}/${{ env.PROJECT_NAME }}.sln
 
     - name: Setup msbuild
       uses: microsoft/setup-msbuild@v2
