@@ -44,6 +44,20 @@ namespace DNX {
             static list<string> SplitText(const string& str, const char splitChar = ',', const char trimChar = NULL);
             static string JoinText(const list<string>& list, const string& delimiter);
 
+            static bool Contains(const string& str, const string& search);
+
+            static bool ContainsOnly(const string& str, const string& characters);
+            static bool ContainsOnly(const string& str, const char* characters);
+
+            static bool ContainsAny(const string& str, const string& characters);
+            static bool ContainsAny(const string& str, const char* characters);
+
+            static string RemoveAny(const string& str, const string& characters);
+            static string RemoveAny(const string& str, const char* characters);
+
+            static string RemoveAnyExcept(const string& str, const string& characters);
+            static string RemoveAnyExcept(const string& str, const char* characters);
+
             static bool StartsWith(const string& str, const string& prefix);
             static bool EndsWith(const string& str, const string& suffix);
             static bool StartsAndEndsWith(const string& str, const string& prefixAndSuffix);

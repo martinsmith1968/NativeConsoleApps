@@ -222,6 +222,104 @@ string StringUtils::JoinText(const list<string>& list, const string& delimiter)
     return ss.str();
 }
 
+bool StringUtils::Contains(const string& str, const string& search)
+{
+    if (str.empty() || search.empty())
+        return false;
+
+    const auto pos = str.find(search);
+
+    return pos != string::npos;
+}
+
+bool StringUtils::ContainsOnly(const string& str, const string& characters)
+{
+    return ContainsOnly(str, characters.c_str());
+}
+
+bool StringUtils::ContainsOnly(const string& str, const char* characters)
+{
+    if (str.empty() || strlen(characters) == 0)
+        return false;
+
+    for (size_t x=0; x < strlen(characters); ++x)
+    {
+        auto pos = str.find(characters[x]);
+        if (pos == string::npos)
+            return false;
+    }
+
+    return true;
+}
+
+bool StringUtils::ContainsAny(const string& str, const string& characters)
+{
+    return ContainsAny(str, characters.c_str());
+}
+
+bool StringUtils::ContainsAny(const string& str, const char* characters)
+{
+    if (str.empty() || strlen(characters) == 0)
+        return false;
+
+    for (size_t x = 0; x < strlen(characters); ++x)
+    {
+        const auto pos = str.find(characters[x]);
+        if (pos == string::npos)
+            return true;
+    }
+
+    return false;
+}
+
+string StringUtils::RemoveAny(const string& str, const string& characters)
+{
+    if (str.empty() || characters.empty())
+        return str;
+
+    std::ostringstream result;
+
+    for (const auto ch : str)
+    {
+        const auto pos = characters.find(ch);
+        if (pos != string::npos)
+            continue;
+
+        result << ch;
+    }
+
+    return result.str();
+}
+
+string StringUtils::RemoveAny(const string& str, const char* characters)
+{
+    return RemoveAny(str, string(characters));
+}
+
+string StringUtils::RemoveAnyExcept(const string& str, const string& characters)
+{
+    if (str.empty() || characters.empty())
+        return str;
+
+    std::ostringstream result;
+
+    for (const auto ch : str)
+    {
+        const auto pos = characters.find(ch);
+        if (pos == string::npos)
+            continue;
+
+        result << ch;
+    }
+
+    return result.str();
+}
+
+string StringUtils::RemoveAnyExcept(const string& str, const char* characters)
+{
+    return RemoveAnyExcept(str, string(characters));
+}
+
 bool StringUtils::StartsWith(const string& str, const string& prefix)
 {
     if (str.length() < prefix.length())
