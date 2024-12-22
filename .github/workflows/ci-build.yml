@@ -177,7 +177,7 @@ jobs:
       run: msbuild NativeConsoleApplications.sln -t:Rebuild -p:Configuration=${{ env.BUILD_CONFIG }} -p:"Platform=${{ env.BUILD_PLATFORM }}" -p:"Version=${{ needs.setup.outputs.product_version }}"
 
     - name: Run Tests
-      uses: arvsrao/googletest-action
+      uses: arvsrao/googletest-action@master
 
     - name: Add files to output folder
       run: |
