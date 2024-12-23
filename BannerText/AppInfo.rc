@@ -31,3 +31,5 @@ BEGIN
         END
     END
 END
+
+MAIN_ICON   ICON  "BannerText.ico"
