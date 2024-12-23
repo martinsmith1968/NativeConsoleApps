@@ -188,7 +188,7 @@ jobs:
             Write-Host "------------------------------------------------------------"
             Write-Host "Handling: ${filename}"
 
-            $content = Get-Content $filename
+            $content = Get-Content $filename -Raw
 
             Write-Host ""
             Write-Host "Before"
