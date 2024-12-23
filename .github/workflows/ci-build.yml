@@ -170,7 +170,6 @@ jobs:
             Get-Content $filename
         }
 
-
     - name: Setup Nuget
       uses: Nuget/setup-nuget@v2
 
