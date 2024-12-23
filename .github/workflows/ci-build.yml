@@ -170,6 +170,40 @@ jobs:
             Get-Content $filename
         }
 
+    - name: Write BuildInfo Header File
+      run: |
+        Write-Host "Starting in : $((Get-Location).Path)"
+        Write-Host ""
+
+        $filenames = @( "Common/BuildInfo.h" )
+
+        $build_date     = $(Get-Date -Format "yyyy-MM-dd")
+        $build_time     = $(Get-Date -Format "HH:mm")
+        $build_datetime = "${build_date} ${build_time}"
+
+        Write-Host "Build Date: " $build_date
+        Write-Host ""
+
+        foreach ($filename in $filenames) {
+            Write-Host "------------------------------------------------------------"
+            Write-Host "Handling: ${filename}"
+
+            $content = Get-Content $filename
+
+            Write-Host ""
+            Write-Host "Before"
+            Write-Host $content
+
+            $content = $content.replace("__DATE__", ${build_date})
+            $content = $content.replace("__TIME__", ${build_time})
+
+            Write-Host ""
+            Write-Host "After"
+            Write-Host $content
+
+            Set-Content $filename $content
+        }
+
     - name: Setup Nuget
       uses: Nuget/setup-nuget@v2
 
