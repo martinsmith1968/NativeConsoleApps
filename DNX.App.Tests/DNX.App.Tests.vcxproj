@@ -19,9 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{fe553727-0f98-409e-93e2-f8ebc5b2c6be}</ProjectGuid>
+    <ProjectGuid>{01774a04-f33b-40ec-b35c-203f0b8a96a8}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>DNXUtilsTests</RootNamespace>
+    <RootNamespace>DNXAppTests</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.22621.0</WindowsTargetPlatformVersion>
     <ConfigurationType>Application</ConfigurationType>
     <PlatformToolset>v143</PlatformToolset>
@@ -103,7 +103,7 @@
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="StringUtils_Tests.cpp" />
+    <ClCompile Include="AppDetails_Tests.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -115,8 +115,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DNX.Utils\DNX.Utils.vcxproj">
-      <Project>{bd755021-f792-4b24-91f6-4352a88ef567}</Project>
+    <ProjectReference Include="..\DNX.App\DNX.App.vcxproj">
+      <Project>{bd49f55e-7151-4702-92bf-4bd6138496e6}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
