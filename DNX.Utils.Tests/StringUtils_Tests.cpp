@@ -5,7 +5,6 @@
 using namespace std;
 using namespace DNX::Utils;
 
-
 TEST(Trim, RTrim_single_character_removes_found_target_returns_as_expected) {
     EXPECT_EQ(StringUtils::RTrim("...text...", '.'), "...text");
     EXPECT_EQ(StringUtils::RTrim("...text...", ' '), "...text...");

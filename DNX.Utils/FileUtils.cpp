@@ -48,7 +48,7 @@ string FileUtils::ChangeFileExtension(const string& filePath, const string& file
         fileName = fileName.substr(0, lastFileExtSep);
     }
 
-    if (fileExtension.length() > 0 && fileExtension.substr(0, 1) != ".")
+    if (!fileExtension.empty() && fileExtension.substr(0, 1) != ".")
     {
         fileName += '.';
     }
