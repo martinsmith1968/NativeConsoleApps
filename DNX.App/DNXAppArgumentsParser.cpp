@@ -47,11 +47,11 @@ void AppArgumentsParser::ParseOptionsFile(AppOptions& options, const string& fil
 
 void AppArgumentsParser::ParseOptions(const int argc, char** argv, AppOptions& options)
 {
+    string optionName;
+    auto parameter = 0;
+
     for (auto i = 1; i < argc; ++i)
     {
-        string optionName;
-        auto parameter = 0;
-
         const string arg = argv[i];
 
         // Process this argument
