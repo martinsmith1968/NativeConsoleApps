@@ -51,6 +51,14 @@ namespace DNX {
                 int position = 0,
                 const list<string>& valueList = list<string>()
             );
+            void AddSwitch(
+                const string& shortName,
+                const string& longName = "",
+                const string& defaultValue = "",
+                const string& description = "",
+                bool required = false,
+                int position = 0
+            );
 
             list<AppOption> GetOptions() const;
             AppOption& GetOptionByLongName(const string& longName);

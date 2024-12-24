@@ -214,6 +214,40 @@ void AppOptions::AddOption(
     _options[option.GetShortName()] = option;
 }
 
+void AppOptions::AddSwitch(
+    const string& shortName,
+    const string& longName,
+    const string& defaultValue,
+    const string& description,
+    const bool required,
+    const int position
+)
+{
+    if (!GetOptionByShortName(shortName).IsEmpty())
+        throw exception((string("Option already exists: ") + shortName).c_str());
+    if (!GetOptionByLongName(longName).IsEmpty())
+        throw exception((string("Option already exists: ") + longName).c_str());
+
+    int realPosition = position;
+    string realShortName = shortName;
+    const auto valueList = list<string>();
+
+    {
+        if (ValueConverter::IsInt(shortName))
+            throw exception((string("Invalid Option Name: ") + shortName).c_str());
+
+        if (position == 0)
+        {
+            const auto types = { OptionType::OPTION, OptionType::SWITCH };
+            realPosition = static_cast<int>(GetOptionsByTypes(types).size() + 1);
+        }
+    }
+
+    const auto option = AppOption(OptionType::SWITCH, ValueType::BOOL, realPosition, realShortName, longName, description, defaultValue, required, valueList);
+
+    _options[option.GetShortName()] = option;
+}
+
 void AppOptions::Reset()
 {
     _values.clear();
