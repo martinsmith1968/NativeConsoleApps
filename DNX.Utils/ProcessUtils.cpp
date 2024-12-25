@@ -3,15 +3,14 @@
 
 #include <Windows.h>
 
+#include "PathUtils.h"
+#include "StringUtils.h"
+
 using namespace std;
 using namespace DNX::Utils;
 
 // ReSharper disable CppInconsistentNaming
 
-/// <summary>
-/// Gets the name of the executable file.
-/// </summary>
-/// <returns>string.</returns>
 string ProcessUtils::GetExecutableFileName()
 {
     wchar_t buffer[MAX_PATH];
@@ -22,4 +21,14 @@ string ProcessUtils::GetExecutableFileName()
     string str(ws.begin(), ws.end());
 
     return str;
+}
+
+string ProcessUtils::GetExecutableFileNameOnly()
+{
+    return StringUtils::AfterLast(GetExecutableFileName(), PathUtils::PATH_SEPARATOR);
+}
+
+string ProcessUtils::GetExecutableFilePath()
+{
+    return StringUtils::BeforeLast(GetExecutableFileName(), PathUtils::PATH_SEPARATOR);
 }

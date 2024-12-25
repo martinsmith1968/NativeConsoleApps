@@ -17,6 +17,8 @@ namespace DNX {
         {
         public:
             static string GetExecutableFileName();
+            static string GetExecutableFileNameOnly();
+            static string GetExecutableFilePath();
         };
 
     }
