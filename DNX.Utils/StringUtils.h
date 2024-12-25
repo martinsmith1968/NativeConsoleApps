@@ -62,9 +62,15 @@ namespace DNX {
             static bool EndsWith(const string& str, const string& suffix);
             static bool StartsAndEndsWith(const string& str, const string& prefixAndSuffix);
 
+            static string EnsureStartsWith(const string& str, const string& prefix);
+            static string EnsureEndsWith(const string& str, const string& suffix);
+            static string EnsureStartsAndEndsWith(const string& str, const string& prefixAndSuffix);
+            static string EnsureStartsAndEndsWith(const string& str, const string& prefix, const string& suffix);
+
             static string RemoveStartsWith(const string& str, const string& prefix);
             static string RemoveEndsWith(const string& str, const string& suffix);
             static string RemoveStartsAndEndsWith(const string& str, const string& prefixAndSuffix);
+            static string RemoveStartsAndEndsWith(const string& str, const string& prefix, const string& suffix);
         };
     }
 }

@@ -341,6 +341,40 @@ bool StringUtils::StartsAndEndsWith(const string& str, const string& prefixAndSu
     return StartsWith(str, prefixAndSuffix) && EndsWith(str, prefixAndSuffix);
 }
 
+string StringUtils::EnsureStartsWith(const string& str, const string& prefix)
+{
+    if (prefix.empty() || str.length() < prefix.length())
+        return str;
+
+    auto text = StartsWith(str, prefix)
+        ? str
+        : prefix + str;
+
+    return text;
+}
+
+string StringUtils::EnsureEndsWith(const string& str, const string& suffix)
+{
+    if (suffix.empty() || str.length() < suffix.length())
+        return str;
+
+    auto text = EndsWith(str, suffix)
+        ? str
+        : suffix + str;
+
+    return text;
+}
+
+string StringUtils::EnsureStartsAndEndsWith(const string& str, const string& prefixAndSuffix)
+{
+    return EnsureStartsAndEndsWith(str, prefixAndSuffix, prefixAndSuffix);
+}
+
+string StringUtils::EnsureStartsAndEndsWith(const string& str, const string& prefix, const string& suffix)
+{
+    return EnsureStartsWith(EnsureEndsWith(str, suffix), prefix);
+}
+
 string StringUtils::RemoveStartsWith(const string& str, const string& prefix)
 {
     if (str.length() < prefix.length())
@@ -375,5 +409,10 @@ string StringUtils::RemoveEndsWith(const string& str, const string& suffix)
 
 string StringUtils::RemoveStartsAndEndsWith(const string& str, const string& prefixAndSuffix)
 {
-    return RemoveStartsWith(RemoveEndsWith(str, prefixAndSuffix), prefixAndSuffix);
+    return RemoveStartsAndEndsWith(str, prefixAndSuffix, prefixAndSuffix);
+}
+
+string StringUtils::RemoveStartsAndEndsWith(const string& str, const string& prefix, const string& suffix)
+{
+    return RemoveStartsWith(RemoveEndsWith(str, suffix), prefix);
 }
