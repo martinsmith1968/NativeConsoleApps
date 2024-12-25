@@ -28,7 +28,7 @@ void AppArgumentsParser::ParseDefaultOptionsFile(AppOptions& options)
 
 void AppArgumentsParser::ParseLocalOptionsFile(AppOptions& options)
 {
-    const auto localOptionsFileName = AppDetails::GetDefaultOptionsFileName();
+    const auto localOptionsFileName = AppDetails::GetLocalOptionsFileName();
 
     ParseOptionsFile(options, localOptionsFileName);
 }
