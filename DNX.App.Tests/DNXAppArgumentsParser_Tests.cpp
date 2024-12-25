@@ -1,5 +1,7 @@
 #include "pch.h"
 
+#define TEST_GROUP AppArgumentsParser
+
 #include "../DNX.App/DNXAppOptions.h"
 #include "../DNX.App/DNXAppArgumentsParser.h"
 #include "Options1.h"
@@ -10,7 +12,7 @@
 using namespace std;
 using namespace DNX::App;
 
-TEST(Parse, single_positional_arguments_assigns_correctly) {
+TEST(TEST_GROUP, Parse_single_positional_arguments_assigns_correctly) {
     char* argv[] = {
         "",
         "bob",
@@ -27,7 +29,7 @@ TEST(Parse, single_positional_arguments_assigns_correctly) {
     EXPECT_EQ("bob", options.GetMessageText());
 }
 
-TEST(Parse, single_positional_argument_with_shortname_option_after_and_switch_assigns_correctly) {
+TEST(TEST_GROUP, Parse_single_positional_argument_with_shortname_option_after_and_switch_assigns_correctly) {
     char* argv[] = {
         "",
         "bob",
@@ -49,7 +51,7 @@ TEST(Parse, single_positional_argument_with_shortname_option_after_and_switch_as
     EXPECT_EQ(true, options.GetDebug());
 }
 
-TEST(Parse, single_positional_argument_with_shortname_option_before_and_switch_assigns_correctly) {
+TEST(TEST_GROUP, Parse_single_positional_argument_with_shortname_option_before_and_switch_assigns_correctly) {
     char* argv[] = {
         "",
         "-t",
@@ -71,7 +73,7 @@ TEST(Parse, single_positional_argument_with_shortname_option_before_and_switch_a
     EXPECT_EQ(true, options.GetDebug());
 }
 
-TEST(Parse, single_positional_argument_with_shortname_options_before_and_after_and_switch_assigns_correctly) {
+TEST(TEST_GROUP, Parse_single_positional_argument_with_shortname_options_before_and_after_and_switch_assigns_correctly) {
     char* argv[] = {
         "",
         "-t",
@@ -96,7 +98,7 @@ TEST(Parse, single_positional_argument_with_shortname_options_before_and_after_a
     EXPECT_EQ(true, options.GetDebug());
 }
 
-TEST(IsValid, options_without_any_required_arguments_returns_successfully) {
+TEST(TEST_GROUP, IsValid_options_without_any_required_arguments_returns_successfully) {
     char* argv[] = {
         "",
     };
@@ -111,7 +113,7 @@ TEST(IsValid, options_without_any_required_arguments_returns_successfully) {
     EXPECT_TRUE(options.IsValid());
 }
 
-TEST(IsValid, options_with_required_arguments_returns_successfully) {
+TEST(TEST_GROUP, IsValid_options_with_required_arguments_returns_successfully) {
     char* argv[] = {
         "",
     };
@@ -126,7 +128,7 @@ TEST(IsValid, options_with_required_arguments_returns_successfully) {
     EXPECT_FALSE(options.IsValid());
 }
 
-//TEST(IsValid, options_with_option_shortname_without_value_returns_successfully) {
+//TEST(TEST_GROUP, IsValid_options_with_option_shortname_without_value_returns_successfully) {
 //    char* argv[] = {
 //        "",
 //        "-t",
@@ -142,7 +144,7 @@ TEST(IsValid, options_with_required_arguments_returns_successfully) {
 //    EXPECT_FALSE(options.IsValid());
 //}
 //
-//TEST(IsValid, options_with_option_longname_without_value_returns_successfully) {
+//TEST(TEST_GROUP, IsValid_options_with_option_longname_without_value_returns_successfully) {
 //    char* argv[] = {
 //        "",
 //        "--timeout",
