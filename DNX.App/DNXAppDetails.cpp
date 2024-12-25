@@ -2,6 +2,7 @@
 #include "DNXAppDetails.h"
 #include "../DNX.Utils/ProcessUtils.h"
 #include "../DNX.Utils/FileUtils.h"
+#include "../DNX.Utils/PathUtils.h"
 
 #include <sstream>
 
@@ -36,18 +37,22 @@ string AppDetails::GetHeaderLine() const
 
 string AppDetails::GetApplicationName()
 {
-    const auto executableName = ProcessUtils::GetExecutableFileName();
+    return FileUtils::GetFileNameOnly(ProcessUtils::GetExecutableFileNameOnly());
+}
 
-    const auto fileName = FileUtils::GetFileNameOnly(executableName);
+string AppDetails::GetOptionsFileNameOnly()
+{
+    const auto executableName = ProcessUtils::GetExecutableFileNameOnly();
 
-    return fileName;
+    return FileUtils::ChangeFileExtension(executableName, "options");
 }
 
 string AppDetails::GetDefaultOptionsFileName()
 {
-    const auto executableName = ProcessUtils::GetExecutableFileName();
+    return PathUtils::Combine(ProcessUtils::GetExecutableFilePath(), GetOptionsFileNameOnly());
+}
 
-    auto defaultOptionsFileName = FileUtils::ChangeFileExtension(executableName, "options");
-
-    return defaultOptionsFileName;
+string AppDetails::GetLocalOptionsFileName()
+{
+    return PathUtils::Combine(PathUtils::GetCurrentDirectory(), GetOptionsFileNameOnly());
 }

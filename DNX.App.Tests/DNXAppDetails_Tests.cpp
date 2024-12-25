@@ -1,17 +1,20 @@
 #include "pch.h"
 
+#define TEST_GROUP AppDetails
+
 #include "../DNX.App/DNXAppDetails.h"
 
 // ReSharper disable CppClangTidyPerformanceUnnecessaryCopyInitialization
+// ReSharper disable CppClangTidyPerformanceAvoidEndl
 
 using namespace std;
 using namespace DNX::App;
 
-TEST(GetApplicationName, returns_the_correct_value) {
+TEST(TEST_GROUP, GetApplicationName_returns_the_correct_value) {
     EXPECT_EQ("DNX.App.Tests", AppDetails::GetApplicationName());
 }
 
-TEST(GetDefaultOptionsFileName, returns_the_correct_value) {
+TEST(TEST_GROUP, GetDefaultOptionsFileName_returns_the_correct_value) {
     const string expected = "DNX.App.Tests.options";
 
     // Act
@@ -19,10 +22,26 @@ TEST(GetDefaultOptionsFileName, returns_the_correct_value) {
     const auto result = filename.substr(filename.length() - expected.length());
 
     // Assert
+    cout << "GetDefaultOptionsFileName: " << filename << endl;
+    cout << "GetDefaultOptionsFileName result: " << result << endl;
     EXPECT_EQ(expected, result);
 }
 
-TEST(GetHeaderLine, with_all_details_returns_the_correct_value) {
+TEST(TEST_GROUP, GetLocalOptionsFileName_returns_the_correct_value) {
+    const string expected = "DNX.App.Tests.options";
+
+    // Act
+    const auto filename = AppDetails::GetLocalOptionsFileName();
+    const auto result = filename.substr(filename.length() - expected.length());
+
+    // Assert
+    cout << "GetLocalOptionsFileName: " << filename << endl;
+    cout << "GetLocalOptionsFileName result: " << result << endl;
+    EXPECT_EQ(expected, result);
+    EXPECT_NE(result, AppDetails::GetDefaultOptionsFileName());
+}
+
+TEST(TEST_GROUP, GetHeaderLine_with_all_details_returns_the_correct_value) {
     const string app_name        = "MyAppName";
     const string app_description = "My App";
     const string app_copyright   = "Copyright (c) 2024 My Company";
@@ -43,7 +62,7 @@ TEST(GetHeaderLine, with_all_details_returns_the_correct_value) {
     EXPECT_EQ(expected, result);
 }
 
-TEST(GetHeaderLine, with_all_details_except_description_returns_the_correct_value) {
+TEST(TEST_GROUP, GetHeaderLine_with_all_details_except_description_returns_the_correct_value) {
     const string app_name      = "MyAppName";
     const string app_copyright = "Copyright (c) 2024 My Company";
     const string app_version   = "1.2.3.4";
@@ -62,7 +81,7 @@ TEST(GetHeaderLine, with_all_details_except_description_returns_the_correct_valu
     EXPECT_EQ(expected, result);
 }
 
-TEST(GetHeaderLine, with_all_details_except_version_and_description_returns_the_correct_value) {
+TEST(TEST_GROUP, GetHeaderLine_with_all_details_except_version_and_description_returns_the_correct_value) {
     const string app_name      = "MyAppName";
     const string app_copyright = "Copyright (c) 2024 My Company";
 

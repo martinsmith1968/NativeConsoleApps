@@ -27,7 +27,9 @@ namespace DNX {
 
             static string GetApplicationName();
 
+            static string GetOptionsFileNameOnly();
             static string GetDefaultOptionsFileName();
+            static string GetLocalOptionsFileName();
         };
     }
 }
