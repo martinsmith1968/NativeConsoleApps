@@ -108,8 +108,8 @@
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="DNXAppDetails_Tests.cpp" />
-    <ClCompile Include="DNXAppArgumentsParser_Tests.cpp" />
+    <ClCompile Include="AppDetails_Tests.cpp" />
+    <ClCompile Include="ArgumentsParser_Tests.cpp" />
     <ClCompile Include="Options2.h" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

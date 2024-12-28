@@ -1,8 +1,9 @@
 #include "pch.h"
-#include "../DNX.App/DNXAppOptions.h"
+#include "../DNX.App/Arguments.h"
 #include "../DNX.App/ArgumentsParser.h"
 #include "Options1.h"
 #include "Options2.h"
+
 // ReSharper disable CppClangTidyPerformanceUnnecessaryCopyInitialization
 // ReSharper disable CppInconsistentNaming
 // ReSharper disable CppClangTidyMiscUseAnonymousNamespace
@@ -15,7 +16,7 @@ using namespace DNX::App;
 
 #define TEST_GROUP ArgumentsParser
 
-static void ShowErrors(const AppOptions& options)
+static void ShowErrors(const Arguments& options)
 {
     cout << "Error Count: " << options.GetErrors().size() << endl;
     for (const auto& error : options.GetErrors())

@@ -12,9 +12,9 @@ using namespace DNX::App;
 namespace DNX::App
 {
     //--------------------------------------------------------------------------
-    // Class: AppOption
+    // Class: Argument
     //--------------------------------------------------------------------------
-    class AppOption
+    class Argument
     {
         ArgumentType _argumentType;
         ValueType _valueType;
@@ -45,9 +45,9 @@ namespace DNX::App
         [[nodiscard]] bool HasLongName() const;
         [[nodiscard]] string GetNameDescription() const;
 
-        AppOption();
+        Argument();
 
-        AppOption(
+        Argument(
             ArgumentType argumentType,
             ValueType valueType,
             uint8_t position,
@@ -59,10 +59,10 @@ namespace DNX::App
             const list<string>& valueList = list<string>()
         );
 
-        static AppOption _app_option;
-        static AppOption& Empty() { return _app_option; }
+        static Argument _app_option;
+        static Argument& Empty() { return _app_option; }
 
-        static bool CompareByPosition(const AppOption& first, const AppOption& second);
-        static bool CompareByTypeAndPosition(const AppOption& first, const AppOption& second);
+        static bool CompareByPosition(const Argument& first, const Argument& second);
+        static bool CompareByTypeAndPosition(const Argument& first, const Argument& second);
     };
 }

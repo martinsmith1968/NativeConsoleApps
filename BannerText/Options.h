@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <string>
 #include "../DNX.Utils/StringUtils.h"
-#include "../DNX.App/DNXAppOptions.h"
+#include "../DNX.App/Arguments.h"
 
 // ReSharper disable CppInconsistentNaming
 // ReSharper disable StringLiteralTypo
@@ -32,7 +32,7 @@ class TextAlignmentTypeText : public EnumTextResolver<TextAlignmentType>
     }
 };
 
-class Options final : public AppOptions
+class Options final : public Arguments
 {
     TextAlignmentTypeText TextAlignmentTypeTextConverter;
 

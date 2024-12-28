@@ -1,60 +1,60 @@
 ﻿#include "stdafx.h"
-#include "DNXAppOption.h"
+#include "Argument.h"
 
 // ReSharper disable CppInconsistentNaming
 
 using namespace std;
 using namespace DNX::App;
 
-AppOption AppOption::_app_option = AppOption();;
+Argument Argument::_app_option = Argument();;
 
-bool AppOption::IsEmpty() const
+bool Argument::IsEmpty() const
 {
     return _position == 0;
 }
-ArgumentType AppOption::GetArgumentType() const
+ArgumentType Argument::GetArgumentType() const
 {
     return _argumentType;
 }
-ValueType AppOption::GetValueType() const
+ValueType Argument::GetValueType() const
 {
     return _valueType;
 }
-string AppOption::GetShortName() const
+string Argument::GetShortName() const
 {
     return _shortName;
 }
-string AppOption::GetLongName() const
+string Argument::GetLongName() const
 {
     return _longName;
 }
-string AppOption::GetDescription() const
+string Argument::GetDescription() const
 {
     return _description;
 }
-string AppOption::GetDefaultValue() const
+string Argument::GetDefaultValue() const
 {
     return _defaultValue;
 }
-bool AppOption::GetRequired() const
+bool Argument::GetRequired() const
 {
     return _required;
 }
-uint8_t AppOption::GetPosition() const
+uint8_t Argument::GetPosition() const
 {
     return _position;
 }
-list<string> AppOption::GetValueList() const
+list<string> Argument::GetValueList() const
 {
     return _valueList;
 }
 
-bool AppOption::HasLongName() const
+bool Argument::HasLongName() const
 {
     return !_longName.empty();
 }
 
-string AppOption::GetNameDescription() const
+string Argument::GetNameDescription() const
 {
     string description;
 
@@ -70,7 +70,7 @@ string AppOption::GetNameDescription() const
     return description;
 }
 
-AppOption::AppOption() :
+Argument::Argument() :
     _argumentType(ArgumentType::PARAMETER),
     _valueType(ValueType::STRING),
     _required(false),
@@ -78,7 +78,7 @@ AppOption::AppOption() :
 {
 }
 
-AppOption::AppOption(
+Argument::Argument(
     const ArgumentType argumentType,
     const ValueType valueType,
     const uint8_t position,
@@ -105,12 +105,12 @@ AppOption::AppOption(
     }
 }
 
-bool AppOption::CompareByPosition(const AppOption& first, const AppOption& second)
+bool Argument::CompareByPosition(const Argument& first, const Argument& second)
 {
     return first.GetPosition() < second.GetPosition();
 }
 
-bool AppOption::CompareByTypeAndPosition(const AppOption& first, const AppOption& second)
+bool Argument::CompareByTypeAndPosition(const Argument& first, const Argument& second)
 {
     if (first.GetArgumentType() != second.GetArgumentType())
     {

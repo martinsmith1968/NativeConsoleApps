@@ -1,11 +1,11 @@
 #pragma once
 
 #include "pch.h"
-#include "../DNX.App/DNXAppOptions.h"
+#include "../DNX.App/Arguments.h"
 
 // ReSharper disable CppInconsistentNaming
 
-class Options1 final : public AppOptions
+class Options1 final : public Arguments
 {
 public:
     Options1()

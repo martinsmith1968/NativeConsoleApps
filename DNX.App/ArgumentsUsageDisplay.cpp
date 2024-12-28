@@ -13,14 +13,14 @@
 using namespace DNX::App;
 using namespace DNX::Utils;
 
-void ArgumentsUsageDisplay::ShowUsage(const AppOptions& options, const AppDetails& appDetails)
+void ArgumentsUsageDisplay::ShowUsage(const Arguments& options, const AppDetails& appDetails)
 {
     auto parameters = options.GetOptionsByType(ArgumentType::PARAMETER);
-    parameters.sort(AppOption::CompareByPosition);
+    parameters.sort(Argument::CompareByPosition);
 
     const auto optionsAndSwitchesTypes = { ArgumentType::PARAMETER, ArgumentType::OPTION, ArgumentType::SWITCH };
     auto optionsAndSwitches = options.GetOptionsByTypes(optionsAndSwitchesTypes);
-    optionsAndSwitches.sort(AppOption::CompareByTypeAndPosition);
+    optionsAndSwitches.sort(Argument::CompareByTypeAndPosition);
 
     const auto hasOptions = !optionsAndSwitches.empty();
 
@@ -57,7 +57,7 @@ void ArgumentsUsageDisplay::ShowUsage(const AppOptions& options, const AppDetail
         cout << std::endl;
         cout << "OPTIONS:" << std::endl;
 
-        list<tuple<AppOption, string, string>> optionDescriptions;
+        list<tuple<Argument, string, string>> optionDescriptions;
 
         size_t maxOptionDescriptionLength = 0;
         for (auto iter = optionsAndSwitches.begin(); iter != optionsAndSwitches.end(); ++iter)
@@ -118,7 +118,7 @@ void ArgumentsUsageDisplay::ShowUsage(const AppOptions& options, const AppDetail
                 textDesc += ")";
             }
 
-            const auto optionAndDesc = tuple<AppOption, string, string>(*iter, optionDesc, textDesc);
+            const auto optionAndDesc = tuple<Argument, string, string>(*iter, optionDesc, textDesc);
 
             optionDescriptions.push_back(optionAndDesc);
         }
@@ -151,7 +151,7 @@ void ArgumentsUsageDisplay::ShowUsage(const AppOptions& options, const AppDetail
     }
 }
 
-void ArgumentsUsageDisplay::ShowErrors(const AppOptions& options, const int blankLinesBefore, const int blankLinesAfter)
+void ArgumentsUsageDisplay::ShowErrors(const Arguments& options, const int blankLinesBefore, const int blankLinesAfter)
 {
     ConsoleUtils::ShowBlankLines(blankLinesBefore);
 

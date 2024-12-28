@@ -18,7 +18,7 @@ using namespace DNX::Utils;
 
 //-----------------------------------------------------------------------------
 // Instance methods
-void ArgumentsParser::ParseOptionsFile(AppOptions& options, const string& fileName) const
+void ArgumentsParser::ParseOptionsFile(Arguments& options, const string& fileName) const
 {
     if (FileUtils::FileExists(fileName))
     {
@@ -29,7 +29,7 @@ void ArgumentsParser::ParseOptionsFile(AppOptions& options, const string& fileNa
     }
 }
 
-void ArgumentsParser::ParseArguments(list<string> arguments, AppOptions& options) const
+void ArgumentsParser::ParseArguments(list<string> arguments, Arguments& options) const
 {
     for (auto i = 0; i < static_cast<int>(arguments.size()); ++i)
     {
@@ -44,7 +44,7 @@ void ArgumentsParser::ParseArguments(list<string> arguments, AppOptions& options
     }
 }
 
-bool ArgumentsParser::ParseArgument(const string& argumentName, const string& argumentValue, AppOptions& options, bool& argumentValueConsumed) const
+bool ArgumentsParser::ParseArgument(const string& argumentName, const string& argumentValue, Arguments& options, bool& argumentValueConsumed) const
 {
     argumentValueConsumed = false;
 
@@ -131,7 +131,7 @@ list<string> ArgumentsParser::ConvertLinesToRawArguments(const list<string>& lin
     return raw_arguments;
 }
 
-bool ArgumentsParser::HandleAsSwitch(AppOptions& options, const ParserConfig& config, const string& argumentName)
+bool ArgumentsParser::HandleAsSwitch(Arguments& options, const ParserConfig& config, const string& argumentName)
 {
     const auto switchOnSuffix = string(1, config.GetSwitchOnSuffix());
     const auto switchOffSuffix = string(1, config.GetSwitchOffSuffix());
@@ -164,7 +164,7 @@ bool ArgumentsParser::HandleAsSwitch(AppOptions& options, const ParserConfig& co
     return true;
 }
 
-bool ArgumentsParser::HandleAsOption(AppOptions& options, const string& argumentName, const string& argumentValue)
+bool ArgumentsParser::HandleAsOption(Arguments& options, const string& argumentName, const string& argumentValue)
 {
     const auto& option = options.GetOptionByName(argumentName);
     if (option.IsEmpty())
@@ -180,7 +180,7 @@ bool ArgumentsParser::HandleAsOption(AppOptions& options, const string& argument
     return true;
 }
 
-bool ArgumentsParser::HandleAsParameter(AppOptions& options, const int position, const string& argumentValue)
+bool ArgumentsParser::HandleAsParameter(Arguments& options, const int position, const string& argumentValue)
 {
     auto& option = options.GetParameterAtPosition(position);
     if (option.IsEmpty())
@@ -191,7 +191,7 @@ bool ArgumentsParser::HandleAsParameter(AppOptions& options, const int position,
     return true;
 }
 
-void ArgumentsParser::ValidateRequired(AppOptions& options)
+void ArgumentsParser::ValidateRequired(Arguments& options)
 {
     auto requiredOptions = options.GetRequiredOptions();
 
@@ -204,7 +204,7 @@ void ArgumentsParser::ValidateRequired(AppOptions& options)
     }
 }
 
-void ArgumentsParser::ValidateValues(AppOptions& options)
+void ArgumentsParser::ValidateValues(Arguments& options)
 {
     auto optionList = options.GetOptions();
 
@@ -225,7 +225,7 @@ void ArgumentsParser::ValidateValues(AppOptions& options)
 
 //-----------------------------------------------------------------------------
 // Public methods
-ArgumentsParser::ArgumentsParser(AppOptions& options, const AppDetails& app_details, const ParserConfig& config)
+ArgumentsParser::ArgumentsParser(Arguments& options, const AppDetails& app_details, const ParserConfig& config)
     : _options(options),
     _config(config),
     _app_details(app_details)
@@ -253,7 +253,7 @@ void ArgumentsParser::Parse(const int argc, char* argv[]) const
 
 //-----------------------------------------------------------------------------
 // Static Public methods
-void ArgumentsParser::ParseArguments(const int argc, char* argv[], AppOptions& options, const ParserConfig& config)
+void ArgumentsParser::ParseArguments(const int argc, char* argv[], Arguments& options, const ParserConfig& config)
 {
     auto parser = ArgumentsParser(options, AppDetails(), config);
     parser.Parse(argc, argv);

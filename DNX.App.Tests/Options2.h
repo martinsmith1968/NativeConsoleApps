@@ -1,9 +1,9 @@
 #pragma once
 
 #include "pch.h"
-#include "../DNX.App/DNXAppOptions.h"
+#include "../DNX.App/Arguments.h"
 
-class Options2 final : public AppOptions
+class Options2 final : public Arguments
 {
 public:
     Options2()

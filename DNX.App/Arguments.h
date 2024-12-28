@@ -1,9 +1,9 @@
-﻿#pragma once
+#pragma once
 #include "stdafx.h"
 #include "../DNX.Utils/FileUtils.h"
 #include "AppDetails.h"
 #include "ArgumentType.h"
-#include "DNXAppOption.h"
+#include "Argument.h"
 #include "ValueConverter.h"
 #include <list>
 #include <map>
@@ -20,9 +20,9 @@ using namespace DNX::Utils;
 namespace DNX::App
 {
     //--------------------------------------------------------------------------
-    // Class: AppOptions
+    // Class: Arguments
     //--------------------------------------------------------------------------
-    class AppOptions
+    class Arguments
     {
         const string DebugShortName                 = "x";
         const string HelpShortName                  = "?";
@@ -40,7 +40,7 @@ namespace DNX::App
         const string useLocalOptionsFileDesc   = "Use Local Options File (" + FileUtils::GetFileNameAndExtension(AppDetails::GetDefaultOptionsFileName()) + ")";
 
         int _last_position = 0;
-        map<string, AppOption> _options{};
+        map<string, Argument> _options{};
         map<string, string> _values{};
         list<string> _errors{};
 
@@ -83,13 +83,13 @@ namespace DNX::App
 
         void AddError(const string& text);
 
-        [[nodiscard]] list<AppOption> GetOptions() const;
-        AppOption& GetOptionByLongName(const string& longName);
-        AppOption& GetOptionByShortName(const string& shortName);
-        AppOption& GetOptionByName(const string& name);
-        [[nodiscard]] AppOption& GetParameterAtPosition(const int position);
+        [[nodiscard]] list<Argument> GetOptions() const;
+        Argument& GetOptionByLongName(const string& longName);
+        Argument& GetOptionByShortName(const string& shortName);
+        Argument& GetOptionByName(const string& name);
+        [[nodiscard]] Argument& GetParameterAtPosition(const int position);
 
-        [[nodiscard]] list<AppOption> GetRequiredOptions() const;
+        [[nodiscard]] list<Argument> GetRequiredOptions() const;
 
         string GetOptionValue(const string& name);
         void SetOptionValue(const string& name, const string& value);
@@ -98,13 +98,13 @@ namespace DNX::App
         friend class ArgumentsParser;
 
     public:
-        AppOptions();
-        virtual ~AppOptions() = default;
+        Arguments();
+        virtual ~Arguments() = default;
 
         void Reset();
 
-        [[nodiscard]] list<AppOption> GetOptionsByType(ArgumentType ArgumentType) const;
-        [[nodiscard]] list<AppOption> GetOptionsByTypes(const list<ArgumentType>& ArgumentTypes) const;
+        [[nodiscard]] list<Argument> GetOptionsByType(ArgumentType ArgumentType) const;
+        [[nodiscard]] list<Argument> GetOptionsByTypes(const list<ArgumentType>& ArgumentTypes) const;
 
         [[nodiscard]] int GetNextPosition() const;
         void AdvancePosition();

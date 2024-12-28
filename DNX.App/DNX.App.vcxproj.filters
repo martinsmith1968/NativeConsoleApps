@@ -27,13 +27,13 @@
     <ClInclude Include="AppDetails.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DNXAppOptions.h">
+    <ClInclude Include="Arguments.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ArgumentType.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DNXAppOption.h">
+    <ClInclude Include="Argument.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SwitchValue.h">
@@ -62,10 +62,10 @@
     <ClCompile Include="ArgumentType.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DNXAppOptions.cpp">
+    <ClCompile Include="Arguments.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DNXAppOption.cpp">
+    <ClCompile Include="Argument.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="AppDetails.cpp">

@@ -3,7 +3,7 @@
 #include "../DNX.Utils/StringUtils.h"
 #include "../DNX.App/ValueConverter.h"
 #include "../DNX.App/ArgumentType.h"
-#include "../DNX.App/DNXAppOptions.h"
+#include "../DNX.App/Arguments.h"
 #include <string>
 #include <chrono>
 
@@ -14,7 +14,7 @@ using namespace DNX::Utils;
 
 //------------------------------------------------------------------------------
 // AppOptions
-class Options final : public AppOptions
+class Options final : public Arguments
 {
 public:
     Options()

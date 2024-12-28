@@ -160,8 +160,8 @@
   <ItemGroup>
     <ClInclude Include="ArgumentsParser.h" />
     <ClInclude Include="AppDetails.h" />
-    <ClInclude Include="DNXAppOption.h" />
-    <ClInclude Include="DNXAppOptions.h" />
+    <ClInclude Include="Argument.h" />
+    <ClInclude Include="Arguments.h" />
     <ClInclude Include="SwitchValue.h" />
     <ClInclude Include="ArgumentsUsageDisplay.h" />
     <ClInclude Include="ParserConfig.h" />
@@ -174,8 +174,8 @@
   <ItemGroup>
     <ClCompile Include="ArgumentsParser.cpp" />
     <ClCompile Include="AppDetails.cpp" />
-    <ClCompile Include="DNXAppOption.cpp" />
-    <ClCompile Include="DNXAppOptions.cpp" />
+    <ClCompile Include="Argument.cpp" />
+    <ClCompile Include="Arguments.cpp" />
     <ClCompile Include="SwitchValue.cpp" />
     <ClCompile Include="ArgumentsUsageDisplay.cpp" />
     <ClCompile Include="ParserConfig.cpp" />
