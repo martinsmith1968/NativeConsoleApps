@@ -1,4 +1,9 @@
 #include "stdafx.h"
+#include "AppInfo.h"
+#include "Options.h"
+#include "../DNX.Utils/StringUtils.h"
+#include "../DNX.App/DNXAppArgumentsParser.h"
+#include "../DNX.App/DNXAppOptionsUsageDisplay.h"
 #include <conio.h>
 #include <chrono>
 #include <ctime>
@@ -6,16 +11,12 @@
 #include <regex>
 #include <thread>
 
-#include "AppInfo.h"
-#include "Options.h"
-#include "../DNX.Utils/StringUtils.h"
-#include "../DNX.App/DNXAppArgumentsParser.h"
+// ReSharper disable CppInconsistentNaming
+// ReSharper disable CppClangTidyPerformanceAvoidEndl
 
 using namespace std;
 using namespace DNX::App;
 using namespace DNX::Utils;
-
-// ReSharper disable CppInconsistentNaming
 
 //------------------------------------------------------------------------------
 // Declarations
@@ -32,17 +33,17 @@ int main(const int argc, char* argv[])
         const AppInfo appInfo;
 
         Options options;
-        AppArgumentsParser::Parse(argc, argv, options);
+        AppArgumentsParser::ParseArguments(argc, argv, options);
 
         if (options.IsHelp())
         {
-            AppArgumentsParser::ShowUsage(options, appInfo);
+            AppOptionsUsageDisplay::ShowUsage(options, appInfo);
             return 1;
         }
         if (!options.IsValid())
         {
-            AppArgumentsParser::ShowUsage(options, appInfo);
-            AppArgumentsParser::ShowErrors(options, 1);
+            AppOptionsUsageDisplay::ShowUsage(options, appInfo);
+            AppOptionsUsageDisplay::ShowErrors(options, 1);
             return 2;
         }
 
@@ -69,14 +70,14 @@ void PauseN::Execute(Options& options)
     cout << options.GetFormattedMessageText();
 
     const auto start_time = time(nullptr);
-    const auto exit_time = start_time + options.GetTimeoutSeconds();
+    const auto exit_time  = start_time + options.GetTimeoutSeconds();
     const auto sleep_time = std::chrono::milliseconds(options.GetSleepMilliseconds());
 
     do
     {
         if (_kbhit())
         {
-            auto key = _getch();
+            _getch();
             break;
         }
 

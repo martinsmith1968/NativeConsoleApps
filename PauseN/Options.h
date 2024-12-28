@@ -1,12 +1,14 @@
+#pragma once
 #include "stdafx.h"
-#include <string>
-#include <chrono>
 #include "../DNX.Utils/StringUtils.h"
 #include "../DNX.App/DNXValueConverter.h"
 #include "../DNX.App/DNXOptionType.h"
 #include "../DNX.App/DNXAppOptions.h"
+#include <string>
+#include <chrono>
 
 // ReSharper disable CppInconsistentNaming
+// ReSharper disable CppClangTidyClangDiagnosticHeaderHygiene
 
 using namespace DNX::Utils;
 
@@ -17,13 +19,14 @@ class Options final : public AppOptions
 public:
     Options()
     {
-        auto const defaultMessageText = "Press any key to continue (or wait {timeout} seconds) . . . ";
-        auto const defaultTimeout = std::to_string(30);
-        auto const defaultSleep = std::to_string(200);
 
-        AddOption(OptionType::PARAMETER, ValueType::STRING, "", "message-text", defaultMessageText, "The Text to display", false, 0);
-        AddOption(OptionType::OPTION, ValueType::INT, "t", "timeout", defaultTimeout, "The timeout to wait for in seconds", false);
-        AddOption(OptionType::OPTION, ValueType::INT, "s", "sleep", defaultSleep, "The timeout to sleep for between checks for in milliseconds", false);
+        auto const defaultMessageText = "Press any key to continue (or wait {timeout} seconds) . . . ";
+        auto const defaultTimeout     = std::to_string(30);
+        auto const defaultSleep       = std::to_string(200);
+
+        AddArgument(OptionType::PARAMETER, ValueType::STRING, "", "message-text", defaultMessageText, "The Text to display", false, 0);
+        AddArgument(OptionType::OPTION, ValueType::INT, "t", "timeout", defaultTimeout, "The timeout to wait for in seconds", false);
+        AddArgument(OptionType::OPTION, ValueType::INT, "s", "sleep", defaultSleep, "The timeout to sleep for between checks for in milliseconds", false);
 
         SetOptionValue("message-text", defaultMessageText);
         SetOptionValue("timeout", defaultTimeout);
@@ -68,5 +71,5 @@ public:
         {
             AddError("Sleep time must be less than Timeout");
         }
-    };
+    }
 };

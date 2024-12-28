@@ -1,18 +1,21 @@
 #include "stdafx.h"
-#include <iostream>
-#include <regex>
-#include <string>
-
 #include "AppInfo.h"
 #include "Options.h"
 #include "../DNX.Utils/StringUtils.h"
 #include "../DNX.App/DNXAppArgumentsParser.h"
+#include "../DNX.App/DNXAppOptionsUsageDisplay.h"
+#include <iostream>
+#include <regex>
+#include <string>
+
+// ReSharper disable CppInconsistentNaming
+// ReSharper disable CppClangTidyPerformanceAvoidEndl
+// ReSharper disable CppTooWideScopeInitStatement
+// ReSharper disable CppTooWideScope
 
 using namespace std;
 using namespace DNX::App;
 using namespace DNX::Utils;
-
-// ReSharper disable CppInconsistentNaming
 
 //------------------------------------------------------------------------------
 // Declarations
@@ -29,17 +32,17 @@ int main(const int argc, char* argv[])
         const AppInfo appInfo;
 
         Options options;
-        AppArgumentsParser::Parse(argc, argv, options);
+        AppArgumentsParser::ParseArguments(argc, argv, options);
 
         if (options.IsHelp())
         {
-            AppArgumentsParser::ShowUsage(options, appInfo);
+            AppOptionsUsageDisplay::ShowUsage(options, appInfo);
             return 1;
         }
         if (!options.IsValid())
         {
-            AppArgumentsParser::ShowUsage(options, appInfo);
-            AppArgumentsParser::ShowErrors(options, 1);
+            AppOptionsUsageDisplay::ShowUsage(options, appInfo);
+            AppOptionsUsageDisplay::ShowErrors(options, 1);
             return 2;
         }
 
@@ -66,9 +69,9 @@ void BannerText::Execute(Options& options)
     const auto header_line_count = options.GetHeaderLineCount();
     if (header_line_count > 0)
     {
-        auto header_line = options.GetHeaderLine();
+        const auto header_line = options.GetHeaderLine();
 
-        for (auto i = 0; i < header_line_count; ++i)
+        for (auto i = 0; i < static_cast<int>(header_line_count); ++i)
         {
             cout << header_line << endl;
         }
@@ -83,9 +86,9 @@ void BannerText::Execute(Options& options)
     const auto footer_line_count = options.GetFooterLineCount();
     if (footer_line_count)
     {
-        auto footer_line = options.GetFooterLine();
+        const auto footer_line = options.GetFooterLine();
 
-        for (auto i = 0; i < options.GetFooterLineCount(); ++i)
+        for (auto i = 0; i < static_cast<int>(options.GetFooterLineCount()); ++i)
         {
             cout << footer_line << endl;
         }
