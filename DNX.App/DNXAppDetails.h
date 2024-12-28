@@ -1,35 +1,35 @@
 ﻿#pragma once
 #include "stdafx.h"
-
 #include <string>
 
 // ReSharper disable CppInconsistentNaming
+// ReSharper disable CppClangTidyClangDiagnosticHeaderHygiene
+// ReSharper disable CppClangTidyCppcoreguidelinesSpecialMemberFunctions
 
 using namespace std;
 
-namespace DNX {
-    namespace App {
-        //--------------------------------------------------------------------------
-        // Class: AppDetails
-        //--------------------------------------------------------------------------
-        class AppDetails
-        {
-        public:
-            string Name;
-            string Version;
-            string Description;
-            string Copyright;
+namespace DNX::App
+{
+    //--------------------------------------------------------------------------
+    // Class: AppDetails
+    //--------------------------------------------------------------------------
+    class AppDetails
+    {
+    public:
+        string Name;
+        string Version;
+        string Description;
+        string Copyright;
 
-            AppDetails();
-            virtual ~AppDetails();
+        AppDetails();
+        virtual ~AppDetails();
 
-            string virtual GetHeaderLine() const;
+        [[nodiscard]] string virtual GetHeaderLine() const;
 
-            static string GetApplicationName();
+        static string GetApplicationName();
 
-            static string GetOptionsFileNameOnly();
-            static string GetDefaultOptionsFileName();
-            static string GetLocalOptionsFileName();
-        };
-    }
+        static string GetOptionsFileNameOnly();
+        static string GetDefaultOptionsFileName();
+        static string GetLocalOptionsFileName();
+    };
 }

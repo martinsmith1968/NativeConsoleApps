@@ -163,6 +163,8 @@
     <ClInclude Include="DNXAppOption.h" />
     <ClInclude Include="DNXAppOptions.h" />
     <ClInclude Include="DNXAppOptionsSwitchValue.h" />
+    <ClInclude Include="DNXAppOptionsUsageDisplay.h" />
+    <ClInclude Include="DNXAppParserConfig.h" />
     <ClInclude Include="DNXOptionType.h" />
     <ClInclude Include="DNXValueConverter.h" />
     <ClInclude Include="DNXValueType.h" />
@@ -175,6 +177,8 @@
     <ClCompile Include="DNXAppOption.cpp" />
     <ClCompile Include="DNXAppOptions.cpp" />
     <ClCompile Include="DNXAppOptionsSwitchValue.cpp" />
+    <ClCompile Include="DNXAppOptionsUsageDisplay.cpp" />
+    <ClCompile Include="DNXAppParserConfig.cpp" />
     <ClCompile Include="DNXOptionType.cpp" />
     <ClCompile Include="DNXValueConverter.cpp" />
     <ClCompile Include="DNXValueType.cpp" />

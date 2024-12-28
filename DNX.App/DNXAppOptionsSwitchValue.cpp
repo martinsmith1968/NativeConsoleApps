@@ -2,11 +2,12 @@
 #include "DNXAppOptionsSwitchValue.h"
 #include "../DNX.Utils/StringUtils.h"
 
+// ReSharper disable CppInconsistentNaming
+// ReSharper disable CppClangTidyModernizeReturnBracedInitList
+
 using namespace std;
 using namespace DNX::App;
 using namespace DNX::Utils;
-
-// ReSharper disable CppInconsistentNaming
 
 string AppOptionsSwitchValue::GetName() const
 {

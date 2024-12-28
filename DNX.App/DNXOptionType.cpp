@@ -1,9 +1,9 @@
 ﻿#include "stdafx.h"
 #include "DNXOptionType.h"
 
-using namespace DNX::App;
-
 // ReSharper disable CppInconsistentNaming
+
+using namespace DNX::App;
 
 OptionTypeText::OptionTypeText()
 {

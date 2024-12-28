@@ -1,91 +1,118 @@
 ﻿#pragma once
 #include "stdafx.h"
+#include "../DNX.Utils/FileUtils.h"
+#include "DNXAppDetails.h"
+#include "DNXOptionType.h"
+#include "DNXAppOption.h"
+#include "DNXValueConverter.h"
 #include <list>
 #include <map>
 #include <string>
 
-#include "DNXOptionType.h"
-#include "DNXAppOption.h"
-#include "DNXValueConverter.h"
+// ReSharper disable CppInconsistentNaming
+// ReSharper disable CppClangTidyCppcoreguidelinesAvoidConstOrRefDataMembers
+// ReSharper disable CppClangTidyCppcoreguidelinesSpecialMemberFunctions
+// ReSharper disable CppClangTidyClangDiagnosticHeaderHygiene
 
 using namespace std;
+using namespace DNX::Utils;
 
-// ReSharper disable CppInconsistentNaming
+namespace DNX::App
+{
+    //--------------------------------------------------------------------------
+    // Class: AppOptions
+    //--------------------------------------------------------------------------
+    class AppOptions
+    {
+        const string DebugShortName                 = "x";
+        const string HelpShortName                  = "?";
+        const string UseDefaultOptionsFileShortName = "@";
+        const string UseLocalOptionsFileShortName   = "$";
 
-namespace DNX {
-    namespace App {
-        //--------------------------------------------------------------------------
-        // Class: AppOptions
-        //--------------------------------------------------------------------------
-        class AppOptions
-        {
-            map<string, AppOption> _options{};
-            map<string, string> _values{};
-            list<string> _errors{};
+        const string DebugLongName                 = "debug";
+        const string HelpLongName                  = "help";
+        const string UseDefaultOptionsFileLongName = "use-default-options-file";
+        const string UseLocalOptionsFileLongName   = "use-local-options-file";
 
-        protected:
-            OptionTypeText OptionTypeText;
+        const string HelpDescription           = "Show Help screen";
+        const string DebugDescription          = "Activate debug mode";
+        const string useDefaultOptionsFileDesc = "Use Default Options File (" + FileUtils::GetFileNameAndExtension(AppDetails::GetDefaultOptionsFileName()) + ")";
+        const string useLocalOptionsFileDesc   = "Use Local Options File (" + FileUtils::GetFileNameAndExtension(AppDetails::GetDefaultOptionsFileName()) + ")";
 
-            void virtual PostParseValidate();
+        int _last_position = 0;
+        map<string, AppOption> _options{};
+        map<string, string> _values{};
+        list<string> _errors{};
 
-            void AddError(const string& text);
-            void AddOptionWithValues(
-                OptionType optionType,
-                ValueType valueType,
-                const string& shortName,
-                const string& longName = "",
-                const string& defaultValue = "",
-                const string& description = "",
-                bool required = false,
-                int position = 0,
-                const string& valueListText = ""
-            );
-            void AddOption(
-                OptionType optionType,
-                ValueType valueType,
-                const string& shortName,
-                const string& longName = "",
-                const string& defaultValue = "",
-                const string& description = "",
-                bool required = false,
-                int position = 0,
-                const list<string>& valueList = list<string>()
-            );
-            void AddSwitch(
-                const string& shortName,
-                const string& longName = "",
-                const string& defaultValue = "",
-                const string& description = "",
-                bool required = false,
-                int position = 0
-            );
+        void AddArgumentWithValues(
+            OptionType optionType,
+            ValueType valueType,
+            const string& shortName,
+            const string& longName = "",
+            const string& defaultValue = "",
+            const string& description = "",
+            bool required = false,
+            int position = 0,
+            const string& valueListText = ""
+        );
 
-            list<AppOption> GetOptions() const;
-            AppOption& GetOptionByLongName(const string& longName);
-            AppOption& GetOptionByShortName(const string& shortName);
-            AppOption& GetOptionByName(const string& name);
-            list<AppOption> GetOptionsByType(OptionType optionType) const;
-            list<AppOption> GetOptionsByTypes(const list<OptionType>& optionTypes) const;
+    protected:
+        OptionTypeText OptionTypeText;
 
-            list<AppOption> GetRequiredOptions();
+        void virtual PostParseValidate();
 
-            string GetOptionValue(const string& name);
-            void SetOptionValue(const string& name, const string& value);
-            bool HasOptionValue(const string& name);
+        void AddArgument(
+            OptionType optionType,
+            ValueType valueType,
+            const string& shortName,
+            const string& longName = "",
+            const string& defaultValue = "",
+            const string& description = "",
+            bool required = false,
+            int position = 0,
+            const list<string>& valueList = list<string>()
+        );
+        void AddSwitch(
+            const string& shortName,
+            const string& longName = "",
+            const string& defaultValue = "",
+            const string& description = "",
+            bool required = false,
+            int position = 0
+        );
 
-            friend class AppArgumentsParser;
+        void AddError(const string& text);
 
-        public:
-            AppOptions();
-            virtual ~AppOptions() = default;
+        [[nodiscard]] list<AppOption> GetOptions() const;
+        AppOption& GetOptionByLongName(const string& longName);
+        AppOption& GetOptionByShortName(const string& shortName);
+        AppOption& GetOptionByName(const string& name);
+        [[nodiscard]] AppOption& GetParameterAtPosition(const int position);
 
-            void Reset();
+        [[nodiscard]] list<AppOption> GetRequiredOptions() const;
 
-            list<string> GetErrors() const;
-            bool IsValid() const;
-            bool IsHelp();
-            bool IsUsingDefaultOptionsFile();
+        string GetOptionValue(const string& name);
+        void SetOptionValue(const string& name, const string& value);
+        bool HasOptionValue(const string& name);
 
-        };
-    }
+        friend class AppArgumentsParser;
+
+    public:
+        AppOptions();
+        virtual ~AppOptions() = default;
+
+        void Reset();
+
+        [[nodiscard]] list<AppOption> GetOptionsByType(OptionType optionType) const;
+        [[nodiscard]] list<AppOption> GetOptionsByTypes(const list<OptionType>& optionTypes) const;
+
+        [[nodiscard]] int GetNextPosition() const;
+        void AdvancePosition();
+        [[nodiscard]] list<string> GetErrors() const;
+        [[nodiscard]] bool IsValid() const;
+        bool IsDebug();
+        bool IsHelp();
+        bool IsUsingDefaultOptionsFile();
+
+    };
 }

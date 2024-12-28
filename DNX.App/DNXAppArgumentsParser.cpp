@@ -1,432 +1,192 @@
 #include "stdafx.h"
 #include "DNXAppArgumentsParser.h"
-#include "DNXAppOptionsSwitchValue.h"
 #include "../DNX.Utils/FileUtils.h"
+#include "../DNX.Utils/ListUtils.h"
 #include "../DNX.Utils/StringUtils.h"
-
-#include <algorithm>
-#include <iostream>
 #include <fstream>
-#include <iomanip>
 #include <list>
 #include <string>
+
+// ReSharper disable CppInconsistentNaming
+// ReSharper disable CppClangTidyPerformanceAvoidEndl
+// ReSharper disable CppClangTidyBugproneNarrowingConversions
+// ReSharper disable CppClangTidyModernizePassByValue
 
 using namespace std;
 using namespace DNX::App;
 using namespace DNX::Utils;
 
-// ReSharper disable CppInconsistentNaming
-// ReSharper disable CppClangTidyPerformanceAvoidEndl
-// ReSharper disable CppClangTidyBugproneNarrowingConversions
-
-void AppArgumentsParser::ParseDefaultOptionsFile(AppOptions& options)
-{
-    const auto defaultOptionsFileName = AppDetails::GetDefaultOptionsFileName();
-
-    ParseOptionsFile(options, defaultOptionsFileName);
-}
-
-void AppArgumentsParser::ParseLocalOptionsFile(AppOptions& options)
-{
-    const auto localOptionsFileName = AppDetails::GetLocalOptionsFileName();
-
-    ParseOptionsFile(options, localOptionsFileName);
-}
-
-void AppArgumentsParser::ParseOptionsFile(AppOptions& options, const string& fileName)
+//-----------------------------------------------------------------------------
+// Instance methods
+void AppArgumentsParser::ParseOptionsFile(AppOptions& options, const string& fileName) const
 {
     if (FileUtils::FileExists(fileName))
     {
-        string optionName;
-        auto parameter = 0;
-        const auto arg = "@" + fileName;
+        const auto arg = _config.GetCustomOptionsFilePrefix() + fileName;
 
-        ParseSingleArg(arg, options, optionName, parameter);
+        auto argumentValueConsumed = false;
+        ParseArgument(arg, "", options, argumentValueConsumed);
     }
 }
 
-void AppArgumentsParser::ParseOptions(const int argc, char** argv, AppOptions& options)
+void AppArgumentsParser::ParseArguments(list<string> arguments, AppOptions& options) const
 {
-    string optionName;
-    auto parameter = 0;
-
-    for (auto i = 1; i < argc; ++i)
+    for (auto i = 0; i < static_cast<int>(arguments.size()); ++i)
     {
-        const string arg = argv[i];
+        string argumentName  = ListUtils::GetAt(arguments, i);
+        string argumentValue = ListUtils::GetAt(arguments, i + 1);
 
-        // Process this argument
-        ParseSingleArg(arg, options, optionName, parameter);
-    }
-}
-
-void AppArgumentsParser::ReadOptions(const int argc, char* argv[], AppOptions& options, const bool processOptionsFiles)
-{
-    if (processOptionsFiles)
-    {
-        ParseDefaultOptionsFile(options);
-        ParseLocalOptionsFile(options);
-    }
-
-    ParseOptions(argc, argv, options);
-}
-
-void AppArgumentsParser::Parse(const int argc, char* argv[], AppOptions& options)
-{
-    ReadOptions(argc, argv, options, true);
-
-    if (!options.IsUsingDefaultOptionsFile())
-    {
-        options.Reset();
-
-        ReadOptions(argc, argv, options, false);
-    }
-
-    // Validate
-    ValidateRequired(options);
-    ValidateValues(options);
-    options.PostParseValidate();
-}
-
-void AppArgumentsParser::ParseSingleArg(const string& arg, AppOptions& options, string& optionName, int& parameter)
-{
-    // Handle file name options
-    if (StringUtils::StartsWith(arg, "@"))
-    {
-        const auto fileName = StringUtils::RemoveStartsWith(arg, "@");
-
-        auto lines = ReadLinesFromFile(fileName, options);
-
-        for (auto iter = lines.begin(); iter != lines.end(); ++iter)
-        {
-            auto& line = *iter;
-
-            if (StringUtils::StartsWith(line, "-") || StringUtils::StartsWith(line, "/"))
-            {
-                const auto spacePos = line.find(' ');
-                const auto hasSpace = spacePos != string::npos;
-
-                const auto argName = hasSpace
-                    ? line.substr(0, spacePos)
-                    : line;
-
-                auto argValue = hasSpace
-                    ? line.substr(spacePos + 1, string::npos)
-                    : string("");
-
-                if (StringUtils::StartsAndEndsWith(argValue, "\""))
-                {
-                    argValue = StringUtils::RemoveStartsAndEndsWith(argValue, "\"");
-                }
-
-                if (!argName.empty())
-                {
-                    ParseSingleArg(argName, options, optionName, parameter);
-                }
-                if (!argValue.empty())
-                {
-                    ParseSingleArg(argValue, options, optionName, parameter);
-                }
-            }
-            else
-            {
-                ParseSingleArg(*iter, options, optionName, parameter);
-            }
-        }
-
-        return;
-    }
-
-    // Handle long name options
-    if (StringUtils::StartsWith(arg, "--"))
-    {
-        auto argNameAndValue = StringUtils::RemoveStartsWith(arg, "--");
-
-        const auto equalsPos = argNameAndValue.find('=');
-        const auto hasValue = equalsPos != string::npos;
-
-        const auto argName = hasValue
-            ? argNameAndValue.substr(0, equalsPos - 1)
-            : argNameAndValue;
-
-        const auto argValue = hasValue
-            ? arg.substr(equalsPos + 1, string::npos)
-            : "";
-
-        auto& option = options.GetOptionByLongName(argName);
-        if (option.IsEmpty())
-        {
-            options.AddError(string("Unknown option: ") + argName);
+        auto argumentValueConsumed = false;
+        if (!ParseArgument(argumentName, argumentValue, options, argumentValueConsumed))
             return;
-        }
-
-        const auto shortName = option.GetShortName();
-        if (hasValue)
-        {
-            HandleOption(options, shortName, argValue);
-        }
-        else
-        {
-            auto switchInfo = AppOptionsSwitchValue::ParseSwitchDetails(optionName);
-
-            HandleSwitch(options, switchInfo.GetName(), switchInfo.GetValue());
-        }
-
-        return;
-    }
-
-    // Parse Option Name
-    if (StringUtils::StartsWith(arg, "-") || StringUtils::StartsWith(arg, "/"))
-    {
-        optionName = arg.substr(1, string::npos);
-
-        auto switchInfo = AppOptionsSwitchValue::ParseSwitchDetails(optionName);
-
-        // Handle as a switch ?
-        if (HandleSwitch(options, switchInfo.GetName(), switchInfo.GetValue()))
-        {
-            optionName = "";
-        }
-        return;
-    }
-
-    // Handle as an option or parameter ?
-    if (optionName.empty())
-    {
-        if (HandleParameter(options, parameter, arg))
-        {
-            ++parameter;
-        }
-    }
-    else
-    {
-        HandleOption(options, optionName, arg);
-    }
-
-    // Reset for next iteration
-    optionName = "";
-}
-
-list<string> AppArgumentsParser::ReadLinesFromFile(const string& fileName, AppOptions& options)
-{
-    list<string> lines;
-
-    try
-    {
-        ifstream in(fileName);
-
-        if (in)
-        {
-            string line;
-
-            while (std::getline(in, line))
-            {
-                lines.push_back(line);
-            }
-
-            in.close();
-        }
-    }
-    catch (exception& ex)
-    {
-        options.AddError(ex.what());
-        lines.clear();
-    }
-
-    return lines;
-}
-
-void AppArgumentsParser::ShowBlankLines(const int count)
-{
-    for (auto iter = 0; iter < count; ++iter)
-    {
-        cout << endl;
+        if (argumentValueConsumed)
+            i += 1;
     }
 }
 
-void AppArgumentsParser::ShowUsage(const AppOptions& options, const AppDetails& appDetails)
+bool AppArgumentsParser::ParseArgument(const string& argumentName, const string& argumentValue, AppOptions& options, bool& argumentValueConsumed) const
 {
-    auto parameters = options.GetOptionsByType(OptionType::PARAMETER);
-    parameters.sort(AppOption::CompareByPosition);
+    argumentValueConsumed = false;
 
-    const auto optionsAndSwitchesTypes = { OptionType::PARAMETER, OptionType::OPTION, OptionType::SWITCH };
-    auto optionsAndSwitches = options.GetOptionsByTypes(optionsAndSwitchesTypes);
-    optionsAndSwitches.sort(AppOption::CompareByTypeAndPosition);
-
-    const auto hasOptions = !optionsAndSwitches.empty();
-
-    string parameterText;
-    for (auto iter = parameters.begin(); iter != parameters.end(); ++iter)
+    if (StringUtils::StartsWith(argumentName, _config.GetCustomOptionsFilePrefix()))
     {
-        parameterText
-            .append(" [")
-            .append(iter->GetLongName())
-            .append("]");
-    }
+        const auto fileName = StringUtils::RemoveStartsWith(argumentName, _config.GetCustomOptionsFilePrefix());
 
-    if (hasOptions)
-    {
-        if (!parameterText.empty())
+        try
         {
-            parameterText.append(" ");
+            const auto lines = FileUtils::ReadLines(fileName);
+            const auto arguments = ConvertLinesToRawArguments(lines);
+
+            ParseArguments(arguments, options);
+
+            return true;
         }
-
-        parameterText.append("[OPTIONS]");
-    }
-
-    cout << appDetails.GetHeaderLine() << std::endl;
-    if (!appDetails.Copyright.empty())
-    {
-        cout << appDetails.Copyright << std::endl;
-    }
-    cout << std::endl;
-    cout << "Usage:" << std::endl;
-    cout << AppDetails::GetApplicationName() << parameterText << std::endl;
-
-    if (hasOptions)
-    {
-        cout << std::endl;
-        cout << "OPTIONS:" << std::endl;
-
-        list<tuple<AppOption, string, string>> optionDescriptions;
-
-        size_t maxOptionDescriptionLength = 0;
-        for (auto iter = optionsAndSwitches.begin(); iter != optionsAndSwitches.end(); ++iter)
+        catch (exception& ex)
         {
-            string optionDesc;
-            if (iter->GetOptionType() == OptionType::PARAMETER)
-            {
-                optionDesc = "[" + iter->GetLongName() + "]";
-            }
-            else
-            {
-                optionDesc = "-" + iter->GetShortName();
-                if (iter->HasLongName())
-                {
-                    optionDesc += ", --" + iter->GetLongName();
-                }
-            }
-            optionDesc += " " + ValueTypeTextConverter.GetText(iter->GetValueType());
-
-            maxOptionDescriptionLength = std::max(optionDesc.length(), maxOptionDescriptionLength);
-
-            auto textDesc = iter->GetDescription();
-
-            list<string> textDescParts;
-
-            if (iter->GetRequired())
-            {
-                textDescParts.emplace_back("Required");
-            }
-            if (!iter->GetDefaultValue().empty())
-            {
-                textDescParts.push_back("Default:" + iter->GetDefaultValue());
-            }
-            if (!iter->GetValueList().empty())
-            {
-                const auto valueListText = StringUtils::JoinText(iter->GetValueList(), ", ");
-
-                textDescParts.push_back("Values: " + valueListText);
-            }
-
-            if (!textDescParts.empty())
-            {
-                textDesc += " (";
-
-                auto index = 0;
-                for (auto textPart = textDescParts.begin(); textPart != textDescParts.end(); ++textPart)
-                {
-                    if (index > 0)
-                    {
-                        textDesc += ", ";
-                    }
-
-                    textDesc += *textPart;
-
-                    ++index;
-                }
-
-                textDesc += ")";
-            }
-
-            const auto optionAndDesc = tuple<AppOption, string, string>(*iter, optionDesc, textDesc);
-
-            optionDescriptions.push_back(optionAndDesc);
-        }
-
-        for (auto iter = optionDescriptions.begin(); iter != optionDescriptions.end(); ++iter)
-        {
-            streamsize paddedWidth = maxOptionDescriptionLength + 2;
-
-            std::cout << std::left << std::setfill(' ') << std::setw(paddedWidth) << std::get<1>(*iter)
-                << std::get<2>(*iter)
-                << std::endl;
+            options.AddError(ex.what());
+            return false;
         }
     }
-}
 
-void AppArgumentsParser::ShowErrors(const AppOptions& options, const int blankLinesBefore, const int blankLinesAfter)
-{
-    ShowBlankLines(blankLinesBefore);
-
-    auto errors = options.GetErrors();
-    for (auto iter = errors.begin(); iter != errors.end(); ++iter)
+    if (StringUtils::StartsWith(argumentName, _config.GetLongNamePrefix()))
     {
-        cout << "Error: " << *iter << endl;
+        const auto switch_long_name = StringUtils::RemoveStartsWith(argumentName, _config.GetLongNamePrefix(), 1);
+
+        if (HandleAsSwitch(options, _config, switch_long_name))
+            return true;
+        if (HandleAsOption(options, switch_long_name, argumentValue))
+        {
+            argumentValueConsumed = true;
+            return true;
+        }
     }
 
-    ShowBlankLines(blankLinesAfter);
-}
-
-bool AppArgumentsParser::HandleParameter(AppOptions& options, const int position, const string& value)
-{
-    const auto optionName = to_string(position);
-
-    const auto& parameter = options.GetOptionByShortName(optionName);
-    if (parameter.IsEmpty())
+    if (StringUtils::StartsWith(argumentName, _config.GetShortNamePrefix()))
     {
-        options.AddError(string("Unexpected parameter at position: " + optionName));
-        return false;
-    }
-    if (parameter.GetOptionType() != OptionType::PARAMETER)
-    {
-        return false;
+        const auto switch_short_name = StringUtils::RemoveStartsWith(argumentName, _config.GetShortNamePrefix(), 1);
+
+        if (HandleAsSwitch(options, _config, switch_short_name))
+            return true;
+        if (HandleAsOption(options, switch_short_name, argumentValue))
+        {
+            argumentValueConsumed = true;
+            return true;
+        }
     }
 
-    options.SetOptionValue(optionName, value);
-
-    return true;
-}
-
-void AppArgumentsParser::HandleOption(AppOptions& options, const string& optionName, const string& value)
-{
-    const auto& option = options.GetOptionByShortName(optionName);
-    if (option.IsEmpty())
+    if (HandleAsParameter(options, options.GetNextPosition(), argumentName))
     {
-        options.AddError(string("Unknown option: " + optionName));
-        return;
-    }
-    if (option.GetOptionType() != OptionType::OPTION)
-    {
-        return;
-    }
-
-    options.SetOptionValue(optionName, value);
-}
-
-bool AppArgumentsParser::HandleSwitch(AppOptions& options, const string& optionName, const bool switchOn)
-{
-    const auto& option = options.GetOptionByShortName(optionName);
-    if (option.IsEmpty())
-    {
-        options.AddError(string("Unknown switch: " + optionName));
+        options.AdvancePosition();
         return true;
     }
+
+    return false;
+}
+
+string AppArgumentsParser::SanitizeText(const string& text)
+{
+    const auto double_quote = "\"";
+
+    auto value = StringUtils::Trim(text);
+    value = StringUtils::RemoveStartsAndEndsWith(value, double_quote);
+
+    return value;
+}
+
+list<string> AppArgumentsParser::ConvertLinesToRawArguments(const list<string>& lines)
+{
+    list<string> raw_arguments;
+
+    for (auto line : lines)
+    {
+        line = StringUtils::Trim(line);
+
+        auto argument_name  = SanitizeText(StringUtils::Before(line, " "));
+        auto argument_value = SanitizeText(StringUtils::After(line, " "));
+
+        raw_arguments.push_back(argument_name);
+        raw_arguments.push_back(argument_value);
+    }
+
+    return raw_arguments;
+}
+
+bool AppArgumentsParser::HandleAsSwitch(AppOptions& options, const AppParserConfig& config, const string& argumentName)
+{
+    const auto switchOnSuffix = string(1, config.GetSwitchOnSuffix());
+    const auto switchOffSuffix = string(1, config.GetSwitchOffSuffix());
+
+    auto switchValue = true;
+    auto switchName = argumentName;
+
+    if (StringUtils::EndsWith(switchName, switchOnSuffix))
+    {
+        switchName = StringUtils::RemoveEndsWith(switchName, switchOnSuffix, 1);
+        switchValue = true;
+    }
+    if (StringUtils::EndsWith(switchName, switchOffSuffix))
+    {
+        switchName = StringUtils::RemoveEndsWith(switchName, switchOffSuffix, 1);
+        switchValue = false;
+    }
+
+    const auto& option = options.GetOptionByName(argumentName);
+    if (option.IsEmpty())
+        return false;
+
     if (option.GetOptionType() != OptionType::SWITCH)
     {
         return false;
     }
 
-    options.SetOptionValue(optionName, StringUtils::BoolToString(switchOn));
+    options.SetOptionValue(option.GetLongName(), StringUtils::BoolToString(switchValue));
+
+    return true;
+}
+
+bool AppArgumentsParser::HandleAsOption(AppOptions& options, const string& argumentName, const string& argumentValue)
+{
+    const auto& option = options.GetOptionByName(argumentName);
+    if (option.IsEmpty())
+        return false;
+
+    if (option.GetOptionType() != OptionType::OPTION)
+    {
+        return false;
+    }
+
+    options.SetOptionValue(option.GetLongName(), argumentValue);
+
+    return true;
+}
+
+bool AppArgumentsParser::HandleAsParameter(AppOptions& options, const int position, const string& argumentValue)
+{
+    auto& option = options.GetParameterAtPosition(position);
+    if (option.IsEmpty())
+        return false;
+
+    options.SetOptionValue(option.GetLongName(), argumentValue);
 
     return true;
 }
@@ -459,4 +219,42 @@ void AppArgumentsParser::ValidateValues(AppOptions& options)
             }
         }
     }
+}
+
+
+
+//-----------------------------------------------------------------------------
+// Public methods
+AppArgumentsParser::AppArgumentsParser(AppOptions& options, const AppDetails& app_details, const AppParserConfig& config)
+    : _options(options),
+    _config(config),
+    _app_details(app_details)
+{
+}
+
+void AppArgumentsParser::Parse(const int argc, char* argv[]) const
+{
+    if (_config.GetUseGlobalOptionsFile() && _options.IsUsingDefaultOptionsFile())
+        ParseOptionsFile(_options, AppDetails::GetDefaultOptionsFileName());
+
+    if (_config.GetUseLocalOptionsFile() && _options.IsUsingDefaultOptionsFile())
+        ParseOptionsFile(_options, AppDetails::GetLocalOptionsFileName());
+
+    const auto arguments = ListUtils::ToList(argc, argv, 1);
+
+    ParseArguments(arguments, _options);
+
+    // Validate
+    ValidateRequired(_options);
+    ValidateValues(_options);
+    _options.PostParseValidate();
+}
+
+
+//-----------------------------------------------------------------------------
+// Static Public methods
+void AppArgumentsParser::ParseArguments(const int argc, char* argv[], AppOptions& options, const AppParserConfig& config)
+{
+    auto parser = AppArgumentsParser(options, AppDetails(), config);
+    parser.Parse(argc, argv);
 }

@@ -1,24 +1,21 @@
 ﻿#include "stdafx.h"
 #include "DNXAppOptions.h"
-#include "DNXAppDetails.h"
-#include "../DNX.Utils/FileUtils.h"
 #include "../DNX.Utils/StringUtils.h"
+
+// ReSharper disable CppInconsistentNaming
+// ReSharper disable CppTooWideScope
+// ReSharper disable CppClangTidyClangDiagnosticImplicitIntConversion
 
 using namespace std;
 using namespace DNX::App;
 using namespace DNX::Utils;
 
-// ReSharper disable CppInconsistentNaming
-
-const string HelpShortCode = "?";
-const string UseDefaultOptionsFileShortCode = "@";
-
 AppOptions::AppOptions()
 {
-    const auto useDefaultOptionsFileDesc = "Use Default Options File (" + FileUtils::GetFileNameAndExtension(AppDetails::GetDefaultOptionsFileName()) + ")";
-
-    AddOption(OptionType::SWITCH, ValueType::BOOL, HelpShortCode,                   "help",                     "false", "Show Help screen",        false, INT_MAX);
-    AddOption(OptionType::SWITCH, ValueType::BOOL, UseDefaultOptionsFileShortCode,  "use-default-options-file", "true",  useDefaultOptionsFileDesc, false, INT_MAX - 1);
+    AddSwitch(DebugShortName,                 DebugLongName,                    "false", DebugDescription,                     false, INT_MAX - 3);
+    AddSwitch(HelpShortName,                  HelpLongName,                     "false", HelpDescription,                      false, INT_MAX - 2);
+    AddSwitch(UseDefaultOptionsFileShortName, UseDefaultOptionsFileLongName, "true",  useDefaultOptionsFileDesc, false, INT_MAX - 1);
+    AddSwitch(UseLocalOptionsFileShortName,   UseLocalOptionsFileLongName,   "true",  useLocalOptionsFileDesc,   false, INT_MAX);
 }
 
 void AppOptions::PostParseValidate()
@@ -39,23 +36,24 @@ list<AppOption> AppOptions::GetOptions() const
 
 AppOption& AppOptions::GetOptionByLongName(const string& longName)
 {
+    const auto iter = _options.find(longName);
+    if (iter == _options.end())
+        return AppOption::Empty();
+
+    return iter->second;
+}
+
+AppOption& AppOptions::GetOptionByShortName(const string& shortName)
+{
     for (auto iter = _options.begin(); iter != _options.end(); ++iter)
     {
-        if (iter->second.HasLongName() && iter->second.GetLongName() == longName)
+        if (iter->second.GetShortName() == shortName)
         {
             return iter->second;
         }
     }
 
     return AppOption::Empty();
-}
-
-AppOption& AppOptions::GetOptionByShortName(const string& shortName)
-{
-    const auto iter = _options.find(shortName);
-    return iter == _options.end()
-        ? AppOption::Empty()
-        : iter->second;
 }
 
 AppOption& AppOptions::GetOptionByName(const string& name)
@@ -65,6 +63,19 @@ AppOption& AppOptions::GetOptionByName(const string& name)
         return property;
 
     return GetOptionByLongName(name);
+}
+
+AppOption& AppOptions::GetParameterAtPosition(const int position)
+{
+    for (auto iter = _options.begin(); iter != _options.end(); ++iter)
+    {
+        if (iter->second.GetOptionType() == OptionType::PARAMETER && iter->second.GetPosition() == position)
+        {
+            return iter->second;
+        }
+    }
+
+    return AppOption::Empty();
 }
 
 list<AppOption> AppOptions::GetOptionsByType(const OptionType optionType) const
@@ -98,7 +109,7 @@ list<AppOption> AppOptions::GetOptionsByTypes(const list<OptionType>& optionType
     return filtered;
 }
 
-list<AppOption> AppOptions::GetRequiredOptions()
+list<AppOption> AppOptions::GetRequiredOptions() const
 {
     list<AppOption> filtered;
 
@@ -120,7 +131,7 @@ string AppOptions::GetOptionValue(const string& name)
     if (option.IsEmpty())
         throw exception((string("Unknown Option: ") + name).c_str());
 
-    const auto iter = _values.find(option.GetShortName());
+    const auto iter = _values.find(option.GetLongName());
     if (iter != _values.end())
         return iter->second;
 
@@ -133,7 +144,7 @@ void AppOptions::SetOptionValue(const string& name, const string& value)
     if (option.IsEmpty())
         throw exception((string("Unknown Option: ") + name).c_str());
 
-    _values[option.GetShortName()] = value;
+    _values[option.GetLongName()] = value;
 }
 
 bool AppOptions::HasOptionValue(const string& name)
@@ -142,10 +153,10 @@ bool AppOptions::HasOptionValue(const string& name)
     if (option.IsEmpty())
         throw exception((string("Unknown Option: ") + name).c_str());
 
-    return _values.find(option.GetShortName()) != _values.end();
+    return _values.find(option.GetLongName()) != _values.end();
 }
 
-void AppOptions::AddOptionWithValues(
+void AppOptions::AddArgumentWithValues(
     const OptionType optionType,
     const ValueType valueType,
     const string& shortName,
@@ -164,10 +175,10 @@ void AppOptions::AddOptionWithValues(
         valueList = StringUtils::SplitText(valueListText, ',');
     }
 
-    AddOption(optionType, valueType, shortName, longName, defaultValue, description, required, position, valueList);
+    AddArgument(optionType, valueType, shortName, longName, defaultValue, description, required, position, valueList);
 }
 
-void AppOptions::AddOption(
+void AppOptions::AddArgument(
     const OptionType optionType,
     const ValueType valueType,
     const string& shortName,
@@ -179,17 +190,25 @@ void AppOptions::AddOption(
     const list<string>& valueList
 )
 {
-    if (!GetOptionByShortName(shortName).IsEmpty())
+    if (shortName.empty() && optionType != OptionType::PARAMETER)
+        throw exception("ShortName is required");
+    if (longName.empty())
+        throw exception("LongName is required");
+
+    auto existingOption = GetOptionByName(shortName);
+    if (!existingOption.IsEmpty())
         throw exception((string("Option already exists: ") + shortName).c_str());
-    if (!GetOptionByLongName(longName).IsEmpty())
+
+    existingOption = GetOptionByName(longName);
+    if (!existingOption.IsEmpty())
         throw exception((string("Option already exists: ") + longName).c_str());
 
-    int realPosition = position;
+    uint8_t realPosition = static_cast<uint8_t>(position);
     string realShortName = shortName;
 
     if (optionType == OptionType::PARAMETER)
     {
-        realPosition = static_cast<int>(GetOptionsByType(OptionType::PARAMETER).size() + 1);
+        realPosition = static_cast<uint8_t>(GetOptionsByType(OptionType::PARAMETER).size() + 1);
         realShortName = to_string(position);
 
         if (longName.empty())
@@ -211,7 +230,7 @@ void AppOptions::AddOption(
 
     const auto option = AppOption(optionType, valueType, realPosition, realShortName, longName, description, defaultValue, required, valueList);
 
-    _options[option.GetShortName()] = option;
+    _options[option.GetLongName()] = option;
 }
 
 void AppOptions::AddSwitch(
@@ -223,35 +242,34 @@ void AppOptions::AddSwitch(
     const int position
 )
 {
-    if (!GetOptionByShortName(shortName).IsEmpty())
-        throw exception((string("Option already exists: ") + shortName).c_str());
-    if (!GetOptionByLongName(longName).IsEmpty())
-        throw exception((string("Option already exists: ") + longName).c_str());
+    if (!ValueConverter::IsBool(defaultValue))
+        throw exception((string("Default Value is not a BOOL: ") + defaultValue).c_str());
 
     int realPosition = position;
-    string realShortName = shortName;
-    const auto valueList = list<string>();
-
+    if (position == 0)
     {
-        if (ValueConverter::IsInt(shortName))
-            throw exception((string("Invalid Option Name: ") + shortName).c_str());
-
-        if (position == 0)
-        {
-            const auto types = { OptionType::OPTION, OptionType::SWITCH };
-            realPosition = static_cast<int>(GetOptionsByTypes(types).size() + 1);
-        }
+        const auto types = { OptionType::OPTION, OptionType::SWITCH };
+        realPosition = static_cast<int>(GetOptionsByTypes(types).size() + 1);
     }
 
-    const auto option = AppOption(OptionType::SWITCH, ValueType::BOOL, realPosition, realShortName, longName, description, defaultValue, required, valueList);
-
-    _options[option.GetShortName()] = option;
+    AddArgument(OptionType::SWITCH, ValueType::BOOL, shortName, longName, defaultValue, description, required, realPosition);
 }
 
 void AppOptions::Reset()
 {
+    _last_position = 0;
     _values.clear();
     _errors.clear();
+}
+
+int AppOptions::GetNextPosition() const
+{
+    return _last_position + 1;
+}
+
+void AppOptions::AdvancePosition()
+{
+    ++_last_position;
 }
 
 list<string> AppOptions::GetErrors() const
@@ -264,9 +282,14 @@ bool AppOptions::IsValid() const
     return _errors.empty();
 }
 
+bool AppOptions::IsDebug()
+{
+    return ValueConverter::ToBool(GetOptionValue(DebugLongName));
+}
+
 bool AppOptions::IsHelp()
 {
-    const auto value = GetOptionValue(HelpShortCode);
+    const auto value = GetOptionValue(HelpLongName);
     return ValueConverter::IsBool(value)
         ? ValueConverter::ToBool(value)
         : false;
@@ -274,7 +297,7 @@ bool AppOptions::IsHelp()
 
 bool AppOptions::IsUsingDefaultOptionsFile()
 {
-    const auto value = GetOptionValue(UseDefaultOptionsFileShortCode);
+    const auto value = GetOptionValue(UseDefaultOptionsFileLongName);
     return ValueConverter::IsBool(value)
         ? ValueConverter::ToBool(value)
         : false;

@@ -3,14 +3,13 @@
 #include "../DNX.Utils/ProcessUtils.h"
 #include "../DNX.Utils/FileUtils.h"
 #include "../DNX.Utils/PathUtils.h"
-
 #include <sstream>
+
+// ReSharper disable CppInconsistentNaming
 
 using namespace std;
 using namespace DNX::App;
 using namespace DNX::Utils;
-
-// ReSharper disable CppInconsistentNaming
 
 AppDetails::AppDetails() = default;
 

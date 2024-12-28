@@ -1,18 +1,18 @@
 ﻿#include "stdafx.h"
 #include "DNXValueConverter.h"
 #include "../DNX.Utils/StringUtils.h"
-
 #include <iostream>
 #include <ctime>
 #include <iomanip>
 #include <sstream>
 
+// ReSharper disable CppInconsistentNaming
+// ReSharper disable IdentifierTypo
+// ReSharper disable CppClangTidyClangDiagnosticCoveredSwitchDefault
+
 using namespace std;
 using namespace DNX::App;
 using namespace DNX::Utils;
-
-// ReSharper disable CppInconsistentNaming
-// ReSharper disable IdentifierTypo
 
 bool ValueConverter::IsValueValid(const string& value, const ValueType valueType)
 {

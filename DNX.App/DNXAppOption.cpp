@@ -1,21 +1,22 @@
 ﻿#include "stdafx.h"
 #include "DNXAppOption.h"
 
+// ReSharper disable CppInconsistentNaming
+
 using namespace std;
 using namespace DNX::App;
 
-// ReSharper disable CppInconsistentNaming
+AppOption AppOption::_app_option = AppOption();;
 
 bool AppOption::IsEmpty() const
 {
-    return _position < 0;
+    return _position == 0;
 }
 
 OptionType AppOption::GetOptionType() const
 {
     return _optionType;
 }
-
 ValueType AppOption::GetValueType() const
 {
     return _valueType;
@@ -40,7 +41,7 @@ bool AppOption::GetRequired() const
 {
     return _required;
 }
-int AppOption::GetPosition() const
+uint8_t AppOption::GetPosition() const
 {
     return _position;
 }
@@ -65,9 +66,7 @@ string AppOption::GetNameDescription() const
         description += ": ";
     }
 
-    description += _optionType == OptionType::PARAMETER
-        ? _longName
-        : _shortName;
+    description += _longName;
 
     return description;
 }
@@ -76,14 +75,14 @@ AppOption::AppOption() :
     _optionType(OptionType::PARAMETER),
     _valueType(ValueType::STRING),
     _required(false),
-    _position(-1)
+    _position(0)
 {
 }
 
 AppOption::AppOption(
     const OptionType optionType,
     const ValueType valueType,
-    const int position,
+    const uint8_t position,
     const string& shortName,
     const string& longName,
     const string& description,
@@ -105,13 +104,6 @@ AppOption::AppOption(
     {
         _valueList = valueList;
     }
-}
-
-AppOption& AppOption::Empty()
-{
-    static AppOption empty_instance;
-
-    return empty_instance;
 }
 
 bool AppOption::CompareByPosition(const AppOption& first, const AppOption& second)

@@ -1,43 +1,45 @@
 #pragma once
 #include "stdafx.h"
-#include <string>
 #include "DNXAppOptions.h"
 #include "DNXAppDetails.h"
+#include "DNXAppParserConfig.h"
+#include <string>
+
+// ReSharper disable CppInconsistentNaming
+// ReSharper disable CppClangTidyCppcoreguidelinesAvoidConstOrRefDataMembers
+// ReSharper disable CppClangTidyClangDiagnosticHeaderHygiene
 
 using namespace std;
 
-// ReSharper disable CppInconsistentNaming
+namespace DNX::App
+{
+    //--------------------------------------------------------------------------
+    // Class: AppArgumentsParser
+    //--------------------------------------------------------------------------
+    class AppArgumentsParser
+    {
+        AppOptions& _options;
+        const AppParserConfig _config;
+        const AppDetails _app_details;
 
-namespace DNX {
-    namespace App {
-        //--------------------------------------------------------------------------
-        // Class: AppArgumentsParser
-        //--------------------------------------------------------------------------
-        class AppArgumentsParser
-        {
-            static void ParseDefaultOptionsFile(AppOptions& options);
-            static void ParseLocalOptionsFile(AppOptions& options);
-            static void ParseOptionsFile(AppOptions& options, const string& fileName);
-            static void ReadOptions(const int argc, char* argv[], AppOptions& options, const bool processOptionsFiles);
-            static void ParseOptions(int argc, char** argv, AppOptions& options);
+        void ParseOptionsFile(AppOptions& options, const string& fileName) const;
+        bool ParseArgument(const string& argumentName, const string& argumentValue, AppOptions& options, bool& argumentValueConsumed) const;
+        void ParseArguments(list<string> arguments, AppOptions& options) const;
 
-            static bool HandleParameter(AppOptions& options, int position, const string& value);
-            static void HandleOption(AppOptions& options, const string& optionName, const string& value);
-            static bool HandleSwitch(AppOptions& options, const string& optionName, bool switchOn);
+        static string SanitizeText(const string& text);
+        static list<string> ConvertLinesToRawArguments(const list<string>& lines);
 
-            static void ValidateRequired(AppOptions& options);
-            static void ValidateValues(AppOptions& options);
+        static bool HandleAsSwitch(AppOptions& options, const AppParserConfig& config, const string& argumentName);
+        static bool HandleAsOption(AppOptions& options, const string& argumentName, const string& argumentValue);
+        static bool HandleAsParameter(AppOptions& options, int position, const string& argumentValue);
 
-            static void ParseSingleArg(const string& arg, AppOptions& options, string& optionName, int& parameter);
+        static void ValidateRequired(AppOptions& options);
+        static void ValidateValues(AppOptions& options);
 
-            static list<string> ReadLinesFromFile(const string& fileName, AppOptions& options);
+    public:
+        AppArgumentsParser(AppOptions& options, const AppDetails& app_details, const AppParserConfig& config);
+        void Parse(int argc, char* argv[]) const;
 
-            static void ShowBlankLines(const int count);
-
-        public:
-            static void Parse(int argc, char* argv[], AppOptions& options);
-            static void ShowUsage(const AppOptions& options, const AppDetails& appDetails);
-            static void ShowErrors(const AppOptions& options, const int blankLinesBefore = 0, const int blankLinesAfter = 0);
-        };
-    }
+        static void ParseArguments(int argc, char* argv[], AppOptions& options, const AppParserConfig& config = AppParserConfig());
+    };
 }
