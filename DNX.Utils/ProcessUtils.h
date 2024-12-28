@@ -1,25 +1,22 @@
 #pragma once
 #include "stdafx.h"
-
 #include <string>
 
 // ReSharper disable CppInconsistentNaming
+// ReSharper disable CppClangTidyClangDiagnosticHeaderHygiene
 
 using namespace std;
 
-namespace DNX {
-    namespace Utils {
-
-        //--------------------------------------------------------------------------
-        // Class: ProcessUtils
-        //--------------------------------------------------------------------------
-        class ProcessUtils
-        {
-        public:
-            static string GetExecutableFileName();
-            static string GetExecutableFileNameOnly();
-            static string GetExecutableFilePath();
-        };
-
-    }
+namespace DNX::Utils
+{
+    //--------------------------------------------------------------------------
+    // Class: ProcessUtils
+    //--------------------------------------------------------------------------
+    class ProcessUtils
+    {
+    public:
+        static string GetExecutableFileName();
+        static string GetExecutableFileNameOnly();
+        static string GetExecutableFilePath();
+    };
 }

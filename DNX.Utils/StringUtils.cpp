@@ -1,7 +1,7 @@
 ﻿#include "stdafx.h"
 #include "StringUtils.h"
-
 #include <algorithm>
+#include <sstream>
 
 // ReSharper disable CppInconsistentNaming
 // ReSharper disable CppClangTidyMiscUseAnonymousNamespace
@@ -13,6 +13,7 @@ using namespace DNX::Utils;
 //--------------------------------------------------------------------------
 // Class: StringUtils
 //--------------------------------------------------------------------------
+
 string StringUtils::Trim(const string& str, const char removeChar)
 {
     return LTrim(RTrim(str, removeChar), removeChar);
@@ -47,7 +48,7 @@ string StringUtils::Trim(const string& str, const string& prefix_suffix)
 
 string StringUtils::LTrim(const string& str, const string& prefix)
 {
-    auto result = str;
+    string result = str;
     while (StartsWith(result, prefix))
         result = Right(result, result.length() - prefix.length());
 
@@ -56,7 +57,7 @@ string StringUtils::LTrim(const string& str, const string& prefix)
 
 string StringUtils::RTrim(const string& str, const string& suffix)
 {
-    auto result = str;
+    string result = str;
     while (EndsWith(result, suffix))
         result = Left(result, result.length() - suffix.length());
 
@@ -375,44 +376,50 @@ string StringUtils::EnsureStartsAndEndsWith(const string& str, const string& pre
     return EnsureStartsWith(EnsureEndsWith(str, suffix), prefix);
 }
 
-string StringUtils::RemoveStartsWith(const string& str, const string& prefix)
+string StringUtils::RemoveStartsWith(const string& str, const string& prefix, int count)
 {
     if (str.length() < prefix.length())
         return str;
 
     string trimmedStr = str;
-    while (StartsWith(trimmedStr, prefix))
+    while (StartsWith(trimmedStr, prefix) && count != 0)
     {
         trimmedStr = trimmedStr == prefix
             ? ""
             : trimmedStr.substr(prefix.length(), string::npos);
+
+        if (count > 0)
+            --count;
     }
 
     return trimmedStr;
 }
 
-string StringUtils::RemoveEndsWith(const string& str, const string& suffix)
+string StringUtils::RemoveEndsWith(const string& str, const string& suffix, int count)
 {
     if (str.length() < suffix.length())
         return str;
 
     string trimmedStr = str;
-    while (EndsWith(trimmedStr, suffix))
+    while (EndsWith(trimmedStr, suffix) && count != 0)
     {
         trimmedStr = trimmedStr == suffix
             ? ""
             : trimmedStr.substr(0, trimmedStr.length() - suffix.length());
+
+        if (count > 0)
+            --count;
     }
 
     return trimmedStr;
 }
 
-string StringUtils::RemoveStartsAndEndsWith(const string& str, const string& prefixAndSuffix)
+string StringUtils::RemoveStartsAndEndsWith(const string& str, const string& prefixAndSuffix, int count)
 {
     return RemoveStartsAndEndsWith(str, prefixAndSuffix, prefixAndSuffix);
 }
 
-string StringUtils::RemoveStartsAndEndsWith(const string& str, const string& prefix, const string& suffix)
+string StringUtils::RemoveStartsAndEndsWith(const string& str, const string& prefix, const string& suffix, int count)
 {
     return RemoveStartsWith(RemoveEndsWith(str, suffix), prefix);
 }

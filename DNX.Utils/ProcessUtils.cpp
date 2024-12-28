@@ -1,15 +1,17 @@
 #include "stdafx.h"
 #include "ProcessUtils.h"
-
-#include <Windows.h>
-
 #include "PathUtils.h"
 #include "StringUtils.h"
+#include <Windows.h>
+
+// ReSharper disable CppInconsistentNaming
 
 using namespace std;
 using namespace DNX::Utils;
 
-// ReSharper disable CppInconsistentNaming
+//--------------------------------------------------------------------------
+// Class: ProcessUtils
+//--------------------------------------------------------------------------
 
 string ProcessUtils::GetExecutableFileName()
 {

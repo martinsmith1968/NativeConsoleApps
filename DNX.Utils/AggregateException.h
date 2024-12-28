@@ -8,6 +8,7 @@
 
 // ReSharper disable CppClangTidyPerformanceAvoidEndl
 // ReSharper disable CppInconsistentNaming
+// ReSharper disable CppClassCanBeFinal
 
 using namespace std;
 
@@ -24,7 +25,7 @@ public:
         _exceptions = std::move(exceptions);
 
         std::stringstream what_string;
-        what_string << "AggregateException:" << endl;
+        what_string << "AggregateException: (" << _exceptions.size() << ")" << endl;
         for (auto const& ex : _exceptions) {
             what_string << " " << ex.what() << endl;
         }
@@ -32,11 +33,11 @@ public:
     }
 
 
-    const char* what() const noexcept override {
+    [[nodiscard]] const char* what() const noexcept override {
         return _whatMessage.c_str();
     }
 
-    std::vector<std::exception> GetExceptions() const
+    [[nodiscard]] std::vector<std::exception> GetExceptions() const
     {
         return _exceptions;
     }

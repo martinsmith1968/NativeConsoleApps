@@ -5,10 +5,10 @@
 #include <string>
 #include <iostream>
 #include <filesystem>
-#include <sys/types.h>
 #include <sys/stat.h>
 
 // ReSharper disable CppInconsistentNaming
+// ReSharper disable CppClangTidyPerformanceAvoidEndl
 
 using namespace std;
 using namespace DNX::Utils;
@@ -16,6 +16,7 @@ using namespace DNX::Utils;
 //--------------------------------------------------------------------------
 // Class: PathUtils
 //--------------------------------------------------------------------------
+
 const string PathUtils::DRIVE_SEPARATOR = ":";
 const string PathUtils::PATH_SEPARATOR = "\\";
 

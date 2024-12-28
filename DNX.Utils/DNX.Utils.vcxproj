@@ -158,6 +158,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ConsoleUtils.h" />
     <ClInclude Include="EnumUtils.h" />
     <ClInclude Include="FileUtils.h" />
     <ClInclude Include="ListUtils.h" />
@@ -169,6 +170,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AggregateException.h" />
+    <ClCompile Include="ConsoleUtils.cpp" />
     <ClCompile Include="FileUtils.cpp" />
     <ClCompile Include="ListUtils.cpp" />
     <ClCompile Include="PathUtils.cpp" />

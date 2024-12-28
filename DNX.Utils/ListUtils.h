@@ -1,17 +1,36 @@
 ﻿#pragma once
-#include "stdafx.h"
 
 #include <list>
 #include <string>
 
 // ReSharper disable CppInconsistentNaming
+// ReSharper disable CppClangTidyClangDiagnosticHeaderHygiene
 
 using namespace std;
 
-namespace DNX {
-    namespace Utils {
-        namespace ListUtils {
-            static list<string> ToList(const char* array[]);
+namespace DNX::Utils
+{
+    //--------------------------------------------------------------------------
+    // Class: ListUtils
+    //--------------------------------------------------------------------------
+    class ListUtils
+    {
+    public:
+        static list<string> ToList(int argc, char* argv[], const int startAt = 0);
+
+        template<class T>
+        static T& GetAt(list<T>& list, const int index)
+        {
+            auto default_return_value = T();
+
+            if (index < 0 || index >= list.size())
+                return default_return_value;
+
+            auto iter = list.begin();
+
+            std::advance(iter, index);
+
+            return *iter;
         }
-    }
+    };
 }
