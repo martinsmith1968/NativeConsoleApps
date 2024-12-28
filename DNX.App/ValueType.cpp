@@ -1,5 +1,5 @@
 ﻿#include "stdafx.h"
-#include "DNXValueType.h"
+#include "ValueType.h"
 
 using namespace DNX::App;
 

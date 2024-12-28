@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "stdafx.h"
-#include "DNXValueType.h"
+#include "ValueType.h"
 #include <string>
 
 // ReSharper disable CppInconsistentNaming

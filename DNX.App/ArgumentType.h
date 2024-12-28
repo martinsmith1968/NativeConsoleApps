@@ -11,9 +11,9 @@ using namespace DNX::Utils::EnumUtils;
 namespace DNX::App
 {
     //--------------------------------------------------------------------------
-    // Enum: OptionType
+    // Enum: ArgumentType
     //--------------------------------------------------------------------------
-    enum class OptionType : uint8_t
+    enum class ArgumentType : uint8_t
     {
         PARAMETER,
         OPTION,
@@ -22,11 +22,11 @@ namespace DNX::App
 
 
     //--------------------------------------------------------------------------
-    // Class: OptionTypeText
+    // Class: ArgumentTypeText
     //--------------------------------------------------------------------------
-    class OptionTypeText : public EnumTextResolver<OptionType>
+    class ArgumentTypeText : public EnumTextResolver<ArgumentType>
     {
     public:
-        OptionTypeText();
+        ArgumentTypeText();
     };
 }

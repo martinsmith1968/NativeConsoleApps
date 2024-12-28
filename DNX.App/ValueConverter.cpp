@@ -1,5 +1,5 @@
 ﻿#include "stdafx.h"
-#include "DNXValueConverter.h"
+#include "ValueConverter.h"
 #include "../DNX.Utils/StringUtils.h"
 #include <iostream>
 #include <ctime>

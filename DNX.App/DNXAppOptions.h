@@ -2,9 +2,9 @@
 #include "stdafx.h"
 #include "../DNX.Utils/FileUtils.h"
 #include "DNXAppDetails.h"
-#include "DNXOptionType.h"
+#include "ArgumentType.h"
 #include "DNXAppOption.h"
-#include "DNXValueConverter.h"
+#include "ValueConverter.h"
 #include <list>
 #include <map>
 #include <string>
@@ -45,7 +45,7 @@ namespace DNX::App
         list<string> _errors{};
 
         void AddArgumentWithValues(
-            OptionType optionType,
+            ArgumentType ArgumentType,
             ValueType valueType,
             const string& shortName,
             const string& longName = "",
@@ -57,12 +57,12 @@ namespace DNX::App
         );
 
     protected:
-        OptionTypeText OptionTypeText;
+        ArgumentTypeText ArgumentTypeText;
 
         void virtual PostParseValidate();
 
         void AddArgument(
-            OptionType optionType,
+            ArgumentType ArgumentType,
             ValueType valueType,
             const string& shortName,
             const string& longName = "",
@@ -103,8 +103,8 @@ namespace DNX::App
 
         void Reset();
 
-        [[nodiscard]] list<AppOption> GetOptionsByType(OptionType optionType) const;
-        [[nodiscard]] list<AppOption> GetOptionsByTypes(const list<OptionType>& optionTypes) const;
+        [[nodiscard]] list<AppOption> GetOptionsByType(ArgumentType ArgumentType) const;
+        [[nodiscard]] list<AppOption> GetOptionsByTypes(const list<ArgumentType>& ArgumentTypes) const;
 
         [[nodiscard]] int GetNextPosition() const;
         void AdvancePosition();

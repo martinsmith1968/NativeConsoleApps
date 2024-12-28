@@ -39,20 +39,20 @@ class Options final : public AppOptions
     public:
     Options()
     {
-        AddArgument(OptionType::PARAMETER, ValueType::STRING, "text", "message-text", "", "The Text to display", true);
-        AddArgument(OptionType::OPTION, ValueType::CHAR, "hlc", "header-line-char", "*", "The character to use for header lines", false);
-        AddArgument(OptionType::OPTION, ValueType::INT, "hln", "header-line-count", "1", "The number of header lines to print", false);
-        AddArgument(OptionType::OPTION, ValueType::CHAR, "flc", "footer-line-char", "*", "The character to use for footer lines", false);
-        AddArgument(OptionType::OPTION, ValueType::INT, "fln", "footer-line-count", "1", "The number of footer lines to print", false);
-        AddArgument(OptionType::OPTION, ValueType::CHAR, "tlc", "text-line-char", "*", "The character to use for text line prefix/suffix", false);
-        AddArgument(OptionType::OPTION, ValueType::INT, "tpc", "title-prefix-count", "2", "Set Title Prefix Count", false);
-        AddArgument(OptionType::OPTION, ValueType::INT, "tsc", "title-suffix-count", "2", "Set Title Suffix Count", false);
-        AddArgument(OptionType::OPTION, ValueType::INT, "tpgs", "title-prefix-gap-size", "2", "Set Title Prefix Gap Size", false);
-        AddArgument(OptionType::OPTION, ValueType::INT, "tsgs", "title-suffix-gap-size", "2", "Set Title Suffix Gap Size", false);
-        AddArgument(OptionType::OPTION, ValueType::ENUM, "ta", "text-alignment", "CENTER", "Set Text Alignment", false, 0, TextAlignmentTypeTextConverter.GetAllText());
-        AddArgument(OptionType::OPTION, ValueType::INT, "minl", "min-total-length", "0", "Set Minimum Total line length", false);
-        AddArgument(OptionType::OPTION, ValueType::INT, "maxl", "max-total-length", "0", "Set Maximum Total line length", false);
-        AddArgument(OptionType::SWITCH, ValueType::BOOL, "x", "debug", "false", "Turn debugging on/off", false);
+        AddArgument(ArgumentType::PARAMETER, ValueType::STRING, "text", "message-text", "", "The Text to display", true);
+        AddArgument(ArgumentType::OPTION, ValueType::CHAR, "hlc", "header-line-char", "*", "The character to use for header lines", false);
+        AddArgument(ArgumentType::OPTION, ValueType::INT, "hln", "header-line-count", "1", "The number of header lines to print", false);
+        AddArgument(ArgumentType::OPTION, ValueType::CHAR, "flc", "footer-line-char", "*", "The character to use for footer lines", false);
+        AddArgument(ArgumentType::OPTION, ValueType::INT, "fln", "footer-line-count", "1", "The number of footer lines to print", false);
+        AddArgument(ArgumentType::OPTION, ValueType::CHAR, "tlc", "text-line-char", "*", "The character to use for text line prefix/suffix", false);
+        AddArgument(ArgumentType::OPTION, ValueType::INT, "tpc", "title-prefix-count", "2", "Set Title Prefix Count", false);
+        AddArgument(ArgumentType::OPTION, ValueType::INT, "tsc", "title-suffix-count", "2", "Set Title Suffix Count", false);
+        AddArgument(ArgumentType::OPTION, ValueType::INT, "tpgs", "title-prefix-gap-size", "2", "Set Title Prefix Gap Size", false);
+        AddArgument(ArgumentType::OPTION, ValueType::INT, "tsgs", "title-suffix-gap-size", "2", "Set Title Suffix Gap Size", false);
+        AddArgument(ArgumentType::OPTION, ValueType::ENUM, "ta", "text-alignment", "CENTER", "Set Text Alignment", false, 0, TextAlignmentTypeTextConverter.GetAllText());
+        AddArgument(ArgumentType::OPTION, ValueType::INT, "minl", "min-total-length", "0", "Set Minimum Total line length", false);
+        AddArgument(ArgumentType::OPTION, ValueType::INT, "maxl", "max-total-length", "0", "Set Maximum Total line length", false);
+        AddArgument(ArgumentType::SWITCH, ValueType::BOOL, "x", "debug", "false", "Turn debugging on/off", false);
     }
 
     void PostParseValidate() override

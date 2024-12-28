@@ -29,7 +29,7 @@ void AppOptions::AddError(const string& text)
 
 list<AppOption> AppOptions::GetOptions() const
 {
-    const auto types = OptionTypeText.GetAllValues();
+    const auto types = ArgumentTypeText.GetAllValues();
 
     return GetOptionsByTypes(types);
 }
@@ -69,7 +69,7 @@ AppOption& AppOptions::GetParameterAtPosition(const int position)
 {
     for (auto iter = _options.begin(); iter != _options.end(); ++iter)
     {
-        if (iter->second.GetOptionType() == OptionType::PARAMETER && iter->second.GetPosition() == position)
+        if (iter->second.GetArgumentType() == ArgumentType::PARAMETER && iter->second.GetPosition() == position)
         {
             return iter->second;
         }
@@ -78,13 +78,13 @@ AppOption& AppOptions::GetParameterAtPosition(const int position)
     return AppOption::Empty();
 }
 
-list<AppOption> AppOptions::GetOptionsByType(const OptionType optionType) const
+list<AppOption> AppOptions::GetOptionsByType(const ArgumentType ArgumentType) const
 {
     list<AppOption> filtered;
 
     for (auto iter = _options.begin(); iter != _options.end(); ++iter)
     {
-        if (iter->second.GetOptionType() == optionType)
+        if (iter->second.GetArgumentType() == ArgumentType)
         {
             filtered.push_back(iter->second);
         }
@@ -93,13 +93,13 @@ list<AppOption> AppOptions::GetOptionsByType(const OptionType optionType) const
     return filtered;
 }
 
-list<AppOption> AppOptions::GetOptionsByTypes(const list<OptionType>& optionTypes) const
+list<AppOption> AppOptions::GetOptionsByTypes(const list<ArgumentType>& ArgumentTypes) const
 {
     list<AppOption> filtered;
 
     for (auto iter = _options.begin(); iter != _options.end(); ++iter)
     {
-        const auto found = std::find(std::begin(optionTypes), std::end(optionTypes), iter->second.GetOptionType()) != std::end(optionTypes);
+        const auto found = std::find(std::begin(ArgumentTypes), std::end(ArgumentTypes), iter->second.GetArgumentType()) != std::end(ArgumentTypes);
         if (found)
         {
             filtered.push_back(iter->second);
@@ -157,7 +157,7 @@ bool AppOptions::HasOptionValue(const string& name)
 }
 
 void AppOptions::AddArgumentWithValues(
-    const OptionType optionType,
+    const ArgumentType ArgumentType,
     const ValueType valueType,
     const string& shortName,
     const string& longName,
@@ -175,11 +175,11 @@ void AppOptions::AddArgumentWithValues(
         valueList = StringUtils::SplitText(valueListText, ',');
     }
 
-    AddArgument(optionType, valueType, shortName, longName, defaultValue, description, required, position, valueList);
+    AddArgument(ArgumentType, valueType, shortName, longName, defaultValue, description, required, position, valueList);
 }
 
 void AppOptions::AddArgument(
-    const OptionType optionType,
+    const ArgumentType ArgumentType,
     const ValueType valueType,
     const string& shortName,
     const string& longName,
@@ -190,7 +190,7 @@ void AppOptions::AddArgument(
     const list<string>& valueList
 )
 {
-    if (shortName.empty() && optionType != OptionType::PARAMETER)
+    if (shortName.empty() && ArgumentType != ArgumentType::PARAMETER)
         throw exception("ShortName is required");
     if (longName.empty())
         throw exception("LongName is required");
@@ -206,9 +206,9 @@ void AppOptions::AddArgument(
     uint8_t realPosition = static_cast<uint8_t>(position);
     string realShortName = shortName;
 
-    if (optionType == OptionType::PARAMETER)
+    if (ArgumentType == ArgumentType::PARAMETER)
     {
-        realPosition = static_cast<uint8_t>(GetOptionsByType(OptionType::PARAMETER).size() + 1);
+        realPosition = static_cast<uint8_t>(GetOptionsByType(ArgumentType::PARAMETER).size() + 1);
         realShortName = to_string(position);
 
         if (longName.empty())
@@ -223,12 +223,12 @@ void AppOptions::AddArgument(
 
         if (position == 0)
         {
-            const auto types = {OptionType::OPTION, OptionType::SWITCH };
+            const auto types = {ArgumentType::OPTION, ArgumentType::SWITCH };
             realPosition = static_cast<int>(GetOptionsByTypes(types).size() + 1);
         }
     }
 
-    const auto option = AppOption(optionType, valueType, realPosition, realShortName, longName, description, defaultValue, required, valueList);
+    const auto option = AppOption(ArgumentType, valueType, realPosition, realShortName, longName, description, defaultValue, required, valueList);
 
     _options[option.GetLongName()] = option;
 }
@@ -248,11 +248,11 @@ void AppOptions::AddSwitch(
     int realPosition = position;
     if (position == 0)
     {
-        const auto types = { OptionType::OPTION, OptionType::SWITCH };
+        const auto types = { ArgumentType::OPTION, ArgumentType::SWITCH };
         realPosition = static_cast<int>(GetOptionsByTypes(types).size() + 1);
     }
 
-    AddArgument(OptionType::SWITCH, ValueType::BOOL, shortName, longName, defaultValue, description, required, realPosition);
+    AddArgument(ArgumentType::SWITCH, ValueType::BOOL, shortName, longName, defaultValue, description, required, realPosition);
 }
 
 void AppOptions::Reset()

@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "stdafx.h"
-#include "DNXOptionType.h"
-#include "DNXValueType.h"
+#include "ArgumentType.h"
+#include "ValueType.h"
 
 // ReSharper disable CppInconsistentNaming
 // ReSharper disable CppClangTidyClangDiagnosticHeaderHygiene
@@ -16,7 +16,7 @@ namespace DNX::App
     //--------------------------------------------------------------------------
     class AppOption
     {
-        OptionType _optionType;
+        ArgumentType _argumentType;
         ValueType _valueType;
         string _shortName;
         string _longName;
@@ -27,12 +27,12 @@ namespace DNX::App
         list<string> _valueList{};
 
     protected:
-        OptionTypeText OptionTypeTextHelper;
+        ArgumentTypeText ArgumentTypeTextHelper;
 
     public:
         [[nodiscard]] bool IsEmpty() const;
 
-        [[nodiscard]] OptionType GetOptionType() const;
+        [[nodiscard]] ArgumentType GetArgumentType() const;
         [[nodiscard]] ValueType GetValueType() const;
         [[nodiscard]] string GetShortName() const;
         [[nodiscard]] string GetLongName() const;
@@ -48,7 +48,7 @@ namespace DNX::App
         AppOption();
 
         AppOption(
-            OptionType optionType,
+            ArgumentType argumentType,
             ValueType valueType,
             uint8_t position,
             const string& shortName,

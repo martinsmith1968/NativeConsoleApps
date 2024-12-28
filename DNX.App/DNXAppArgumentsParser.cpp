@@ -131,7 +131,7 @@ list<string> AppArgumentsParser::ConvertLinesToRawArguments(const list<string>& 
     return raw_arguments;
 }
 
-bool AppArgumentsParser::HandleAsSwitch(AppOptions& options, const AppParserConfig& config, const string& argumentName)
+bool AppArgumentsParser::HandleAsSwitch(AppOptions& options, const ParserConfig& config, const string& argumentName)
 {
     const auto switchOnSuffix = string(1, config.GetSwitchOnSuffix());
     const auto switchOffSuffix = string(1, config.GetSwitchOffSuffix());
@@ -154,7 +154,7 @@ bool AppArgumentsParser::HandleAsSwitch(AppOptions& options, const AppParserConf
     if (option.IsEmpty())
         return false;
 
-    if (option.GetOptionType() != OptionType::SWITCH)
+    if (option.GetArgumentType() != ArgumentType::SWITCH)
     {
         return false;
     }
@@ -170,7 +170,7 @@ bool AppArgumentsParser::HandleAsOption(AppOptions& options, const string& argum
     if (option.IsEmpty())
         return false;
 
-    if (option.GetOptionType() != OptionType::OPTION)
+    if (option.GetArgumentType() != ArgumentType::OPTION)
     {
         return false;
     }
@@ -225,7 +225,7 @@ void AppArgumentsParser::ValidateValues(AppOptions& options)
 
 //-----------------------------------------------------------------------------
 // Public methods
-AppArgumentsParser::AppArgumentsParser(AppOptions& options, const AppDetails& app_details, const AppParserConfig& config)
+AppArgumentsParser::AppArgumentsParser(AppOptions& options, const AppDetails& app_details, const ParserConfig& config)
     : _options(options),
     _config(config),
     _app_details(app_details)
@@ -253,7 +253,7 @@ void AppArgumentsParser::Parse(const int argc, char* argv[]) const
 
 //-----------------------------------------------------------------------------
 // Static Public methods
-void AppArgumentsParser::ParseArguments(const int argc, char* argv[], AppOptions& options, const AppParserConfig& config)
+void AppArgumentsParser::ParseArguments(const int argc, char* argv[], AppOptions& options, const ParserConfig& config)
 {
     auto parser = AppArgumentsParser(options, AppDetails(), config);
     parser.Parse(argc, argv);

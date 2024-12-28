@@ -12,10 +12,9 @@ bool AppOption::IsEmpty() const
 {
     return _position == 0;
 }
-
-OptionType AppOption::GetOptionType() const
+ArgumentType AppOption::GetArgumentType() const
 {
-    return _optionType;
+    return _argumentType;
 }
 ValueType AppOption::GetValueType() const
 {
@@ -59,7 +58,7 @@ string AppOption::GetNameDescription() const
 {
     string description;
 
-    description += OptionTypeTextHelper.GetText(_optionType);
+    description += ArgumentTypeTextHelper.GetText(_argumentType);
 
     if (!description.empty())
     {
@@ -72,7 +71,7 @@ string AppOption::GetNameDescription() const
 }
 
 AppOption::AppOption() :
-    _optionType(OptionType::PARAMETER),
+    _argumentType(ArgumentType::PARAMETER),
     _valueType(ValueType::STRING),
     _required(false),
     _position(0)
@@ -80,7 +79,7 @@ AppOption::AppOption() :
 }
 
 AppOption::AppOption(
-    const OptionType optionType,
+    const ArgumentType argumentType,
     const ValueType valueType,
     const uint8_t position,
     const string& shortName,
@@ -91,7 +90,7 @@ AppOption::AppOption(
     const list<string>& valueList
 )
 {
-    _optionType   = optionType;
+    _argumentType = argumentType;
     _valueType    = valueType;
     _shortName    = shortName;
     _longName     = longName;
@@ -113,9 +112,9 @@ bool AppOption::CompareByPosition(const AppOption& first, const AppOption& secon
 
 bool AppOption::CompareByTypeAndPosition(const AppOption& first, const AppOption& second)
 {
-    if (first.GetOptionType() != second.GetOptionType())
+    if (first.GetArgumentType() != second.GetArgumentType())
     {
-        return first.GetOptionType() < second.GetOptionType();
+        return first.GetArgumentType() < second.GetArgumentType();
     }
 
     return CompareByPosition(first, second);

@@ -11,9 +11,9 @@ using namespace std;
 namespace DNX::App
 {
     //--------------------------------------------------------------------------
-    // Class: AppParserConfig
+    // Class: ParserConfig
     //--------------------------------------------------------------------------
-    class AppParserConfig {
+    class ParserConfig {
         static const string DefaultShortNamePrefix;
         static const string DefaultLongNamePrefix;
         static const string DefaultCustomOptionsFilePrefix;
@@ -42,8 +42,8 @@ namespace DNX::App
         [[nodiscard]] char GetSwitchOnSuffix() const { return _switchOnSuffix; }
         [[nodiscard]] char GetSwitchOffSuffix() const { return _switchOffSuffix; }
 
-        AppParserConfig()
-            : AppParserConfig(
+        ParserConfig()
+            : ParserConfig(
                 DefaultShortNamePrefix,
                 DefaultLongNamePrefix,
                 DefaultCustomOptionsFilePrefix,
@@ -56,7 +56,7 @@ namespace DNX::App
         {
         }
 
-        AppParserConfig(
+        ParserConfig(
             const string& shortNamePrefix,
             const string& longNamePrefix,
             const string& customOptionsFilePrefix,

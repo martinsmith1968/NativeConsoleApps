@@ -15,10 +15,10 @@ using namespace DNX::Utils;
 
 void AppOptionsUsageDisplay::ShowUsage(const AppOptions& options, const AppDetails& appDetails)
 {
-    auto parameters = options.GetOptionsByType(OptionType::PARAMETER);
+    auto parameters = options.GetOptionsByType(ArgumentType::PARAMETER);
     parameters.sort(AppOption::CompareByPosition);
 
-    const auto optionsAndSwitchesTypes = { OptionType::PARAMETER, OptionType::OPTION, OptionType::SWITCH };
+    const auto optionsAndSwitchesTypes = { ArgumentType::PARAMETER, ArgumentType::OPTION, ArgumentType::SWITCH };
     auto optionsAndSwitches = options.GetOptionsByTypes(optionsAndSwitchesTypes);
     optionsAndSwitches.sort(AppOption::CompareByTypeAndPosition);
 
@@ -63,7 +63,7 @@ void AppOptionsUsageDisplay::ShowUsage(const AppOptions& options, const AppDetai
         for (auto iter = optionsAndSwitches.begin(); iter != optionsAndSwitches.end(); ++iter)
         {
             string optionDesc;
-            if (iter->GetOptionType() == OptionType::PARAMETER)
+            if (iter->GetArgumentType() == ArgumentType::PARAMETER)
             {
                 optionDesc = "[" + iter->GetLongName() + "]";
             }
