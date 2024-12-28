@@ -16,6 +16,9 @@ namespace DNX::Utils
     class StringUtils
     {
     public:
+        static wstring ToWideString(string& str);
+        static string ToString(wstring& wstr);
+
         static string Trim(const string& str, const char removeChar = ' ');
         static string LTrim(const string& str, const char removeChar = ' ');
         static string RTrim(const string& str, const char removeChar = ' ');

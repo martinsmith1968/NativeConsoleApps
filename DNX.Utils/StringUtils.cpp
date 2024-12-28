@@ -1,4 +1,4 @@
-﻿#include "stdafx.h"
+#include "stdafx.h"
 #include "StringUtils.h"
 #include <algorithm>
 #include <sstream>
@@ -13,6 +13,28 @@ using namespace DNX::Utils;
 //--------------------------------------------------------------------------
 // Class: StringUtils
 //--------------------------------------------------------------------------
+
+// From : https://stackoverflow.com/questions/4804298/how-to-convert-wstring-into-string
+wstring StringUtils::ToWideString(string& str)
+{
+    std::wstring wstr(str.length(), 0);
+    std::transform(str.begin(), str.end(), str.begin(), [](const char c) {
+        return static_cast<wchar_t>(c);
+        });
+
+    return wstr;
+}
+
+// From : https://stackoverflow.com/questions/4804298/how-to-convert-wstring-into-string
+string StringUtils::ToString(wstring& wstr)
+{
+    std::string str(wstr.length(), 0);
+    std::transform(wstr.begin(), wstr.end(), str.begin(), [](const wchar_t c) {
+        return static_cast<char>(c);
+        });
+
+    return str;
+}
 
 string StringUtils::Trim(const string& str, const char removeChar)
 {
@@ -265,8 +287,7 @@ bool StringUtils::ContainsAny(const string& str, const char* characters)
 
     for (size_t x = 0; x < strlen(characters); ++x)
     {
-        const auto pos = str.find(characters[x]);
-        if (pos == string::npos)
+        if (str.find(characters[x]) == string::npos)
             return true;
     }
 
@@ -282,8 +303,7 @@ string StringUtils::RemoveAny(const string& str, const string& characters)
 
     for (const auto ch : str)
     {
-        const auto pos = characters.find(ch);
-        if (pos != string::npos)
+        if (characters.find(ch) != string::npos)
             continue;
 
         result << ch;

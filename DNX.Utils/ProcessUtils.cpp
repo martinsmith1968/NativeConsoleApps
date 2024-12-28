@@ -2,6 +2,7 @@
 #include "ProcessUtils.h"
 #include "PathUtils.h"
 #include "StringUtils.h"
+#include <algorithm>
 #include <Windows.h>
 
 // ReSharper disable CppInconsistentNaming
@@ -13,16 +14,21 @@ using namespace DNX::Utils;
 // Class: ProcessUtils
 //--------------------------------------------------------------------------
 
-string ProcessUtils::GetExecutableFileName()
+wstring ProcessUtils::GetExecutableFileNameWide()
 {
     wchar_t buffer[MAX_PATH];
     const auto length = GetModuleFileName(nullptr, buffer, MAX_PATH);
 
-    wstring ws(buffer, length);
+    wstring wstr(buffer, length);
 
-    string str(ws.begin(), ws.end());
+    return wstr;
+}
 
-    return str;
+string ProcessUtils::GetExecutableFileName()
+{
+    auto wstr = GetExecutableFileNameWide();
+
+    return StringUtils::ToString(wstr);
 }
 
 string ProcessUtils::GetExecutableFileNameOnly()

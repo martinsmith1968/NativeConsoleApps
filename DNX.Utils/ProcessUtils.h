@@ -15,6 +15,8 @@ namespace DNX::Utils
     class ProcessUtils
     {
     public:
+        static wstring GetExecutableFileNameWide();
+
         static string GetExecutableFileName();
         static string GetExecutableFileNameOnly();
         static string GetExecutableFilePath();
