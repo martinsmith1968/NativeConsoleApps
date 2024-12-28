@@ -1,5 +1,5 @@
 ﻿#include "stdafx.h"
-#include "DNXAppOptionsSwitchValue.h"
+#include "SwitchValue.h"
 #include "../DNX.Utils/StringUtils.h"
 
 // ReSharper disable CppInconsistentNaming
@@ -9,22 +9,22 @@ using namespace std;
 using namespace DNX::App;
 using namespace DNX::Utils;
 
-string AppOptionsSwitchValue::GetName() const
+string SwitchValue::GetName() const
 {
     return _name;
 }
-bool AppOptionsSwitchValue::GetValue() const
+bool SwitchValue::GetValue() const
 {
     return _value;
 }
 
-AppOptionsSwitchValue::AppOptionsSwitchValue(const string& name, const bool value)
+SwitchValue::SwitchValue(const string& name, const bool value)
 {
     _name  = name;
     _value = value;
 }
 
-AppOptionsSwitchValue AppOptionsSwitchValue::ParseSwitchDetails(const string& optionName)
+SwitchValue SwitchValue::ParseDetails(const string& optionName)
 {
     auto realName = optionName;
     auto value = true;
@@ -41,5 +41,5 @@ AppOptionsSwitchValue AppOptionsSwitchValue::ParseSwitchDetails(const string& op
         realName = StringUtils::Left(optionName, optionName.length() - 1);
     }
 
-    return AppOptionsSwitchValue(realName, value);
+    return SwitchValue(realName, value);
 }

@@ -10,9 +10,9 @@ using namespace std;
 namespace DNX::App
 {
     //--------------------------------------------------------------------------
-    // Class: AppOptionsSwitchValue
+    // Class: SwitchValue
     //--------------------------------------------------------------------------
-    class AppOptionsSwitchValue {
+    class SwitchValue {
         string _name;
         bool _value;
 
@@ -20,8 +20,8 @@ namespace DNX::App
         [[nodiscard]] string GetName() const;
         [[nodiscard]] bool GetValue() const;
 
-        AppOptionsSwitchValue(const string& name, bool value);
+        SwitchValue(const string& name, bool value);
 
-        static AppOptionsSwitchValue ParseSwitchDetails(const string& optionName);
+        static SwitchValue ParseDetails(const string& optionName);
     };
 }

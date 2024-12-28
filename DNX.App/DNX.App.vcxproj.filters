@@ -36,7 +36,7 @@
     <ClInclude Include="DNXAppOption.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DNXAppOptionsSwitchValue.h">
+    <ClInclude Include="SwitchValue.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ValueType.h">
@@ -71,7 +71,7 @@
     <ClCompile Include="DNXAppDetails.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DNXAppOptionsSwitchValue.cpp">
+    <ClCompile Include="SwitchValue.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ValueType.cpp">
