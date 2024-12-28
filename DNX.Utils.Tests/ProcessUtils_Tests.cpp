@@ -1,16 +1,15 @@
 #include "pch.h"
-
-#define TEST_GROUP ProcessUtils
-
 #include "../DNX.Utils/ProcessUtils.h"
 #include "../DNX.Utils/StringUtils.h"
 
 using namespace std;
 using namespace DNX::Utils;
 
+#define TEST_GROUP ProcessUtils
+
 TEST(TEST_GROUP, GetExecutableFileName_returns_something) {
     // Act
-    auto result = ProcessUtils::GetExecutableFileName();
+    const auto result = ProcessUtils::GetExecutableFileName();
 
     // Assert
     cout << "GetExecutableFileName: " << result << endl;
@@ -19,7 +18,7 @@ TEST(TEST_GROUP, GetExecutableFileName_returns_something) {
 
 TEST(TEST_GROUP, GetExecutableFileNameOnly_returns_something) {
     // Act
-    auto result = ProcessUtils::GetExecutableFileNameOnly();
+    const auto result = ProcessUtils::GetExecutableFileNameOnly();
 
     // Assert
     cout << "GetExecutableFileNameOnly: " << result << endl;
@@ -31,7 +30,7 @@ TEST(TEST_GROUP, GetExecutableFileNameOnly_returns_something) {
 
 TEST(TEST_GROUP, GetExecutableFilePath_returns_something) {
     // Act
-    auto result = ProcessUtils::GetExecutableFilePath();
+    const auto result = ProcessUtils::GetExecutableFilePath();
 
     // Assert
     cout << "GetExecutableFilePath: " << result << endl;
