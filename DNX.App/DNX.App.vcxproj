@@ -158,12 +158,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="DNXAppArgumentsParser.h" />
+    <ClInclude Include="ArgumentsParser.h" />
     <ClInclude Include="AppDetails.h" />
     <ClInclude Include="DNXAppOption.h" />
     <ClInclude Include="DNXAppOptions.h" />
     <ClInclude Include="DNXAppOptionsSwitchValue.h" />
-    <ClInclude Include="DNXAppOptionsUsageDisplay.h" />
+    <ClInclude Include="ArgumentsUsageDisplay.h" />
     <ClInclude Include="ParserConfig.h" />
     <ClInclude Include="ArgumentType.h" />
     <ClInclude Include="ValueConverter.h" />
@@ -172,12 +172,12 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="DNXAppArgumentsParser.cpp" />
+    <ClCompile Include="ArgumentsParser.cpp" />
     <ClCompile Include="DNXAppDetails.cpp" />
     <ClCompile Include="DNXAppOption.cpp" />
     <ClCompile Include="DNXAppOptions.cpp" />
     <ClCompile Include="DNXAppOptionsSwitchValue.cpp" />
-    <ClCompile Include="DNXAppOptionsUsageDisplay.cpp" />
+    <ClCompile Include="ArgumentsUsageDisplay.cpp" />
     <ClCompile Include="ParserConfig.cpp" />
     <ClCompile Include="ArgumentType.cpp" />
     <ClCompile Include="ValueConverter.cpp" />

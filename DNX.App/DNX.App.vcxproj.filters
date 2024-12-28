@@ -42,13 +42,13 @@
     <ClInclude Include="ValueType.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DNXAppArgumentsParser.h">
+    <ClInclude Include="ArgumentsParser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ParserConfig.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DNXAppOptionsUsageDisplay.h">
+    <ClInclude Include="ArgumentsUsageDisplay.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -77,13 +77,13 @@
     <ClCompile Include="ValueType.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DNXAppArgumentsParser.cpp">
+    <ClCompile Include="ArgumentsParser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ParserConfig.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DNXAppOptionsUsageDisplay.cpp">
+    <ClCompile Include="ArgumentsUsageDisplay.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -14,9 +14,9 @@ using namespace std;
 namespace DNX::App
 {
     //--------------------------------------------------------------------------
-    // Class: AppArgumentsParser
+    // Class: ArgumentsParser
     //--------------------------------------------------------------------------
-    class AppArgumentsParser
+    class ArgumentsParser
     {
         AppOptions& _options;
         const ParserConfig _config;
@@ -37,7 +37,7 @@ namespace DNX::App
         static void ValidateValues(AppOptions& options);
 
     public:
-        AppArgumentsParser(AppOptions& options, const AppDetails& app_details, const ParserConfig& config);
+        ArgumentsParser(AppOptions& options, const AppDetails& app_details, const ParserConfig& config);
         void Parse(int argc, char* argv[]) const;
 
         static void ParseArguments(int argc, char* argv[], AppOptions& options, const ParserConfig& config = ParserConfig());

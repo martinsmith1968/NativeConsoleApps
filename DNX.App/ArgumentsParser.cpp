@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "DNXAppArgumentsParser.h"
+#include "ArgumentsParser.h"
 #include "../DNX.Utils/FileUtils.h"
 #include "../DNX.Utils/ListUtils.h"
 #include "../DNX.Utils/StringUtils.h"
@@ -18,7 +18,7 @@ using namespace DNX::Utils;
 
 //-----------------------------------------------------------------------------
 // Instance methods
-void AppArgumentsParser::ParseOptionsFile(AppOptions& options, const string& fileName) const
+void ArgumentsParser::ParseOptionsFile(AppOptions& options, const string& fileName) const
 {
     if (FileUtils::FileExists(fileName))
     {
@@ -29,7 +29,7 @@ void AppArgumentsParser::ParseOptionsFile(AppOptions& options, const string& fil
     }
 }
 
-void AppArgumentsParser::ParseArguments(list<string> arguments, AppOptions& options) const
+void ArgumentsParser::ParseArguments(list<string> arguments, AppOptions& options) const
 {
     for (auto i = 0; i < static_cast<int>(arguments.size()); ++i)
     {
@@ -44,7 +44,7 @@ void AppArgumentsParser::ParseArguments(list<string> arguments, AppOptions& opti
     }
 }
 
-bool AppArgumentsParser::ParseArgument(const string& argumentName, const string& argumentValue, AppOptions& options, bool& argumentValueConsumed) const
+bool ArgumentsParser::ParseArgument(const string& argumentName, const string& argumentValue, AppOptions& options, bool& argumentValueConsumed) const
 {
     argumentValueConsumed = false;
 
@@ -103,7 +103,7 @@ bool AppArgumentsParser::ParseArgument(const string& argumentName, const string&
     return false;
 }
 
-string AppArgumentsParser::SanitizeText(const string& text)
+string ArgumentsParser::SanitizeText(const string& text)
 {
     const auto double_quote = "\"";
 
@@ -113,7 +113,7 @@ string AppArgumentsParser::SanitizeText(const string& text)
     return value;
 }
 
-list<string> AppArgumentsParser::ConvertLinesToRawArguments(const list<string>& lines)
+list<string> ArgumentsParser::ConvertLinesToRawArguments(const list<string>& lines)
 {
     list<string> raw_arguments;
 
@@ -131,7 +131,7 @@ list<string> AppArgumentsParser::ConvertLinesToRawArguments(const list<string>& 
     return raw_arguments;
 }
 
-bool AppArgumentsParser::HandleAsSwitch(AppOptions& options, const ParserConfig& config, const string& argumentName)
+bool ArgumentsParser::HandleAsSwitch(AppOptions& options, const ParserConfig& config, const string& argumentName)
 {
     const auto switchOnSuffix = string(1, config.GetSwitchOnSuffix());
     const auto switchOffSuffix = string(1, config.GetSwitchOffSuffix());
@@ -164,7 +164,7 @@ bool AppArgumentsParser::HandleAsSwitch(AppOptions& options, const ParserConfig&
     return true;
 }
 
-bool AppArgumentsParser::HandleAsOption(AppOptions& options, const string& argumentName, const string& argumentValue)
+bool ArgumentsParser::HandleAsOption(AppOptions& options, const string& argumentName, const string& argumentValue)
 {
     const auto& option = options.GetOptionByName(argumentName);
     if (option.IsEmpty())
@@ -180,7 +180,7 @@ bool AppArgumentsParser::HandleAsOption(AppOptions& options, const string& argum
     return true;
 }
 
-bool AppArgumentsParser::HandleAsParameter(AppOptions& options, const int position, const string& argumentValue)
+bool ArgumentsParser::HandleAsParameter(AppOptions& options, const int position, const string& argumentValue)
 {
     auto& option = options.GetParameterAtPosition(position);
     if (option.IsEmpty())
@@ -191,7 +191,7 @@ bool AppArgumentsParser::HandleAsParameter(AppOptions& options, const int positi
     return true;
 }
 
-void AppArgumentsParser::ValidateRequired(AppOptions& options)
+void ArgumentsParser::ValidateRequired(AppOptions& options)
 {
     auto requiredOptions = options.GetRequiredOptions();
 
@@ -204,7 +204,7 @@ void AppArgumentsParser::ValidateRequired(AppOptions& options)
     }
 }
 
-void AppArgumentsParser::ValidateValues(AppOptions& options)
+void ArgumentsParser::ValidateValues(AppOptions& options)
 {
     auto optionList = options.GetOptions();
 
@@ -225,14 +225,14 @@ void AppArgumentsParser::ValidateValues(AppOptions& options)
 
 //-----------------------------------------------------------------------------
 // Public methods
-AppArgumentsParser::AppArgumentsParser(AppOptions& options, const AppDetails& app_details, const ParserConfig& config)
+ArgumentsParser::ArgumentsParser(AppOptions& options, const AppDetails& app_details, const ParserConfig& config)
     : _options(options),
     _config(config),
     _app_details(app_details)
 {
 }
 
-void AppArgumentsParser::Parse(const int argc, char* argv[]) const
+void ArgumentsParser::Parse(const int argc, char* argv[]) const
 {
     if (_config.GetUseGlobalOptionsFile() && _options.IsUsingDefaultOptionsFile())
         ParseOptionsFile(_options, AppDetails::GetDefaultOptionsFileName());
@@ -253,8 +253,8 @@ void AppArgumentsParser::Parse(const int argc, char* argv[]) const
 
 //-----------------------------------------------------------------------------
 // Static Public methods
-void AppArgumentsParser::ParseArguments(const int argc, char* argv[], AppOptions& options, const ParserConfig& config)
+void ArgumentsParser::ParseArguments(const int argc, char* argv[], AppOptions& options, const ParserConfig& config)
 {
-    auto parser = AppArgumentsParser(options, AppDetails(), config);
+    auto parser = ArgumentsParser(options, AppDetails(), config);
     parser.Parse(argc, argv);
 }

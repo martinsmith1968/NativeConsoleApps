@@ -10,9 +10,9 @@
 namespace DNX::App
 {
     //--------------------------------------------------------------------------
-    // Class: DNXAppOptionsUsageDisplay
+    // Class: ArgumentsUsageDisplay
     //--------------------------------------------------------------------------
-    class AppOptionsUsageDisplay
+    class ArgumentsUsageDisplay
     {
     public:
         static void ShowUsage(const AppOptions& options, const AppDetails& appDetails);

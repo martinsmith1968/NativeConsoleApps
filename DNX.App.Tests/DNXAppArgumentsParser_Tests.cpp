@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "../DNX.App/DNXAppOptions.h"
-#include "../DNX.App/DNXAppArgumentsParser.h"
+#include "../DNX.App/ArgumentsParser.h"
 #include "Options1.h"
 #include "Options2.h"
 // ReSharper disable CppClangTidyPerformanceUnnecessaryCopyInitialization
@@ -13,7 +13,7 @@
 using namespace std;
 using namespace DNX::App;
 
-#define TEST_GROUP AppArgumentsParser
+#define TEST_GROUP ArgumentsParser
 
 static void ShowErrors(const AppOptions& options)
 {
@@ -35,7 +35,7 @@ TEST(TEST_GROUP, ParseArguments_single_positional_arguments_assigns_correctly)
     Options1 options;
 
     // Act
-    AppArgumentsParser::ParseArguments(argc, argv, options);
+    ArgumentsParser::ParseArguments(argc, argv, options);
     ShowErrors(options);
 
     // Assert
@@ -57,7 +57,7 @@ TEST(TEST_GROUP, ParseArguments_single_positional_argument_with_shortname_option
     Options1 options;
 
     // Act
-    AppArgumentsParser::ParseArguments(argc, argv, options);
+    ArgumentsParser::ParseArguments(argc, argv, options);
     ShowErrors(options);
 
     // Assert
@@ -81,7 +81,7 @@ TEST(TEST_GROUP, ParseArguments_single_positional_argument_with_shortname_option
     Options1 options;
 
     // Act
-    AppArgumentsParser::ParseArguments(argc, argv, options);
+    ArgumentsParser::ParseArguments(argc, argv, options);
     ShowErrors(options);
 
     // Assert
@@ -107,7 +107,7 @@ TEST(TEST_GROUP, ParseArguments_single_positional_argument_with_shortname_option
     Options1 options;
 
     // Act
-    AppArgumentsParser::ParseArguments(argc, argv, options);
+    ArgumentsParser::ParseArguments(argc, argv, options);
     ShowErrors(options);
 
     // Assert
@@ -128,7 +128,7 @@ TEST(TEST_GROUP, IsValid_options_without_any_required_arguments_returns_successf
     Options1 options;
 
     // Act
-    AppArgumentsParser::ParseArguments(argc, argv, options);
+    ArgumentsParser::ParseArguments(argc, argv, options);
     ShowErrors(options);
 
     // Assert
@@ -145,7 +145,7 @@ TEST(TEST_GROUP, IsValid_options_with_required_arguments_returns_successfully)
     Options2 options;
 
     // Act
-    AppArgumentsParser::ParseArguments(argc, argv, options);
+    ArgumentsParser::ParseArguments(argc, argv, options);
     ShowErrors(options);
 
     // Assert
@@ -163,7 +163,7 @@ TEST(TEST_GROUP, IsValid_options_with_option_shortname_without_value_returns_suc
     Options1 options;
 
     // Act
-    AppArgumentsParser::ParseArguments(argc, argv, options);
+    ArgumentsParser::ParseArguments(argc, argv, options);
     ShowErrors(options);
 
     // Assert
@@ -181,7 +181,7 @@ TEST(TEST_GROUP, IsValid_options_with_option_longname_without_value_returns_succ
     Options1 options;
 
     // Act
-    AppArgumentsParser::ParseArguments(argc, argv, options);
+    ArgumentsParser::ParseArguments(argc, argv, options);
     ShowErrors(options);
 
     // Assert
@@ -200,7 +200,7 @@ TEST(TEST_GROUP, IsValid_options_with_option_longname_with_invalid_value_returns
     Options1 options;
 
     // Act
-    AppArgumentsParser::ParseArguments(argc, argv, options);
+    ArgumentsParser::ParseArguments(argc, argv, options);
     ShowErrors(options);
 
     // Assert

@@ -95,7 +95,7 @@ namespace DNX::App
         void SetOptionValue(const string& name, const string& value);
         bool HasOptionValue(const string& name);
 
-        friend class AppArgumentsParser;
+        friend class ArgumentsParser;
 
     public:
         AppOptions();

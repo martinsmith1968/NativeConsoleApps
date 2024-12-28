@@ -2,8 +2,8 @@
 #include "AppInfo.h"
 #include "Options.h"
 #include "../DNX.Utils/StringUtils.h"
-#include "../DNX.App/DNXAppArgumentsParser.h"
-#include "../DNX.App/DNXAppOptionsUsageDisplay.h"
+#include "../DNX.App/ArgumentsParser.h"
+#include "../DNX.App/ArgumentsUsageDisplay.h"
 #include <iostream>
 #include <regex>
 #include <string>
@@ -32,17 +32,17 @@ int main(const int argc, char* argv[])
         const AppInfo appInfo;
 
         Options options;
-        AppArgumentsParser::ParseArguments(argc, argv, options);
+        ArgumentsParser::ParseArguments(argc, argv, options);
 
         if (options.IsHelp())
         {
-            AppOptionsUsageDisplay::ShowUsage(options, appInfo);
+            ArgumentsUsageDisplay::ShowUsage(options, appInfo);
             return 1;
         }
         if (!options.IsValid())
         {
-            AppOptionsUsageDisplay::ShowUsage(options, appInfo);
-            AppOptionsUsageDisplay::ShowErrors(options, 1);
+            ArgumentsUsageDisplay::ShowUsage(options, appInfo);
+            ArgumentsUsageDisplay::ShowErrors(options, 1);
             return 2;
         }
 

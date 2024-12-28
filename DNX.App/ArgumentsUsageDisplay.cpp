@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "DNXAppOptionsUsageDisplay.h"
+#include "ArgumentsUsageDisplay.h"
 #include "../DNX.Utils/ConsoleUtils.h"
 #include "../DNX.Utils/FileUtils.h"
 #include "../DNX.Utils/StringUtils.h"
@@ -13,7 +13,7 @@
 using namespace DNX::App;
 using namespace DNX::Utils;
 
-void AppOptionsUsageDisplay::ShowUsage(const AppOptions& options, const AppDetails& appDetails)
+void ArgumentsUsageDisplay::ShowUsage(const AppOptions& options, const AppDetails& appDetails)
 {
     auto parameters = options.GetOptionsByType(ArgumentType::PARAMETER);
     parameters.sort(AppOption::CompareByPosition);
@@ -151,7 +151,7 @@ void AppOptionsUsageDisplay::ShowUsage(const AppOptions& options, const AppDetai
     }
 }
 
-void AppOptionsUsageDisplay::ShowErrors(const AppOptions& options, const int blankLinesBefore, const int blankLinesAfter)
+void ArgumentsUsageDisplay::ShowErrors(const AppOptions& options, const int blankLinesBefore, const int blankLinesAfter)
 {
     ConsoleUtils::ShowBlankLines(blankLinesBefore);
 
