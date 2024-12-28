@@ -17,7 +17,35 @@ using namespace DNX::App;
 using namespace DNX::Utils;
 
 //-----------------------------------------------------------------------------
-// Instance methods
+// Internal methods
+string ArgumentsParser::SanitizeText(const string& text)
+{
+    const auto double_quote = "\"";
+
+    auto value = StringUtils::Trim(text);
+    value = StringUtils::RemoveStartsAndEndsWith(value, double_quote);
+
+    return value;
+}
+
+list<string> ArgumentsParser::ConvertLinesToRawArguments(const list<string>& lines)
+{
+    list<string> raw_arguments;
+
+    for (auto& line : lines)
+    {
+        string parts = StringUtils::Trim(line);
+
+        auto argument_name = SanitizeText(StringUtils::Before(parts, " "));
+        auto argument_value = SanitizeText(StringUtils::After(parts, " "));
+
+        raw_arguments.push_back(argument_name);
+        raw_arguments.push_back(argument_value);
+    }
+
+    return raw_arguments;
+}
+
 void ArgumentsParser::ParseArgumentsFile(Arguments& arguments, const string& fileName) const
 {
     if (FileUtils::FileExists(fileName))
@@ -101,34 +129,6 @@ bool ArgumentsParser::ParseArgument(const string& argumentName, const string& ar
     }
 
     return false;
-}
-
-string ArgumentsParser::SanitizeText(const string& text)
-{
-    const auto double_quote = "\"";
-
-    auto value = StringUtils::Trim(text);
-    value = StringUtils::RemoveStartsAndEndsWith(value, double_quote);
-
-    return value;
-}
-
-list<string> ArgumentsParser::ConvertLinesToRawArguments(const list<string>& lines)
-{
-    list<string> raw_arguments;
-
-    for (auto& line : lines)
-    {
-        string parts = StringUtils::Trim(line);
-
-        auto argument_name  = SanitizeText(StringUtils::Before(parts, " "));
-        auto argument_value = SanitizeText(StringUtils::After(parts, " "));
-
-        raw_arguments.push_back(argument_name);
-        raw_arguments.push_back(argument_value);
-    }
-
-    return raw_arguments;
 }
 
 bool ArgumentsParser::HandleAsSwitch(Arguments& arguments, const ParserConfig& config, const string& argumentName)
@@ -222,9 +222,8 @@ void ArgumentsParser::ValidateValues(Arguments& arguments)
 }
 
 
-
 //-----------------------------------------------------------------------------
-// Public methods
+// Public usage methods
 ArgumentsParser::ArgumentsParser(Arguments& arguments, const AppDetails& app_details, const ParserConfig& config)
     : _arguments(arguments),
     _config(config),
@@ -255,6 +254,6 @@ void ArgumentsParser::Parse(const int argc, char* argv[]) const
 // Static Public methods
 void ArgumentsParser::ParseArguments(const int argc, char* argv[], Arguments& Arguments, const ParserConfig& config)
 {
-    auto parser = ArgumentsParser(Arguments, AppDetails(), config);
+    const auto parser = ArgumentsParser(Arguments, AppDetails(), config);
     parser.Parse(argc, argv);
 }

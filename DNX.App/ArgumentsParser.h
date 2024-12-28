@@ -22,12 +22,12 @@ namespace DNX::App
         const ParserConfig _config;
         const AppDetails _app_details;
 
-        void ParseArgumentsFile(Arguments& arguments, const string& fileName) const;
-        bool ParseArgument(const string& argumentName, const string& argumentValue, Arguments& arguments, bool& argumentValueConsumed) const;
-        void ParseArguments(list<string>& argumentsText, Arguments& arguments) const;
-
         static string SanitizeText(const string& text);
         static list<string> ConvertLinesToRawArguments(const list<string>& lines);
+
+        void ParseArgumentsFile(Arguments& arguments, const string& fileName) const;
+        void ParseArguments(list<string>& argumentsText, Arguments& arguments) const;
+        bool ParseArgument(const string& argumentName, const string& argumentValue, Arguments& arguments, bool& argumentValueConsumed) const;
 
         static bool HandleAsSwitch(Arguments& arguments, const ParserConfig& config, const string& argumentName);
         static bool HandleAsOption(Arguments& arguments, const string& argumentName, const string& argumentValue);
