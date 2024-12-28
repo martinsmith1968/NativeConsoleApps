@@ -15,7 +15,7 @@ AppDetails::AppDetails() = default;
 
 AppDetails::~AppDetails() = default;
 
-string AppDetails::_options_file_extension = "options";
+string AppDetails::_arguments_file_extension = "options";
 
 string AppDetails::GetHeaderLine() const
 {
@@ -41,11 +41,16 @@ string AppDetails::GetApplicationName()
     return FileUtils::GetFileNameOnly(ProcessUtils::GetExecutableFileNameOnly());
 }
 
+string AppDetails::GetDefaultArgumentsFileExtension()
+{
+    return _arguments_file_extension;
+}
+
 string AppDetails::GetArgumentsFileNameOnly()
 {
     const auto executableName = ProcessUtils::GetExecutableFileNameOnly();
 
-    return FileUtils::ChangeFileExtension(executableName, _options_file_extension);
+    return FileUtils::ChangeFileExtension(executableName, _arguments_file_extension);
 }
 
 string AppDetails::GetDefaultArgumentsFileName()

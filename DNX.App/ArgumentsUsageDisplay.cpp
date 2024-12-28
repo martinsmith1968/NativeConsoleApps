@@ -13,21 +13,21 @@
 using namespace DNX::App;
 using namespace DNX::Utils;
 
-void ArgumentsUsageDisplay::ShowUsage(const Arguments& options, const AppDetails& appDetails)
+void ArgumentsUsageDisplay::ShowUsage(const Arguments& arguments, const AppDetails& appDetails)
 {
-    auto parameters = options.GetArgumentsByType(ArgumentType::PARAMETER);
+    auto parameters = arguments.GetArgumentsByType(ArgumentType::PARAMETER);
     parameters.sort(Argument::CompareByPosition);
 
     const auto optionsAndSwitchesTypes = { ArgumentType::PARAMETER, ArgumentType::OPTION, ArgumentType::SWITCH };
-    auto optionsAndSwitches = options.GetArgumentsByTypes(optionsAndSwitchesTypes);
+    auto optionsAndSwitches = arguments.GetArgumentsByTypes(optionsAndSwitchesTypes);
     optionsAndSwitches.sort(Argument::CompareByTypeAndPosition);
 
     const auto hasOptions = !optionsAndSwitches.empty();
 
-    string parameterText;
+    string argumentText;
     for (auto iter = parameters.begin(); iter != parameters.end(); ++iter)
     {
-        parameterText
+        argumentText
             .append(" [")
             .append(iter->GetLongName())
             .append("]");
@@ -35,12 +35,12 @@ void ArgumentsUsageDisplay::ShowUsage(const Arguments& options, const AppDetails
 
     if (hasOptions)
     {
-        if (!parameterText.empty())
+        if (!argumentText.empty())
         {
-            parameterText.append(" ");
+            argumentText.append(" ");
         }
 
-        parameterText.append("[OPTIONS]");
+        argumentText.append("[OPTIONS]");
     }
 
     cout << appDetails.GetHeaderLine() << std::endl;
@@ -50,7 +50,7 @@ void ArgumentsUsageDisplay::ShowUsage(const Arguments& options, const AppDetails
     }
     cout << std::endl;
     cout << "Usage:" << std::endl;
-    cout << AppDetails::GetApplicationName() << parameterText << std::endl;
+    cout << AppDetails::GetApplicationName() << argumentText << std::endl;
 
     if (hasOptions)
     {
@@ -133,29 +133,29 @@ void ArgumentsUsageDisplay::ShowUsage(const Arguments& options, const AppDetails
         }
     }
 
-    list<string> options_file_lines;
+    list<string> argument_file_lines;
     if (FileUtils::FileExists(AppDetails::GetDefaultArgumentsFileName()))
     {
-        options_file_lines.push_back("Default options file: " + AppDetails::GetDefaultArgumentsFileName());
+        argument_file_lines.push_back("Default arguments file: " + AppDetails::GetDefaultArgumentsFileName());
     }
     if (FileUtils::FileExists(AppDetails::GetLocalArgumentsFileName()))
     {
-        options_file_lines.push_back("Local options file: " + AppDetails::GetLocalArgumentsFileName());
+        argument_file_lines.push_back("Local arguments file: " + AppDetails::GetLocalArgumentsFileName());
     }
 
-    if (!options_file_lines.empty())
+    if (!argument_file_lines.empty())
     {
         cout << std::endl;
-        for (const auto& line : options_file_lines)
+        for (const auto& line : argument_file_lines)
             cout << line << std::endl;
     }
 }
 
-void ArgumentsUsageDisplay::ShowErrors(const Arguments& options, const int blankLinesBefore, const int blankLinesAfter)
+void ArgumentsUsageDisplay::ShowErrors(const Arguments& arguments, const int blankLinesBefore, const int blankLinesAfter)
 {
     ConsoleUtils::ShowBlankLines(blankLinesBefore);
 
-    auto errors = options.GetErrors();
+    auto errors = arguments.GetErrors();
     for (auto iter = errors.begin(); iter != errors.end(); ++iter)
     {
         cout << "Error: " << *iter << endl;

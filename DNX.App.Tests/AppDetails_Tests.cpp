@@ -15,9 +15,9 @@ TEST(TEST_GROUP, GetApplicationName_returns_the_correct_value)
     EXPECT_EQ("DNX.App.Tests", AppDetails::GetApplicationName());
 }
 
-TEST(TEST_GROUP, GetDefaultOptionsFileName_returns_the_correct_value)
+TEST(TEST_GROUP, GetDefaultArgumentsFileName_returns_the_correct_value)
 {
-    const string expected = "DNX.App.Tests.options";
+    const string expected = "DNX.App.Tests." + AppDetails::GetDefaultArgumentsFileExtension();
 
     // Act
     const auto filename = AppDetails::GetDefaultArgumentsFileName();
@@ -29,9 +29,9 @@ TEST(TEST_GROUP, GetDefaultOptionsFileName_returns_the_correct_value)
     EXPECT_EQ(expected, result);
 }
 
-TEST(TEST_GROUP, GetLocalOptionsFileName_returns_the_correct_value)
+TEST(TEST_GROUP, GetLocalArgumentsFileName_returns_the_correct_value)
 {
-    const string expected = "DNX.App.Tests.options";
+    const string expected = "DNX.App.Tests." + AppDetails::GetDefaultArgumentsFileExtension();
 
     // Act
     const auto filename = AppDetails::GetLocalArgumentsFileName();

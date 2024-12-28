@@ -5,6 +5,6 @@
 
 using namespace DNX::App;
 
-const string ParserConfig::DefaultShortNamePrefix         = "-";
-const string ParserConfig::DefaultLongNamePrefix          = "--";
-const string ParserConfig::DefaultCustomOptionsFilePrefix = "@";
+const string ParserConfig::DefaultShortNamePrefix           = "-";
+const string ParserConfig::DefaultLongNamePrefix            = "--";
+const string ParserConfig::DefaultCustomArgumentsFilePrefix = "@";

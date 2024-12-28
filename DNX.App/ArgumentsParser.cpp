@@ -234,10 +234,10 @@ ArgumentsParser::ArgumentsParser(Arguments& arguments, const AppDetails& app_det
 
 void ArgumentsParser::Parse(const int argc, char* argv[]) const
 {
-    if (_config.GetUseCustomOptionsFile() && _arguments.IsUsingDefaultArgumentsFile())
+    if (_config.GetUseCustomArgumentsFile() && _arguments.IsUsingDefaultArgumentsFile())
         ParseArgumentsFile(_arguments, AppDetails::GetDefaultArgumentsFileName());
 
-    if (_config.GetUseLocalOptionsFile() && _arguments.IsUsingDefaultArgumentsFile())
+    if (_config.GetUseLocalArgumentsFile() && _arguments.IsUsingDefaultArgumentsFile())
         ParseArgumentsFile(_arguments, AppDetails::GetLocalArgumentsFileName());
 
     auto arguments = ListUtils::ToList(argc, argv, 1);

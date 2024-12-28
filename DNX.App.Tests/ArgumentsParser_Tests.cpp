@@ -16,10 +16,10 @@ using namespace DNX::App;
 
 #define TEST_GROUP ArgumentsParser
 
-static void ShowErrors(const Arguments& options)
+static void ShowErrors(const Arguments& arguments)
 {
-    cout << "Error Count: " << options.GetErrors().size() << endl;
-    for (const auto& error : options.GetErrors())
+    cout << "Error Count: " << arguments.GetErrors().size() << endl;
+    for (const auto& error : arguments.GetErrors())
     {
         cout << "Error: " << error << endl;
     }
@@ -33,15 +33,15 @@ TEST(TEST_GROUP, ParseArguments_single_positional_arguments_assigns_correctly)
         "bob",
     };
 
-    Arguments1 options;
+    Arguments1 arguments;
 
     // Act
-    ArgumentsParser::ParseArguments(argc, argv, options);
-    ShowErrors(options);
+    ArgumentsParser::ParseArguments(argc, argv, arguments);
+    ShowErrors(arguments);
 
     // Assert
-    EXPECT_TRUE(options.IsValid());
-    EXPECT_EQ("bob", options.GetMessageText());
+    EXPECT_TRUE(arguments.IsValid());
+    EXPECT_EQ("bob", arguments.GetMessageText());
 }
 
 TEST(TEST_GROUP, ParseArguments_single_positional_argument_with_shortname_option_after_and_switch_assigns_correctly)
@@ -55,17 +55,17 @@ TEST(TEST_GROUP, ParseArguments_single_positional_argument_with_shortname_option
         "-x",
     };
 
-    Arguments1 options;
+    Arguments1 arguments;
 
     // Act
-    ArgumentsParser::ParseArguments(argc, argv, options);
-    ShowErrors(options);
+    ArgumentsParser::ParseArguments(argc, argv, arguments);
+    ShowErrors(arguments);
 
     // Assert
-    EXPECT_TRUE(options.IsValid());
-    EXPECT_EQ("bob", options.GetMessageText());
-    EXPECT_EQ(5, options.GetTimeoutSeconds());
-    EXPECT_EQ(true, options.IsDebug());
+    EXPECT_TRUE(arguments.IsValid());
+    EXPECT_EQ("bob", arguments.GetMessageText());
+    EXPECT_EQ(5, arguments.GetTimeoutSeconds());
+    EXPECT_EQ(true, arguments.IsDebug());
 }
 
 TEST(TEST_GROUP, ParseArguments_single_positional_argument_with_shortname_option_before_and_switch_assigns_correctly)
@@ -79,20 +79,20 @@ TEST(TEST_GROUP, ParseArguments_single_positional_argument_with_shortname_option
         "-x",
     };
 
-    Arguments1 options;
+    Arguments1 arguments;
 
     // Act
-    ArgumentsParser::ParseArguments(argc, argv, options);
-    ShowErrors(options);
+    ArgumentsParser::ParseArguments(argc, argv, arguments);
+    ShowErrors(arguments);
 
     // Assert
-    EXPECT_TRUE(options.IsValid());
-    EXPECT_EQ("bob", options.GetMessageText());
-    EXPECT_EQ(5, options.GetTimeoutSeconds());
-    EXPECT_EQ(true, options.IsDebug());
+    EXPECT_TRUE(arguments.IsValid());
+    EXPECT_EQ("bob", arguments.GetMessageText());
+    EXPECT_EQ(5, arguments.GetTimeoutSeconds());
+    EXPECT_EQ(true, arguments.IsDebug());
 }
 
-TEST(TEST_GROUP, ParseArguments_single_positional_argument_with_shortname_options_before_and_after_and_switch_assigns_correctly)
+TEST(TEST_GROUP, ParseArguments_single_positional_argument_with_shortname_arguments_before_and_after_and_switch_assigns_correctly)
 {
     constexpr auto argc = 7;
     char* argv[argc] = {
@@ -105,55 +105,55 @@ TEST(TEST_GROUP, ParseArguments_single_positional_argument_with_shortname_option
         "500",
     };
 
-    Arguments1 options;
+    Arguments1 arguments;
 
     // Act
-    ArgumentsParser::ParseArguments(argc, argv, options);
-    ShowErrors(options);
+    ArgumentsParser::ParseArguments(argc, argv, arguments);
+    ShowErrors(arguments);
 
     // Assert
-    EXPECT_TRUE(options.IsValid());
-    EXPECT_EQ("bob", options.GetMessageText());
-    EXPECT_EQ(5, options.GetTimeoutSeconds());
-    EXPECT_EQ(500, options.GetSleepMilliseconds());
-    EXPECT_EQ(true, options.IsDebug());
+    EXPECT_TRUE(arguments.IsValid());
+    EXPECT_EQ("bob", arguments.GetMessageText());
+    EXPECT_EQ(5, arguments.GetTimeoutSeconds());
+    EXPECT_EQ(500, arguments.GetSleepMilliseconds());
+    EXPECT_EQ(true, arguments.IsDebug());
 }
 
-TEST(TEST_GROUP, IsValid_options_without_any_required_arguments_returns_successfully)
+TEST(TEST_GROUP, IsValid_arguments_without_any_required_arguments_returns_successfully)
 {
     constexpr auto argc = 1;
     char* argv[argc] = {
         "",
     };
 
-    Arguments1 options;
+    Arguments1 arguments;
 
     // Act
-    ArgumentsParser::ParseArguments(argc, argv, options);
-    ShowErrors(options);
+    ArgumentsParser::ParseArguments(argc, argv, arguments);
+    ShowErrors(arguments);
 
     // Assert
-    EXPECT_TRUE(options.IsValid());
+    EXPECT_TRUE(arguments.IsValid());
 }
 
-TEST(TEST_GROUP, IsValid_options_with_required_arguments_returns_successfully)
+TEST(TEST_GROUP, IsValid_arguments_with_required_arguments_returns_successfully)
 {
     constexpr auto argc = 1;
     char* argv[argc] = {
         "",
     };
 
-    Arguments2 options;
+    Arguments2 arguments;
 
     // Act
-    ArgumentsParser::ParseArguments(argc, argv, options);
-    ShowErrors(options);
+    ArgumentsParser::ParseArguments(argc, argv, arguments);
+    ShowErrors(arguments);
 
     // Assert
-    EXPECT_FALSE(options.IsValid());
+    EXPECT_FALSE(arguments.IsValid());
 }
 
-TEST(TEST_GROUP, IsValid_options_with_option_shortname_without_value_returns_successfully)
+TEST(TEST_GROUP, IsValid_arguments_with_option_shortname_without_value_returns_successfully)
 {
     constexpr auto argc = 2;
     char* argv[argc] = {
@@ -161,17 +161,17 @@ TEST(TEST_GROUP, IsValid_options_with_option_shortname_without_value_returns_suc
         "-t",
     };
 
-    Arguments1 options;
+    Arguments1 arguments;
 
     // Act
-    ArgumentsParser::ParseArguments(argc, argv, options);
-    ShowErrors(options);
+    ArgumentsParser::ParseArguments(argc, argv, arguments);
+    ShowErrors(arguments);
 
     // Assert
-    EXPECT_FALSE(options.IsValid());
+    EXPECT_FALSE(arguments.IsValid());
 }
 
-TEST(TEST_GROUP, IsValid_options_with_option_longname_without_value_returns_successfully)
+TEST(TEST_GROUP, IsValid_arguments_with_option_longname_without_value_returns_successfully)
 {
     constexpr auto argc = 2;
     char* argv[argc] = {
@@ -179,17 +179,17 @@ TEST(TEST_GROUP, IsValid_options_with_option_longname_without_value_returns_succ
         "--timeout",
     };
 
-    Arguments1 options;
+    Arguments1 arguments;
 
     // Act
-    ArgumentsParser::ParseArguments(argc, argv, options);
-    ShowErrors(options);
+    ArgumentsParser::ParseArguments(argc, argv, arguments);
+    ShowErrors(arguments);
 
     // Assert
-    EXPECT_FALSE(options.IsValid());
+    EXPECT_FALSE(arguments.IsValid());
 }
 
-TEST(TEST_GROUP, IsValid_options_with_option_longname_with_invalid_value_returns_successfully)
+TEST(TEST_GROUP, IsValid_arguments_with_option_longname_with_invalid_value_returns_successfully)
 {
     constexpr auto argc = 3;
     char* argv[argc] = {
@@ -198,12 +198,12 @@ TEST(TEST_GROUP, IsValid_options_with_option_longname_with_invalid_value_returns
         "abc",
     };
 
-    Arguments1 options;
+    Arguments1 arguments;
 
     // Act
-    ArgumentsParser::ParseArguments(argc, argv, options);
-    ShowErrors(options);
+    ArgumentsParser::ParseArguments(argc, argv, arguments);
+    ShowErrors(arguments);
 
     // Assert
-    EXPECT_FALSE(options.IsValid());
+    EXPECT_FALSE(arguments.IsValid());
 }

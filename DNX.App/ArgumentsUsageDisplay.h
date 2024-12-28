@@ -15,7 +15,7 @@ namespace DNX::App
     class ArgumentsUsageDisplay
     {
     public:
-        static void ShowUsage(const Arguments& options, const AppDetails& appDetails);
-        static void ShowErrors(const Arguments& options, int blankLinesBefore = 0, int blankLinesAfter = 0);
+        static void ShowUsage(const Arguments& arguments, const AppDetails& appDetails);
+        static void ShowErrors(const Arguments& arguments, int blankLinesBefore = 0, int blankLinesAfter = 0);
     };
 }

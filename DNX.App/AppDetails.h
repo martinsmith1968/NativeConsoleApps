@@ -15,7 +15,7 @@ namespace DNX::App
     //--------------------------------------------------------------------------
     class AppDetails
     {
-        static string _options_file_extension;
+        static string _arguments_file_extension;
 
     public:
         string Name;
@@ -29,6 +29,8 @@ namespace DNX::App
         [[nodiscard]] string virtual GetHeaderLine() const;
 
         static string GetApplicationName();
+
+        static string GetDefaultArgumentsFileExtension();
 
         static string GetArgumentsFileNameOnly();
         static string GetDefaultArgumentsFileName();
