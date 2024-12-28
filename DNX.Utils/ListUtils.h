@@ -21,7 +21,7 @@ namespace DNX::Utils
         template<class T>
         static T& GetAt(list<T>& list, const int index)
         {
-            auto default_return_value = T();
+            static T default_return_value;
 
             if (index < 0 || index >= list.size())
                 return default_return_value;

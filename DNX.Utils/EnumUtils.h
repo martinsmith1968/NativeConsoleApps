@@ -50,7 +50,7 @@ namespace DNX::Utils::EnumUtils
             return T();
         }
 
-        list<string> GetAllText() const
+        [[nodiscard]] list<string> GetAllText() const
         {
             list<string> list;
 
