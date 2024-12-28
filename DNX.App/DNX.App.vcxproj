@@ -173,7 +173,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ArgumentsParser.cpp" />
-    <ClCompile Include="DNXAppDetails.cpp" />
+    <ClCompile Include="AppDetails.cpp" />
     <ClCompile Include="DNXAppOption.cpp" />
     <ClCompile Include="DNXAppOptions.cpp" />
     <ClCompile Include="SwitchValue.cpp" />

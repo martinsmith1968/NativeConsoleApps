@@ -68,7 +68,7 @@
     <ClCompile Include="DNXAppOption.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DNXAppDetails.cpp">
+    <ClCompile Include="AppDetails.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SwitchValue.cpp">
