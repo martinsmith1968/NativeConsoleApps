@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "../DNX.App/DNXAppDetails.h"
+#include "../DNX.App/AppDetails.h"
 
 // ReSharper disable CppInconsistentNaming
 // ReSharper disable CppClangTidyPerformanceUnnecessaryCopyInitialization

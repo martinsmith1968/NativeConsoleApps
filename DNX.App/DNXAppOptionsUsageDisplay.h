@@ -1,6 +1,6 @@
 #pragma once
 #include "stdafx.h"
-#include "DNXAppDetails.h"
+#include "AppDetails.h"
 #include "DNXAppOptions.h"
 
 // ReSharper disable CppInconsistentNaming

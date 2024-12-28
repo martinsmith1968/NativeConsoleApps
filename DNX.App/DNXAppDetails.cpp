@@ -1,5 +1,5 @@
 ﻿#include "stdafx.h"
-#include "DNXAppDetails.h"
+#include "AppDetails.h"
 #include "../DNX.Utils/ProcessUtils.h"
 #include "../DNX.Utils/FileUtils.h"
 #include "../DNX.Utils/PathUtils.h"

@@ -4,7 +4,7 @@
 #include "Version.h"
 #include "Macros.h"
 
-#include "../DNX.App/DNXAppDetails.h"
+#include "../DNX.App/AppDetails.h"
 
 using namespace DNX::App;
 

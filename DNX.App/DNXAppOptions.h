@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "stdafx.h"
 #include "../DNX.Utils/FileUtils.h"
-#include "DNXAppDetails.h"
+#include "AppDetails.h"
 #include "ArgumentType.h"
 #include "DNXAppOption.h"
 #include "ValueConverter.h"

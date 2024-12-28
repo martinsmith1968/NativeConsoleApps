@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "DNXAppOptions.h"
-#include "DNXAppDetails.h"
+#include "AppDetails.h"
 #include "ParserConfig.h"
 #include <string>
 

@@ -159,7 +159,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="DNXAppArgumentsParser.h" />
-    <ClInclude Include="DNXAppDetails.h" />
+    <ClInclude Include="AppDetails.h" />
     <ClInclude Include="DNXAppOption.h" />
     <ClInclude Include="DNXAppOptions.h" />
     <ClInclude Include="DNXAppOptionsSwitchValue.h" />

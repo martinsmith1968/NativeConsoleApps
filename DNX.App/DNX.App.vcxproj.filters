@@ -24,7 +24,7 @@
     <ClInclude Include="ValueConverter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DNXAppDetails.h">
+    <ClInclude Include="AppDetails.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DNXAppOptions.h">
