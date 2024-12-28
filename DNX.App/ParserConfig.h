@@ -35,7 +35,7 @@ namespace DNX::App
     public:
         [[nodiscard]] const string& GetShortNamePrefix() const { return _shortNamePrefix; }
         [[nodiscard]] const string& GetLongNamePrefix() const { return _longNamePrefix; }
-        [[nodiscard]] const string& GetCustomOptionsFilePrefix() const { return _customOptionsFilePrefix; }
+        [[nodiscard]] const string& GetCustomArgumentsFilePrefix() const { return _customOptionsFilePrefix; }
         [[nodiscard]] bool GetUseGlobalOptionsFile() const { return _useGlobalOptionsFile; }
         [[nodiscard]] bool GetUseLocalOptionsFile() const { return _useLocalOptionsFile; }
         [[nodiscard]] bool GetUseCustomOptionsFile() const { return _useCustomOptionsFile; }

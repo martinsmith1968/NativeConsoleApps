@@ -13,10 +13,10 @@ using namespace DNX::Utils;
 
 Arguments::Arguments()
 {
-    AddSwitch(DebugShortName,                 DebugLongName,                    "false", DebugDescription,                     false, INT_MAX - 3);
-    AddSwitch(HelpShortName,                  HelpLongName,                     "false", HelpDescription,                      false, INT_MAX - 2);
-    AddSwitch(UseDefaultOptionsFileShortName, UseDefaultOptionsFileLongName, "true",  useDefaultOptionsFileDesc, false, INT_MAX - 1);
-    AddSwitch(UseLocalOptionsFileShortName,   UseLocalOptionsFileLongName,   "true",  useLocalOptionsFileDesc,   false, INT_MAX);
+    AddSwitch(DebugShortName,                   DebugLongName,                   "false", DebugDescription,                     false, INT_MAX - 3);
+    AddSwitch(HelpShortName,                    HelpLongName,                    "false", HelpDescription,                      false, INT_MAX - 2);
+    AddSwitch(UseDefaultArgumentsFileShortName, UseDefaultArgumentsFileLongName, "true",  useDefaultArgumentsFileDesc, false, INT_MAX - 1);
+    AddSwitch(UseLocalArgumentsFileShortName,   UseLocalArgumentsFileLongName,   "true",  useLocalArgumentsFileDesc,   false, INT_MAX);
 }
 
 void Arguments::PostParseValidate()
@@ -28,17 +28,17 @@ void Arguments::AddError(const string& text)
     _errors.push_back(text);
 }
 
-list<Argument> Arguments::GetOptions() const
+list<Argument> Arguments::GetArguments() const
 {
     const auto types = ArgumentTypeText.GetAllValues();
 
-    return GetOptionsByTypes(types);
+    return GetArgumentsByTypes(types);
 }
 
 Argument& Arguments::GetOptionByLongName(const string& longName)
 {
-    const auto iter = _options.find(longName);
-    if (iter == _options.end())
+    const auto iter = _arguments.find(longName);
+    if (iter == _arguments.end())
         return Argument::Empty();
 
     return iter->second;
@@ -46,7 +46,7 @@ Argument& Arguments::GetOptionByLongName(const string& longName)
 
 Argument& Arguments::GetOptionByShortName(const string& shortName)
 {
-    for (auto iter = _options.begin(); iter != _options.end(); ++iter)
+    for (auto iter = _arguments.begin(); iter != _arguments.end(); ++iter)
     {
         if (iter->second.GetShortName() == shortName)
         {
@@ -68,7 +68,7 @@ Argument& Arguments::GetOptionByName(const string& name)
 
 Argument& Arguments::GetParameterAtPosition(const int position)
 {
-    for (auto iter = _options.begin(); iter != _options.end(); ++iter)
+    for (auto iter = _arguments.begin(); iter != _arguments.end(); ++iter)
     {
         if (iter->second.GetArgumentType() == ArgumentType::PARAMETER && iter->second.GetPosition() == position)
         {
@@ -79,11 +79,11 @@ Argument& Arguments::GetParameterAtPosition(const int position)
     return Argument::Empty();
 }
 
-list<Argument> Arguments::GetOptionsByType(const ArgumentType ArgumentType) const
+list<Argument> Arguments::GetArgumentsByType(const ArgumentType ArgumentType) const
 {
     list<Argument> filtered;
 
-    for (auto iter = _options.begin(); iter != _options.end(); ++iter)
+    for (auto iter = _arguments.begin(); iter != _arguments.end(); ++iter)
     {
         if (iter->second.GetArgumentType() == ArgumentType)
         {
@@ -94,11 +94,11 @@ list<Argument> Arguments::GetOptionsByType(const ArgumentType ArgumentType) cons
     return filtered;
 }
 
-list<Argument> Arguments::GetOptionsByTypes(const list<ArgumentType>& ArgumentTypes) const
+list<Argument> Arguments::GetArgumentsByTypes(const list<ArgumentType>& ArgumentTypes) const
 {
     list<Argument> filtered;
 
-    for (auto iter = _options.begin(); iter != _options.end(); ++iter)
+    for (auto iter = _arguments.begin(); iter != _arguments.end(); ++iter)
     {
         const auto found = std::find(std::begin(ArgumentTypes), std::end(ArgumentTypes), iter->second.GetArgumentType()) != std::end(ArgumentTypes);
         if (found)
@@ -110,11 +110,11 @@ list<Argument> Arguments::GetOptionsByTypes(const list<ArgumentType>& ArgumentTy
     return filtered;
 }
 
-list<Argument> Arguments::GetRequiredOptions() const
+list<Argument> Arguments::GetRequiredArguments() const
 {
     list<Argument> filtered;
 
-    auto typeList = GetOptions();
+    auto typeList = GetArguments();
     for (auto iter = typeList.begin(); iter != typeList.end(); ++iter)
     {
         if (iter->GetRequired())
@@ -209,7 +209,7 @@ void Arguments::AddArgument(
 
     if (ArgumentType == ArgumentType::PARAMETER)
     {
-        realPosition = static_cast<uint8_t>(GetOptionsByType(ArgumentType::PARAMETER).size() + 1);
+        realPosition = static_cast<uint8_t>(GetArgumentsByType(ArgumentType::PARAMETER).size() + 1);
         realShortName = to_string(position);
 
         if (longName.empty())
@@ -225,13 +225,13 @@ void Arguments::AddArgument(
         if (position == 0)
         {
             const auto types = {ArgumentType::OPTION, ArgumentType::SWITCH };
-            realPosition = static_cast<int>(GetOptionsByTypes(types).size() + 1);
+            realPosition = static_cast<int>(GetArgumentsByTypes(types).size() + 1);
         }
     }
 
     const auto option = Argument(ArgumentType, valueType, realPosition, realShortName, longName, description, defaultValue, required, valueList);
 
-    _options[option.GetLongName()] = option;
+    _arguments[option.GetLongName()] = option;
 }
 
 void Arguments::AddSwitch(
@@ -250,7 +250,7 @@ void Arguments::AddSwitch(
     if (position == 0)
     {
         const auto types = { ArgumentType::OPTION, ArgumentType::SWITCH };
-        realPosition = static_cast<int>(GetOptionsByTypes(types).size() + 1);
+        realPosition = static_cast<int>(GetArgumentsByTypes(types).size() + 1);
     }
 
     AddArgument(ArgumentType::SWITCH, ValueType::BOOL, shortName, longName, defaultValue, description, required, realPosition);
@@ -296,9 +296,9 @@ bool Arguments::IsHelp()
         : false;
 }
 
-bool Arguments::IsUsingDefaultOptionsFile()
+bool Arguments::IsUsingDefaultArgumentsFile()
 {
-    const auto value = GetOptionValue(UseDefaultOptionsFileLongName);
+    const auto value = GetOptionValue(UseDefaultArgumentsFileLongName);
     return ValueConverter::IsBool(value)
         ? ValueConverter::ToBool(value)
         : false;

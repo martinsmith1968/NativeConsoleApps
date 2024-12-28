@@ -32,7 +32,7 @@
     <ClCompile Include="BannerText.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Options.h">
+    <ClCompile Include="AppArguments.h">
       <Filter>Header Files</Filter>
     </ClCompile>
   </ItemGroup>

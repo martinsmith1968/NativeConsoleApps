@@ -15,11 +15,11 @@ using namespace DNX::Utils;
 
 void ArgumentsUsageDisplay::ShowUsage(const Arguments& options, const AppDetails& appDetails)
 {
-    auto parameters = options.GetOptionsByType(ArgumentType::PARAMETER);
+    auto parameters = options.GetArgumentsByType(ArgumentType::PARAMETER);
     parameters.sort(Argument::CompareByPosition);
 
     const auto optionsAndSwitchesTypes = { ArgumentType::PARAMETER, ArgumentType::OPTION, ArgumentType::SWITCH };
-    auto optionsAndSwitches = options.GetOptionsByTypes(optionsAndSwitchesTypes);
+    auto optionsAndSwitches = options.GetArgumentsByTypes(optionsAndSwitchesTypes);
     optionsAndSwitches.sort(Argument::CompareByTypeAndPosition);
 
     const auto hasOptions = !optionsAndSwitches.empty();
@@ -134,13 +134,13 @@ void ArgumentsUsageDisplay::ShowUsage(const Arguments& options, const AppDetails
     }
 
     list<string> options_file_lines;
-    if (FileUtils::FileExists(AppDetails::GetDefaultOptionsFileName()))
+    if (FileUtils::FileExists(AppDetails::GetDefaultArgumentsFileName()))
     {
-        options_file_lines.push_back("Default options file: " + AppDetails::GetDefaultOptionsFileName());
+        options_file_lines.push_back("Default options file: " + AppDetails::GetDefaultArgumentsFileName());
     }
-    if (FileUtils::FileExists(AppDetails::GetLocalOptionsFileName()))
+    if (FileUtils::FileExists(AppDetails::GetLocalArgumentsFileName()))
     {
-        options_file_lines.push_back("Local options file: " + AppDetails::GetLocalOptionsFileName());
+        options_file_lines.push_back("Local options file: " + AppDetails::GetLocalArgumentsFileName());
     }
 
     if (!options_file_lines.empty())

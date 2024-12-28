@@ -32,12 +32,12 @@ class TextAlignmentTypeText : public EnumTextResolver<TextAlignmentType>
     }
 };
 
-class Options final : public Arguments
+class AppArguments final : public Arguments
 {
     TextAlignmentTypeText TextAlignmentTypeTextConverter;
 
     public:
-    Options()
+    AppArguments()
     {
         AddArgument(ArgumentType::PARAMETER, ValueType::STRING, "text", "message-text", "", "The Text to display", true);
         AddArgument(ArgumentType::OPTION, ValueType::CHAR, "hlc", "header-line-char", "*", "The character to use for header lines", false);

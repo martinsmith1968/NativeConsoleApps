@@ -5,10 +5,10 @@
 
 // ReSharper disable CppInconsistentNaming
 
-class Options1 final : public Arguments
+class Arguments1 final : public Arguments
 {
 public:
-    Options1()
+    Arguments1()
     {
         const auto defaultMessageText = "Press any key to continue (or wait {timeout} seconds) . . . ";
         const auto defaultTimeout = std::to_string(30);

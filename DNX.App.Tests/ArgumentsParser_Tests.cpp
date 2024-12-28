@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "../DNX.App/Arguments.h"
 #include "../DNX.App/ArgumentsParser.h"
-#include "Options1.h"
-#include "Options2.h"
+#include "Arguments1.h"
+#include "Arguments2.h"
 
 // ReSharper disable CppClangTidyPerformanceUnnecessaryCopyInitialization
 // ReSharper disable CppInconsistentNaming
@@ -33,7 +33,7 @@ TEST(TEST_GROUP, ParseArguments_single_positional_arguments_assigns_correctly)
         "bob",
     };
 
-    Options1 options;
+    Arguments1 options;
 
     // Act
     ArgumentsParser::ParseArguments(argc, argv, options);
@@ -55,7 +55,7 @@ TEST(TEST_GROUP, ParseArguments_single_positional_argument_with_shortname_option
         "-x",
     };
 
-    Options1 options;
+    Arguments1 options;
 
     // Act
     ArgumentsParser::ParseArguments(argc, argv, options);
@@ -79,7 +79,7 @@ TEST(TEST_GROUP, ParseArguments_single_positional_argument_with_shortname_option
         "-x",
     };
 
-    Options1 options;
+    Arguments1 options;
 
     // Act
     ArgumentsParser::ParseArguments(argc, argv, options);
@@ -105,7 +105,7 @@ TEST(TEST_GROUP, ParseArguments_single_positional_argument_with_shortname_option
         "500",
     };
 
-    Options1 options;
+    Arguments1 options;
 
     // Act
     ArgumentsParser::ParseArguments(argc, argv, options);
@@ -126,7 +126,7 @@ TEST(TEST_GROUP, IsValid_options_without_any_required_arguments_returns_successf
         "",
     };
 
-    Options1 options;
+    Arguments1 options;
 
     // Act
     ArgumentsParser::ParseArguments(argc, argv, options);
@@ -143,7 +143,7 @@ TEST(TEST_GROUP, IsValid_options_with_required_arguments_returns_successfully)
         "",
     };
 
-    Options2 options;
+    Arguments2 options;
 
     // Act
     ArgumentsParser::ParseArguments(argc, argv, options);
@@ -161,7 +161,7 @@ TEST(TEST_GROUP, IsValid_options_with_option_shortname_without_value_returns_suc
         "-t",
     };
 
-    Options1 options;
+    Arguments1 options;
 
     // Act
     ArgumentsParser::ParseArguments(argc, argv, options);
@@ -179,7 +179,7 @@ TEST(TEST_GROUP, IsValid_options_with_option_longname_without_value_returns_succ
         "--timeout",
     };
 
-    Options1 options;
+    Arguments1 options;
 
     // Act
     ArgumentsParser::ParseArguments(argc, argv, options);
@@ -198,7 +198,7 @@ TEST(TEST_GROUP, IsValid_options_with_option_longname_with_invalid_value_returns
         "abc",
     };
 
-    Options1 options;
+    Arguments1 options;
 
     // Act
     ArgumentsParser::ParseArguments(argc, argv, options);

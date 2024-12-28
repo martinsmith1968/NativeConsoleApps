@@ -3,10 +3,10 @@
 #include "pch.h"
 #include "../DNX.App/Arguments.h"
 
-class Options2 final : public Arguments
+class Arguments2 final : public Arguments
 {
 public:
-    Options2()
+    Arguments2()
     {
         auto const defaultTimeout = std::to_string(30);
         auto const defaultSleep = std::to_string(200);

@@ -18,28 +18,28 @@ namespace DNX::App
     //--------------------------------------------------------------------------
     class ArgumentsParser
     {
-        Arguments& _options;
+        Arguments& _arguments;
         const ParserConfig _config;
         const AppDetails _app_details;
 
-        void ParseOptionsFile(Arguments& options, const string& fileName) const;
-        bool ParseArgument(const string& argumentName, const string& argumentValue, Arguments& options, bool& argumentValueConsumed) const;
-        void ParseArguments(list<string> arguments, Arguments& options) const;
+        void ParseArgumentsFile(Arguments& arguments, const string& fileName) const;
+        bool ParseArgument(const string& argumentName, const string& argumentValue, Arguments& arguments, bool& argumentValueConsumed) const;
+        void ParseArguments(list<string>& argumentsText, Arguments& arguments) const;
 
         static string SanitizeText(const string& text);
         static list<string> ConvertLinesToRawArguments(const list<string>& lines);
 
-        static bool HandleAsSwitch(Arguments& options, const ParserConfig& config, const string& argumentName);
-        static bool HandleAsOption(Arguments& options, const string& argumentName, const string& argumentValue);
-        static bool HandleAsParameter(Arguments& options, int position, const string& argumentValue);
+        static bool HandleAsSwitch(Arguments& arguments, const ParserConfig& config, const string& argumentName);
+        static bool HandleAsOption(Arguments& arguments, const string& argumentName, const string& argumentValue);
+        static bool HandleAsParameter(Arguments& arguments, int position, const string& argumentValue);
 
-        static void ValidateRequired(Arguments& options);
-        static void ValidateValues(Arguments& options);
+        static void ValidateRequired(Arguments& arguments);
+        static void ValidateValues(Arguments& arguments);
 
     public:
-        ArgumentsParser(Arguments& options, const AppDetails& app_details, const ParserConfig& config);
+        ArgumentsParser(Arguments& arguments, const AppDetails& app_details, const ParserConfig& config);
         void Parse(int argc, char* argv[]) const;
 
-        static void ParseArguments(int argc, char* argv[], Arguments& options, const ParserConfig& config = ParserConfig());
+        static void ParseArguments(int argc, char* argv[], Arguments& arguments, const ParserConfig& config = ParserConfig());
     };
 }

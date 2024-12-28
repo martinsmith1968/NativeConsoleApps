@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "stdafx.h"
 #include "../DNX.Utils/FileUtils.h"
 #include "AppDetails.h"
@@ -24,23 +24,23 @@ namespace DNX::App
     //--------------------------------------------------------------------------
     class Arguments
     {
-        const string DebugShortName                 = "x";
-        const string HelpShortName                  = "?";
-        const string UseDefaultOptionsFileShortName = "@";
-        const string UseLocalOptionsFileShortName   = "$";
+        const string DebugShortName                   = "x";
+        const string HelpShortName                    = "?";
+        const string UseDefaultArgumentsFileShortName = "@";
+        const string UseLocalArgumentsFileShortName   = "$";
 
-        const string DebugLongName                 = "debug";
-        const string HelpLongName                  = "help";
-        const string UseDefaultOptionsFileLongName = "use-default-options-file";
-        const string UseLocalOptionsFileLongName   = "use-local-options-file";
+        const string DebugLongName                   = "debug";
+        const string HelpLongName                    = "help";
+        const string UseDefaultArgumentsFileLongName = "use-default-Arguments-file";
+        const string UseLocalArgumentsFileLongName   = "use-local-Arguments-file";
 
-        const string HelpDescription           = "Show Help screen";
-        const string DebugDescription          = "Activate debug mode";
-        const string useDefaultOptionsFileDesc = "Use Default Options File (" + FileUtils::GetFileNameAndExtension(AppDetails::GetDefaultOptionsFileName()) + ")";
-        const string useLocalOptionsFileDesc   = "Use Local Options File (" + FileUtils::GetFileNameAndExtension(AppDetails::GetDefaultOptionsFileName()) + ")";
+        const string HelpDescription             = "Show Help screen";
+        const string DebugDescription            = "Activate debug mode";
+        const string useDefaultArgumentsFileDesc = "Use Default Arguments File (" + FileUtils::GetFileNameAndExtension(AppDetails::GetDefaultArgumentsFileName()) + ")";
+        const string useLocalArgumentsFileDesc   = "Use Local Arguments File (" + FileUtils::GetFileNameAndExtension(AppDetails::GetDefaultArgumentsFileName()) + ")";
 
         int _last_position = 0;
-        map<string, Argument> _options{};
+        map<string, Argument> _arguments{};
         map<string, string> _values{};
         list<string> _errors{};
 
@@ -83,13 +83,13 @@ namespace DNX::App
 
         void AddError(const string& text);
 
-        [[nodiscard]] list<Argument> GetOptions() const;
+        [[nodiscard]] list<Argument> GetArguments() const;
         Argument& GetOptionByLongName(const string& longName);
         Argument& GetOptionByShortName(const string& shortName);
         Argument& GetOptionByName(const string& name);
         [[nodiscard]] Argument& GetParameterAtPosition(const int position);
 
-        [[nodiscard]] list<Argument> GetRequiredOptions() const;
+        [[nodiscard]] list<Argument> GetRequiredArguments() const;
 
         string GetOptionValue(const string& name);
         void SetOptionValue(const string& name, const string& value);
@@ -103,8 +103,8 @@ namespace DNX::App
 
         void Reset();
 
-        [[nodiscard]] list<Argument> GetOptionsByType(ArgumentType ArgumentType) const;
-        [[nodiscard]] list<Argument> GetOptionsByTypes(const list<ArgumentType>& ArgumentTypes) const;
+        [[nodiscard]] list<Argument> GetArgumentsByType(ArgumentType ArgumentType) const;
+        [[nodiscard]] list<Argument> GetArgumentsByTypes(const list<ArgumentType>& ArgumentTypes) const;
 
         [[nodiscard]] int GetNextPosition() const;
         void AdvancePosition();
@@ -112,7 +112,7 @@ namespace DNX::App
         [[nodiscard]] bool IsValid() const;
         bool IsDebug();
         bool IsHelp();
-        bool IsUsingDefaultOptionsFile();
+        bool IsUsingDefaultArgumentsFile();
 
     };
 }

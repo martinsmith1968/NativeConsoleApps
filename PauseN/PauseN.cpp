@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "AppInfo.h"
-#include "Options.h"
+#include "AppArguments.h"
 #include "../DNX.Utils/StringUtils.h"
 #include "../DNX.App/ArgumentsParser.h"
 #include "../DNX.App/ArgumentsUsageDisplay.h"
@@ -21,7 +21,7 @@ using namespace DNX::Utils;
 //------------------------------------------------------------------------------
 // Declarations
 namespace PauseN {
-    static void Execute(Options& options);  // NOLINT(misc-use-anonymous-namespace)
+    static void Execute(AppArguments& arguments);  // NOLINT(misc-use-anonymous-namespace)
 };
 
 //------------------------------------------------------------------------------
@@ -32,22 +32,22 @@ int main(const int argc, char* argv[])
     {
         const AppInfo appInfo;
 
-        Options options;
-        ArgumentsParser::ParseArguments(argc, argv, options);
+        AppArguments arguments;
+        ArgumentsParser::ParseArguments(argc, argv, arguments);
 
-        if (options.IsHelp())
+        if (arguments.IsHelp())
         {
-            ArgumentsUsageDisplay::ShowUsage(options, appInfo);
+            ArgumentsUsageDisplay::ShowUsage(arguments, appInfo);
             return 1;
         }
-        if (!options.IsValid())
+        if (!arguments.IsValid())
         {
-            ArgumentsUsageDisplay::ShowUsage(options, appInfo);
-            ArgumentsUsageDisplay::ShowErrors(options, 1);
+            ArgumentsUsageDisplay::ShowUsage(arguments, appInfo);
+            ArgumentsUsageDisplay::ShowErrors(arguments, 1);
             return 2;
         }
 
-        PauseN::Execute(options);
+        PauseN::Execute(arguments);
 
         return 0;
     }
@@ -65,13 +65,13 @@ int main(const int argc, char* argv[])
 
 //------------------------------------------------------------------------------
 // Execute
-void PauseN::Execute(Options& options)
+void PauseN::Execute(AppArguments& arguments)
 {
-    cout << options.GetFormattedMessageText();
+    cout << arguments.GetFormattedMessageText();
 
     const auto start_time = time(nullptr);
-    const auto exit_time  = start_time + options.GetTimeoutSeconds();
-    const auto sleep_time = std::chrono::milliseconds(options.GetSleepMilliseconds());
+    const auto exit_time  = start_time + arguments.GetTimeoutSeconds();
+    const auto sleep_time = std::chrono::milliseconds(arguments.GetSleepMilliseconds());
 
     do
     {
@@ -82,7 +82,7 @@ void PauseN::Execute(Options& options)
         }
 
         std::this_thread::sleep_for(sleep_time);
-    } while (time(nullptr) < exit_time || options.GetTimeoutSeconds() == 0);
+    } while (time(nullptr) < exit_time || arguments.GetTimeoutSeconds() == 0);
 
     cout << endl;
 }

@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "AppInfo.h"
-#include "Options.h"
+#include "AppArguments.h"
 #include "../DNX.Utils/StringUtils.h"
 #include "../DNX.App/ArgumentsParser.h"
 #include "../DNX.App/ArgumentsUsageDisplay.h"
@@ -20,7 +20,7 @@ using namespace DNX::Utils;
 //------------------------------------------------------------------------------
 // Declarations
 namespace BannerText {
-    static void Execute(Options& options);  // NOLINT(misc-use-anonymous-namespace)
+    static void Execute(AppArguments& arguments);  // NOLINT(misc-use-anonymous-namespace)
 };
 
 //------------------------------------------------------------------------------
@@ -31,22 +31,22 @@ int main(const int argc, char* argv[])
     {
         const AppInfo appInfo;
 
-        Options options;
-        ArgumentsParser::ParseArguments(argc, argv, options);
+        AppArguments arguments;
+        ArgumentsParser::ParseArguments(argc, argv, arguments);
 
-        if (options.IsHelp())
+        if (arguments.IsHelp())
         {
-            ArgumentsUsageDisplay::ShowUsage(options, appInfo);
+            ArgumentsUsageDisplay::ShowUsage(arguments, appInfo);
             return 1;
         }
-        if (!options.IsValid())
+        if (!arguments.IsValid())
         {
-            ArgumentsUsageDisplay::ShowUsage(options, appInfo);
-            ArgumentsUsageDisplay::ShowErrors(options, 1);
+            ArgumentsUsageDisplay::ShowUsage(arguments, appInfo);
+            ArgumentsUsageDisplay::ShowErrors(arguments, 1);
             return 2;
         }
 
-        BannerText::Execute(options);
+        BannerText::Execute(arguments);
 
         return 0;
     }
@@ -64,12 +64,12 @@ int main(const int argc, char* argv[])
 
 //------------------------------------------------------------------------------
 // Execute
-void BannerText::Execute(Options& options)
+void BannerText::Execute(AppArguments& arguments)
 {
-    const auto header_line_count = options.GetHeaderLineCount();
+    const auto header_line_count = arguments.GetHeaderLineCount();
     if (header_line_count > 0)
     {
-        const auto header_line = options.GetHeaderLine();
+        const auto header_line = arguments.GetHeaderLine();
 
         for (auto i = 0; i < static_cast<int>(header_line_count); ++i)
         {
@@ -77,18 +77,18 @@ void BannerText::Execute(Options& options)
         }
     }
 
-    auto text_lines = options.GetTextLines();
+    auto text_lines = arguments.GetTextLines();
     for (auto iter = text_lines.begin(); iter != text_lines.end(); ++iter)
     {
         cout << *iter << endl;
     }
 
-    const auto footer_line_count = options.GetFooterLineCount();
+    const auto footer_line_count = arguments.GetFooterLineCount();
     if (footer_line_count)
     {
-        const auto footer_line = options.GetFooterLine();
+        const auto footer_line = arguments.GetFooterLine();
 
-        for (auto i = 0; i < static_cast<int>(options.GetFooterLineCount()); ++i)
+        for (auto i = 0; i < static_cast<int>(arguments.GetFooterLineCount()); ++i)
         {
             cout << footer_line << endl;
         }

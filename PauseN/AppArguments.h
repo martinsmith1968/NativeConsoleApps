@@ -9,15 +9,16 @@
 
 // ReSharper disable CppInconsistentNaming
 // ReSharper disable CppClangTidyClangDiagnosticHeaderHygiene
+// ReSharper disable CppTooWideScopeInitStatement
 
 using namespace DNX::Utils;
 
 //------------------------------------------------------------------------------
-// AppOptions
-class Options final : public Arguments
+// Arguments
+class AppArguments final : public Arguments
 {
 public:
-    Options()
+    AppArguments()
     {
 
         auto const defaultMessageText = "Press any key to continue (or wait {timeout} seconds) . . . ";
@@ -50,13 +51,13 @@ public:
 
     string GetFormattedMessageText()
     {
-        auto replace_timeout = [](Options& options, const string& text)
+        auto replace_timeout = [](AppArguments& arguments, const string& text)
             {
-                return StringUtils::ReplaceString(text, "{timeout}", std::to_string(options.GetTimeoutSeconds()));
+                return StringUtils::ReplaceString(text, "{timeout}", std::to_string(arguments.GetTimeoutSeconds()));
             };
-        auto replace_sleep= [](Options& options, const string& text)
+        auto replace_sleep= [](AppArguments& arguments, const string& text)
             {
-                return StringUtils::ReplaceString(text, "{sleep}", std::to_string(options.GetSleepMilliseconds()));
+                return StringUtils::ReplaceString(text, "{sleep}", std::to_string(arguments.GetSleepMilliseconds()));
             };
 
         return replace_sleep(*this, replace_timeout(*this, GetMessageText()));
@@ -65,7 +66,7 @@ public:
     void PostParseValidate() override
     {
         auto const timeout_time = std::chrono::seconds(GetTimeoutSeconds());
-        auto const sleep_time = std::chrono::milliseconds(GetSleepMilliseconds());
+        auto const sleep_time   = std::chrono::milliseconds(GetSleepMilliseconds());
 
         if (sleep_time >= timeout_time)
         {

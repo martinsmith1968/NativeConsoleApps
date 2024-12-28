@@ -15,6 +15,8 @@ namespace DNX::App
     //--------------------------------------------------------------------------
     class AppDetails
     {
+        static string _options_file_extension;
+
     public:
         string Name;
         string Version;
@@ -28,8 +30,8 @@ namespace DNX::App
 
         static string GetApplicationName();
 
-        static string GetOptionsFileNameOnly();
-        static string GetDefaultOptionsFileName();
-        static string GetLocalOptionsFileName();
+        static string GetArgumentsFileNameOnly();
+        static string GetDefaultArgumentsFileName();
+        static string GetLocalArgumentsFileName();
     };
 }

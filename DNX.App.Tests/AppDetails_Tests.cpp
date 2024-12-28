@@ -20,12 +20,12 @@ TEST(TEST_GROUP, GetDefaultOptionsFileName_returns_the_correct_value)
     const string expected = "DNX.App.Tests.options";
 
     // Act
-    const auto filename = AppDetails::GetDefaultOptionsFileName();
+    const auto filename = AppDetails::GetDefaultArgumentsFileName();
     const auto result = filename.substr(filename.length() - expected.length());
 
     // Assert
-    cout << "GetDefaultOptionsFileName: " << filename << endl;
-    cout << "GetDefaultOptionsFileName result: " << result << endl;
+    cout << "GetDefaultArgumentsFileName: " << filename << endl;
+    cout << "GetDefaultArgumentsFileName result: " << result << endl;
     EXPECT_EQ(expected, result);
 }
 
@@ -34,14 +34,14 @@ TEST(TEST_GROUP, GetLocalOptionsFileName_returns_the_correct_value)
     const string expected = "DNX.App.Tests.options";
 
     // Act
-    const auto filename = AppDetails::GetLocalOptionsFileName();
+    const auto filename = AppDetails::GetLocalArgumentsFileName();
     const auto result = filename.substr(filename.length() - expected.length());
 
     // Assert
-    cout << "GetLocalOptionsFileName: " << filename << endl;
-    cout << "GetLocalOptionsFileName result: " << result << endl;
+    cout << "GetLocalArgumentsFileName: " << filename << endl;
+    cout << "GetLocalArgumentsFileName result: " << result << endl;
     EXPECT_EQ(expected, result);
-    EXPECT_NE(result, AppDetails::GetDefaultOptionsFileName());
+    EXPECT_NE(result, AppDetails::GetDefaultArgumentsFileName());
 }
 
 TEST(TEST_GROUP, GetHeaderLine_with_all_details_returns_the_correct_value)

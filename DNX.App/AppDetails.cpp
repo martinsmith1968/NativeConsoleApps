@@ -15,6 +15,8 @@ AppDetails::AppDetails() = default;
 
 AppDetails::~AppDetails() = default;
 
+string AppDetails::_options_file_extension = "options";
+
 string AppDetails::GetHeaderLine() const
 {
     ostringstream text;
@@ -39,19 +41,19 @@ string AppDetails::GetApplicationName()
     return FileUtils::GetFileNameOnly(ProcessUtils::GetExecutableFileNameOnly());
 }
 
-string AppDetails::GetOptionsFileNameOnly()
+string AppDetails::GetArgumentsFileNameOnly()
 {
     const auto executableName = ProcessUtils::GetExecutableFileNameOnly();
 
-    return FileUtils::ChangeFileExtension(executableName, "options");
+    return FileUtils::ChangeFileExtension(executableName, _options_file_extension);
 }
 
-string AppDetails::GetDefaultOptionsFileName()
+string AppDetails::GetDefaultArgumentsFileName()
 {
-    return PathUtils::Combine(ProcessUtils::GetExecutableFilePath(), GetOptionsFileNameOnly());
+    return PathUtils::Combine(ProcessUtils::GetExecutableFilePath(), GetArgumentsFileNameOnly());
 }
 
-string AppDetails::GetLocalOptionsFileName()
+string AppDetails::GetLocalArgumentsFileName()
 {
-    return PathUtils::Combine(PathUtils::GetCurrentDirectory(), GetOptionsFileNameOnly());
+    return PathUtils::Combine(PathUtils::GetCurrentDirectory(), GetArgumentsFileNameOnly());
 }
