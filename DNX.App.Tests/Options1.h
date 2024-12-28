@@ -3,25 +3,24 @@
 #include "pch.h"
 #include "../DNX.App/DNXAppOptions.h"
 
+// ReSharper disable CppInconsistentNaming
+
 class Options1 final : public AppOptions
 {
 public:
     Options1()
     {
-        auto const defaultMessageText = "Press any key to continue (or wait {timeout} seconds) . . . ";
-        auto const defaultTimeout = std::to_string(30);
-        auto const defaultSleep = std::to_string(200);
-        auto const defaultDebug = "false";
+        const auto defaultMessageText = "Press any key to continue (or wait {timeout} seconds) . . . ";
+        const auto defaultTimeout = std::to_string(30);
+        const auto defaultSleep = std::to_string(200);
 
-        AddOption(OptionType::PARAMETER, ValueType::STRING, "", "message-text", defaultMessageText, "The Text to display", false, 0);
-        AddOption(OptionType::OPTION, ValueType::INT, "t", "timeout", defaultTimeout, "The timeout to wait for in seconds", false);
-        AddOption(OptionType::OPTION, ValueType::INT, "s", "sleep", defaultSleep, "The timeout to sleep for between checks for in milliseconds", false);
-        AddOption(OptionType::SWITCH, ValueType::BOOL, "x", "debug", defaultDebug, "Debug execution details", false);
+        AddArgument(OptionType::PARAMETER, ValueType::STRING, "", "message-text", defaultMessageText, "The Text to display", false, 0);
+        AddArgument(OptionType::OPTION, ValueType::INT, "t", "timeout", defaultTimeout, "The timeout to wait for in seconds", false);
+        AddArgument(OptionType::OPTION, ValueType::INT, "s", "sleep", defaultSleep, "The timeout to sleep for between checks for in milliseconds", false);
 
         SetOptionValue("message-text", defaultMessageText);
         SetOptionValue("timeout", defaultTimeout);
         SetOptionValue("sleep", defaultSleep);
-        SetOptionValue("debug", defaultDebug);
     }
 
     string GetMessageText()
@@ -37,10 +36,5 @@ public:
     int GetSleepMilliseconds()
     {
         return ValueConverter::ToInt(GetOptionValue("sleep"));
-    }
-
-    bool GetDebug()
-    {
-        return ValueConverter::ToBool(GetOptionValue("debug"));
     }
 };

@@ -10,16 +10,13 @@ public:
     {
         auto const defaultTimeout = std::to_string(30);
         auto const defaultSleep = std::to_string(200);
-        auto const defaultDebug = "false";
 
-        AddOption(OptionType::PARAMETER, ValueType::STRING, "", "message-text", "", "The Text to display", true, 0);
-        AddOption(OptionType::OPTION, ValueType::INT, "t", "timeout", defaultTimeout, "The timeout to wait for in seconds", false);
-        AddOption(OptionType::OPTION, ValueType::INT, "s", "sleep", defaultSleep, "The timeout to sleep for between checks for in milliseconds", false);
-        AddOption(OptionType::SWITCH, ValueType::BOOL, "x", "debug", defaultDebug, "Debug execution details", false);
+        AddArgument(OptionType::PARAMETER, ValueType::STRING, "", "message-text", "", "The Text to display", true, 0);
+        AddArgument(OptionType::OPTION, ValueType::INT, "t", "timeout", defaultTimeout, "The timeout to wait for in seconds", false);
+        AddArgument(OptionType::OPTION, ValueType::INT, "s", "sleep", defaultSleep, "The timeout to sleep for between checks for in milliseconds", false);
 
         SetOptionValue("timeout", defaultTimeout);
         SetOptionValue("sleep", defaultSleep);
-        SetOptionValue("debug", defaultDebug);
     }
 
     string GetMessageText()
@@ -35,10 +32,5 @@ public:
     int GetSleepMilliseconds()
     {
         return ValueConverter::ToInt(GetOptionValue("sleep"));
-    }
-
-    bool GetDebug()
-    {
-        return ValueConverter::ToBool(GetOptionValue("debug"));
     }
 };
