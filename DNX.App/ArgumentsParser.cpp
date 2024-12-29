@@ -50,7 +50,7 @@ void ArgumentsParser::ParseArgumentsFile(Arguments& arguments, const string& fil
 {
     if (FileUtils::FileExists(fileName))
     {
-        const auto arg = _config.GetCustomArgumentsFilePrefix() + fileName;
+        const auto arg = _parser_config.GetCustomArgumentsFilePrefix() + fileName;
 
         auto argumentValueConsumed = false;
         ParseArgument(arguments, arg, "", argumentValueConsumed);
@@ -76,9 +76,9 @@ bool ArgumentsParser::ParseArgument(Arguments& arguments, const string& argument
 {
     argumentValueConsumed = false;
 
-    if (StringUtils::StartsWith(argumentName, _config.GetCustomArgumentsFilePrefix()))
+    if (StringUtils::StartsWith(argumentName, _parser_config.GetCustomArgumentsFilePrefix()))
     {
-        const auto fileName = StringUtils::RemoveStartsWith(argumentName, _config.GetCustomArgumentsFilePrefix());
+        const auto fileName = StringUtils::RemoveStartsWith(argumentName, _parser_config.GetCustomArgumentsFilePrefix());
 
         try
         {
@@ -96,11 +96,11 @@ bool ArgumentsParser::ParseArgument(Arguments& arguments, const string& argument
         }
     }
 
-    if (StringUtils::StartsWith(argumentName, _config.GetLongNamePrefix()))
+    if (StringUtils::StartsWith(argumentName, _parser_config.GetLongNamePrefix()))
     {
-        const auto switch_long_name = StringUtils::RemoveStartsWith(argumentName, _config.GetLongNamePrefix(), 1);
+        const auto switch_long_name = StringUtils::RemoveStartsWith(argumentName, _parser_config.GetLongNamePrefix(), 1);
 
-        if (HandleAsSwitch(arguments, _config, switch_long_name))
+        if (HandleAsSwitch(arguments, _parser_config, switch_long_name))
             return true;
         if (HandleAsOption(arguments, switch_long_name, argumentValue))
         {
@@ -109,11 +109,11 @@ bool ArgumentsParser::ParseArgument(Arguments& arguments, const string& argument
         }
     }
 
-    if (StringUtils::StartsWith(argumentName, _config.GetShortNamePrefix()))
+    if (StringUtils::StartsWith(argumentName, _parser_config.GetShortNamePrefix()))
     {
-        const auto switch_short_name = StringUtils::RemoveStartsWith(argumentName, _config.GetShortNamePrefix(), 1);
+        const auto switch_short_name = StringUtils::RemoveStartsWith(argumentName, _parser_config.GetShortNamePrefix(), 1);
 
-        if (HandleAsSwitch(arguments, _config, switch_short_name))
+        if (HandleAsSwitch(arguments, _parser_config, switch_short_name))
             return true;
         if (HandleAsOption(arguments, switch_short_name, argumentValue))
         {
@@ -131,10 +131,10 @@ bool ArgumentsParser::ParseArgument(Arguments& arguments, const string& argument
     return false;
 }
 
-bool ArgumentsParser::HandleAsSwitch(Arguments& arguments, const ParserConfig& config, const string& argumentName)
+bool ArgumentsParser::HandleAsSwitch(Arguments& arguments, const ParserConfig& parser_config, const string& argumentName)
 {
-    const auto switchOnSuffix = string(1, config.GetSwitchOnSuffix());
-    const auto switchOffSuffix = string(1, config.GetSwitchOffSuffix());
+    const auto switchOnSuffix = string(1, parser_config.GetSwitchOnSuffix());
+    const auto switchOffSuffix = string(1, parser_config.GetSwitchOffSuffix());
 
     auto switchValue = true;
     string switchName = argumentName;
@@ -224,19 +224,19 @@ void ArgumentsParser::ValidateValues(Arguments& arguments)
 
 //-----------------------------------------------------------------------------
 // Public usage methods
-ArgumentsParser::ArgumentsParser(Arguments& arguments, const AppDetails& app_details, const ParserConfig& config)
+ArgumentsParser::ArgumentsParser(Arguments& arguments, const AppDetails& app_details, const ParserConfig& parser_config)
     : _arguments(arguments),
-    _config(config),
+    _parser_config(parser_config),
     _app_details(app_details)
 {
 }
 
 void ArgumentsParser::Parse(const int argc, char* argv[]) const
 {
-    if (_config.GetUseCustomArgumentsFile() && _arguments.IsUsingDefaultArgumentsFile())
+    if (_parser_config.GetUseCustomArgumentsFile() && _arguments.IsUsingDefaultArgumentsFile())
         ParseArgumentsFile(_arguments, AppDetails::GetDefaultArgumentsFileName());
 
-    if (_config.GetUseLocalArgumentsFile() && _arguments.IsUsingDefaultArgumentsFile())
+    if (_parser_config.GetUseLocalArgumentsFile() && _arguments.IsUsingDefaultArgumentsFile())
         ParseArgumentsFile(_arguments, AppDetails::GetLocalArgumentsFileName());
 
     auto arguments = ListUtils::ToList(argc, argv, 1);
