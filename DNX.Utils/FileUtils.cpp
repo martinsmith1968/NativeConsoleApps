@@ -1,7 +1,8 @@
 #include "stdafx.h"
 #include "FileUtils.h"
-
+#include <fstream>
 #include <io.h>
+
 #define ACCESS    _access_s
 
 // ReSharper disable CppInconsistentNaming
@@ -12,6 +13,7 @@ using namespace DNX::Utils;
 //--------------------------------------------------------------------------
 // Class: FileUtils
 //--------------------------------------------------------------------------
+
 string FileUtils::GetFileNameOnly(const string& filePath)
 {
     auto fileName = GetFileNameAndExtension(filePath);
@@ -48,7 +50,7 @@ string FileUtils::ChangeFileExtension(const string& filePath, const string& file
         fileName = fileName.substr(0, lastFileExtSep);
     }
 
-    if (fileExtension.length() > 0 && fileExtension.substr(0, 1) != ".")
+    if (!fileExtension.empty() && fileExtension.substr(0, 1) != ".")
     {
         fileName += '.';
     }
@@ -58,7 +60,37 @@ string FileUtils::ChangeFileExtension(const string& filePath, const string& file
     return fileName;
 }
 
-bool FileUtils::FileExists(const string& Filename)
+bool FileUtils::FileExists(const string& fileName)
 {
-    return ACCESS(Filename.c_str(), 0) == 0;
+    return ACCESS(fileName.c_str(), 0) == 0;
+}
+
+list<string> FileUtils::ReadLines(const string& fileName)
+{
+    list<string> lines;
+
+    if (FileExists(fileName))
+    {
+        try
+        {
+            if (ifstream in(fileName); in)
+            {
+                string line;
+
+                while (std::getline(in, line))
+                {
+                    lines.push_back(line);
+                }
+
+                in.close();
+            }
+        }
+        catch (exception&)
+        {
+            lines.clear();
+            throw;
+        }
+    }
+
+    return lines;
 }

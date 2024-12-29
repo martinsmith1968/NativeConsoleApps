@@ -1,20 +1,36 @@
-﻿#ifndef DNX_UTILS_LISTUTILS
-#define DNX_UTILS_LISTUTILS
+﻿#pragma once
 
-#include "stdafx.h"
 #include <list>
 #include <string>
 
 // ReSharper disable CppInconsistentNaming
+// ReSharper disable CppClangTidyClangDiagnosticHeaderHygiene
 
 using namespace std;
 
-namespace DNX {
-    namespace Utils {
-        namespace ListUtils {
-            list<string> ToList(const char* array[]);
-        }
-    }
-}
+namespace DNX::Utils
+{
+    //--------------------------------------------------------------------------
+    // Class: ListUtils
+    //--------------------------------------------------------------------------
+    class ListUtils
+    {
+    public:
+        static list<string> ToList(int argc, char* argv[], const int startAt = 0);
 
-#endif // DNX_UTILS_LISTUTILS
+        template<class T>
+        static T& GetAt(list<T>& list, const int index)
+        {
+            static T default_return_value;
+
+            if (index < 0 || index >= list.size())
+                return default_return_value;
+
+            auto iter = list.begin();
+
+            std::advance(iter, index);
+
+            return *iter;
+        }
+    };
+}

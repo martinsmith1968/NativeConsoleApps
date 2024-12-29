@@ -24,15 +24,6 @@
     <ClInclude Include="AppInfo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Version.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BuildInfo.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Macros.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -41,11 +32,8 @@
     <ClCompile Include="BannerText.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Options.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="AppInfo.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="AppArguments.h">
+      <Filter>Header Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

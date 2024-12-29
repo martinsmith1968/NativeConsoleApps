@@ -1,22 +1,23 @@
-﻿#include "stdafx.h"
+#include "stdafx.h"
 #include "ListUtils.h"
-
-using namespace std;
 
 // ReSharper disable CppInconsistentNaming
 
-namespace DNX {
-    namespace Utils {
-        namespace ListUtils {
-            list<string> ToList(const char* array[]) {
-                list<string> list;
+using namespace std;
+using namespace DNX::Utils;
 
-                for (auto i = 0; i < sizeof(array); ++i) {
-                    list.push_back(array[i]);
-                }
+//--------------------------------------------------------------------------
+// Class: ListUtils
+//--------------------------------------------------------------------------
 
-                return list;
-            }
-        }
+list<string> ListUtils::ToList(const int argc, char* argv[], const int startAt)
+{
+    list<string> list;
+
+    for (auto i=startAt; i < argc; ++i)
+    {
+        list.emplace_back(argv[i]);
     }
+
+    return list;
 }

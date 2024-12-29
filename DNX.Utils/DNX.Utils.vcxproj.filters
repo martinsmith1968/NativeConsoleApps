@@ -33,6 +33,15 @@
     <ClInclude Include="FileUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ProcessUtils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PathUtils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ConsoleUtils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -41,10 +50,22 @@
     <ClCompile Include="StringUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ListUtils.cpp">
+    <ClCompile Include="FileUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FileUtils.cpp">
+    <ClCompile Include="ProcessUtils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AggregateException.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PathUtils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ConsoleUtils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ListUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

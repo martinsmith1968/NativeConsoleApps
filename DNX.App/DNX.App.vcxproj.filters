@@ -21,31 +21,34 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DNXValueConverter.h">
+    <ClInclude Include="ValueConverter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DNXAppDetails.h">
+    <ClInclude Include="AppDetails.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DNXAppOptions.h">
+    <ClInclude Include="Arguments.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DNXOptionType.h">
+    <ClInclude Include="ArgumentType.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DNXAppOption.h">
+    <ClInclude Include="Argument.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DNXAppOptionsParser.h">
+    <ClInclude Include="SwitchValue.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DNXAppOptionsSwitchValue.h">
+    <ClInclude Include="ValueType.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DNXValueType.h">
+    <ClInclude Include="ArgumentsParser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DNXProcessDetails.h">
+    <ClInclude Include="ParserConfig.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ArgumentsUsageDisplay.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -53,34 +56,35 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DNXValueConverter.cpp">
+    <ClCompile Include="ValueConverter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DNXOptionType.cpp">
+    <ClCompile Include="ArgumentType.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DNXAppOptions.cpp">
+    <ClCompile Include="Arguments.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DNXAppOption.cpp">
+    <ClCompile Include="Argument.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DNXAppDetails.cpp">
+    <ClCompile Include="AppDetails.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DNXAppOptionsSwitchValue.cpp">
+    <ClCompile Include="SwitchValue.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DNXValueType.cpp">
+    <ClCompile Include="ValueType.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DNXProcessDetails.cpp">
+    <ClCompile Include="ArgumentsParser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="DNXAppOptionsParser.cpp">
+    <ClCompile Include="ParserConfig.cpp">
       <Filter>Source Files</Filter>
-    </None>
+    </ClCompile>
+    <ClCompile Include="ArgumentsUsageDisplay.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
