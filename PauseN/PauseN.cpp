@@ -33,7 +33,7 @@ int main(const int argc, char* argv[])
         const AppInfo appInfo;
 
         AppArguments arguments;
-        ArgumentsParser::ParseArguments(argc, argv, arguments);
+        ArgumentsParser::ParseArguments(arguments, argc, argv);
 
         if (arguments.IsHelp())
         {

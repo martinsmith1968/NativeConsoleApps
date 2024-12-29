@@ -53,11 +53,11 @@ void ArgumentsParser::ParseArgumentsFile(Arguments& arguments, const string& fil
         const auto arg = _config.GetCustomArgumentsFilePrefix() + fileName;
 
         auto argumentValueConsumed = false;
-        ParseArgument(arg, "", arguments, argumentValueConsumed);
+        ParseArgument(arguments, arg, "", argumentValueConsumed);
     }
 }
 
-void ArgumentsParser::ParseArguments(list<string>& argumentsText, Arguments& arguments) const
+void ArgumentsParser::ParseArguments(Arguments& arguments, list<string>& argumentsText) const
 {
     for (auto i = 0; i < static_cast<int>(argumentsText.size()); ++i)
     {
@@ -65,14 +65,14 @@ void ArgumentsParser::ParseArguments(list<string>& argumentsText, Arguments& arg
         string argumentValue = ListUtils::GetAt(argumentsText, i + 1);
 
         auto argumentValueConsumed = false;
-        if (!ParseArgument(argumentName, argumentValue, arguments, argumentValueConsumed))
+        if (!ParseArgument(arguments, argumentName, argumentValue, argumentValueConsumed))
             return;
         if (argumentValueConsumed)
             i += 1;
     }
 }
 
-bool ArgumentsParser::ParseArgument(const string& argumentName, const string& argumentValue, Arguments& arguments, bool& argumentValueConsumed) const
+bool ArgumentsParser::ParseArgument(Arguments& arguments, const string& argumentName, const string& argumentValue, bool& argumentValueConsumed) const
 {
     argumentValueConsumed = false;
 
@@ -85,7 +85,7 @@ bool ArgumentsParser::ParseArgument(const string& argumentName, const string& ar
             const auto lines = FileUtils::ReadLines(fileName);
             auto argumentsText = ConvertLinesToRawArguments(lines);
 
-            ParseArguments(argumentsText, arguments);
+            ParseArguments(arguments, argumentsText);
 
             return true;
         }
@@ -241,7 +241,7 @@ void ArgumentsParser::Parse(const int argc, char* argv[]) const
 
     auto arguments = ListUtils::ToList(argc, argv, 1);
 
-    ParseArguments(arguments, _arguments);
+    ParseArguments(_arguments, arguments);
 
     // Validate
     ValidateRequired(_arguments);
@@ -252,8 +252,8 @@ void ArgumentsParser::Parse(const int argc, char* argv[]) const
 
 //-----------------------------------------------------------------------------
 // Static Public methods
-void ArgumentsParser::ParseArguments(const int argc, char* argv[], Arguments& Arguments, const ParserConfig& config)
+void ArgumentsParser::ParseArguments(Arguments& arguments, const int argc, char* argv[], const AppDetails& app_details, const ParserConfig& config)
 {
-    const auto parser = ArgumentsParser(Arguments, AppDetails(), config);
+    const auto parser = ArgumentsParser(arguments, app_details, config);
     parser.Parse(argc, argv);
 }
