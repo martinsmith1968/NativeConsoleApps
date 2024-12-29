@@ -36,7 +36,7 @@ TEST(TEST_GROUP, ParseArguments_single_positional_arguments_assigns_correctly)
     Arguments1 arguments;
 
     // Act
-    ArgumentsParser::ParseArguments(argc, argv, arguments);
+    ArgumentsParser::ParseArguments(arguments, argc, argv);
     ShowErrors(arguments);
 
     // Assert
@@ -58,7 +58,7 @@ TEST(TEST_GROUP, ParseArguments_single_positional_argument_with_shortname_option
     Arguments1 arguments;
 
     // Act
-    ArgumentsParser::ParseArguments(argc, argv, arguments);
+    ArgumentsParser::ParseArguments(arguments, argc, argv);
     ShowErrors(arguments);
 
     // Assert
@@ -82,7 +82,7 @@ TEST(TEST_GROUP, ParseArguments_single_positional_argument_with_shortname_option
     Arguments1 arguments;
 
     // Act
-    ArgumentsParser::ParseArguments(argc, argv, arguments);
+    ArgumentsParser::ParseArguments(arguments, argc, argv);
     ShowErrors(arguments);
 
     // Assert
@@ -108,7 +108,7 @@ TEST(TEST_GROUP, ParseArguments_single_positional_argument_with_shortname_argume
     Arguments1 arguments;
 
     // Act
-    ArgumentsParser::ParseArguments(argc, argv, arguments);
+    ArgumentsParser::ParseArguments(arguments, argc, argv);
     ShowErrors(arguments);
 
     // Assert
@@ -129,7 +129,7 @@ TEST(TEST_GROUP, IsValid_arguments_without_any_required_arguments_returns_succes
     Arguments1 arguments;
 
     // Act
-    ArgumentsParser::ParseArguments(argc, argv, arguments);
+    ArgumentsParser::ParseArguments(arguments, argc, argv);
     ShowErrors(arguments);
 
     // Assert
@@ -146,7 +146,7 @@ TEST(TEST_GROUP, IsValid_arguments_with_required_arguments_returns_successfully)
     Arguments2 arguments;
 
     // Act
-    ArgumentsParser::ParseArguments(argc, argv, arguments);
+    ArgumentsParser::ParseArguments(arguments, argc, argv);
     ShowErrors(arguments);
 
     // Assert
@@ -164,7 +164,7 @@ TEST(TEST_GROUP, IsValid_arguments_with_option_shortname_without_value_returns_s
     Arguments1 arguments;
 
     // Act
-    ArgumentsParser::ParseArguments(argc, argv, arguments);
+    ArgumentsParser::ParseArguments(arguments, argc, argv);
     ShowErrors(arguments);
 
     // Assert
@@ -182,7 +182,7 @@ TEST(TEST_GROUP, IsValid_arguments_with_option_longname_without_value_returns_su
     Arguments1 arguments;
 
     // Act
-    ArgumentsParser::ParseArguments(argc, argv, arguments);
+    ArgumentsParser::ParseArguments(arguments, argc, argv);
     ShowErrors(arguments);
 
     // Assert
@@ -201,7 +201,7 @@ TEST(TEST_GROUP, IsValid_arguments_with_option_longname_with_invalid_value_retur
     Arguments1 arguments;
 
     // Act
-    ArgumentsParser::ParseArguments(argc, argv, arguments);
+    ArgumentsParser::ParseArguments(arguments, argc, argv);
     ShowErrors(arguments);
 
     // Assert
