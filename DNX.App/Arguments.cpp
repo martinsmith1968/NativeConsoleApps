@@ -1,5 +1,8 @@
 ﻿#include "stdafx.h"
 #include "Arguments.h"
+
+#include <complex>
+
 #include "../DNX.Utils/StringUtils.h"
 #include "Argument.h"
 
@@ -19,20 +22,146 @@ Arguments::Arguments()
     AddSwitch(UseLocalArgumentsFileShortName,   UseLocalArgumentsFileLongName,   "true",  useLocalArgumentsFileDesc,   false, INT_MAX);
 }
 
+//-----------------------------------------------------------------------------
+// Internal methods
 void Arguments::PostParseValidate()
 {
+}
+
+void Arguments::AddArgumentComplete(
+    const ArgumentType argumentType,
+    const ValueType valueType,
+    const string& shortName,
+    const string& longName,
+    const string& defaultValue,
+    const string& description,
+    const bool required,
+    const int position,
+    const list<string>& valueList
+)
+{
+    if (shortName.empty() && argumentType != ArgumentType::PARAMETER)
+        throw exception("ShortName is required");
+    if (longName.empty())
+        throw exception("LongName is required");
+
+    auto existingOption = GetOptionByName(shortName);
+    if (!existingOption.IsEmpty())
+        throw exception((string("Option already exists: ") + shortName).c_str());
+
+    existingOption = GetOptionByName(longName);
+    if (!existingOption.IsEmpty())
+        throw exception((string("Option already exists: ") + longName).c_str());
+
+    uint8_t realPosition = static_cast<uint8_t>(position);
+    string realShortName = shortName;
+
+    if (argumentType == ArgumentType::PARAMETER)
+    {
+        realPosition = static_cast<uint8_t>(GetArgumentsByType(ArgumentType::PARAMETER).size() + 1);
+        realShortName = "";
+
+        if (longName.empty())
+        {
+            throw exception((string("Parameter must have a long name: ") + to_string(realPosition)).c_str());
+        }
+    }
+    else
+    {
+        if (position == 0)
+        {
+            const auto types = { ArgumentType::OPTION, ArgumentType::SWITCH };
+            realPosition = static_cast<int>(GetArgumentsByTypes(types).size() + 1);
+        }
+    }
+
+    const auto option = Argument(argumentType, valueType, realPosition, realShortName, longName, description, defaultValue, required, valueList);
+
+    _arguments[option.GetLongName()] = option;
+}
+
+
+void Arguments::AddArgument(
+    const ArgumentType argumentType,
+    const ValueType valueType,
+    const string& shortName,
+    const string& longName,
+    const string& defaultValue,
+    const string& description,
+    const bool required,
+    const int position,
+    const list<string>& valueList
+)
+{
+    AddArgumentComplete(argumentType, valueType, shortName, longName, defaultValue, description, required, position, valueList);
+}
+
+void Arguments::AddParameter(
+    const ValueType valueType,
+    const int position,
+    const string& longName,
+    const string& defaultValue,
+    const string& description,
+    const bool required,
+    const list<string>& valueList
+)
+{
+    int realPosition = position;
+    if (position <= 0)
+    {
+        const auto types = { ArgumentType::PARAMETER };
+        realPosition = static_cast<int>(GetArgumentsByTypes(types).size() + 1);
+    }
+
+    AddArgument(ArgumentType::PARAMETER, valueType, "", longName, defaultValue, description, required, realPosition, valueList);
+}
+
+void Arguments::AddOption(
+    const ValueType valueType,
+    const string& shortName,
+    const string& longName,
+    const string& defaultValue,
+    const string& description,
+    const bool required,
+    const int position,
+    const list<string>& valueList
+)
+{
+    int realPosition = position;
+    if (position <= 0)
+    {
+        const auto types = { ArgumentType::OPTION, ArgumentType::SWITCH };
+        realPosition = static_cast<int>(GetArgumentsByTypes(types).size() + 1);
+    }
+
+    AddArgument(ArgumentType::OPTION, valueType, shortName, longName, defaultValue, description, required, realPosition, valueList);
+}
+
+void Arguments::AddSwitch(
+    const string& shortName,
+    const string& longName,
+    const string& defaultValue,
+    const string& description,
+    const bool required,
+    const int position
+)
+{
+    if (!ValueConverter::IsBool(defaultValue))
+        throw exception((string("Default Value is not a BOOL: ") + defaultValue).c_str());
+
+    int realPosition = position;
+    if (position <= 0)
+    {
+        const auto types = { ArgumentType::OPTION, ArgumentType::SWITCH };
+        realPosition = static_cast<int>(GetArgumentsByTypes(types).size() + 1);
+    }
+
+    AddArgument(ArgumentType::SWITCH, ValueType::BOOL, shortName, longName, defaultValue, description, required, realPosition);
 }
 
 void Arguments::AddError(const string& text)
 {
     _errors.push_back(text);
-}
-
-list<Argument> Arguments::GetArguments() const
-{
-    const auto types = ArgumentTypeText.GetAllValues();
-
-    return GetArgumentsByTypes(types);
 }
 
 Argument& Arguments::GetOptionByLongName(const string& longName)
@@ -77,37 +206,6 @@ Argument& Arguments::GetParameterAtPosition(const int position)
     }
 
     return Argument::Empty();
-}
-
-list<Argument> Arguments::GetArgumentsByType(const ArgumentType ArgumentType) const
-{
-    list<Argument> filtered;
-
-    for (auto iter = _arguments.begin(); iter != _arguments.end(); ++iter)
-    {
-        if (iter->second.GetArgumentType() == ArgumentType)
-        {
-            filtered.push_back(iter->second);
-        }
-    }
-
-    return filtered;
-}
-
-list<Argument> Arguments::GetArgumentsByTypes(const list<ArgumentType>& ArgumentTypes) const
-{
-    list<Argument> filtered;
-
-    for (auto iter = _arguments.begin(); iter != _arguments.end(); ++iter)
-    {
-        const auto found = std::find(std::begin(ArgumentTypes), std::end(ArgumentTypes), iter->second.GetArgumentType()) != std::end(ArgumentTypes);
-        if (found)
-        {
-            filtered.push_back(iter->second);
-        }
-    }
-
-    return filtered;
 }
 
 list<Argument> Arguments::GetRequiredArguments() const
@@ -157,112 +255,6 @@ bool Arguments::HasOptionValue(const string& name)
     return _values.find(option.GetLongName()) != _values.end();
 }
 
-void Arguments::AddArgumentWithValues(
-    const ArgumentType ArgumentType,
-    const ValueType valueType,
-    const string& shortName,
-    const string& longName,
-    const string& defaultValue,
-    const string& description,
-    const bool required,
-    const int position,
-    const string& valueListText
-)
-{
-    auto valueList = list<string>();
-
-    if (!valueListText.empty())
-    {
-        valueList = StringUtils::SplitText(valueListText, ',');
-    }
-
-    AddArgument(ArgumentType, valueType, shortName, longName, defaultValue, description, required, position, valueList);
-}
-
-void Arguments::AddArgument(
-    const ArgumentType ArgumentType,
-    const ValueType valueType,
-    const string& shortName,
-    const string& longName,
-    const string& defaultValue,
-    const string& description,
-    const bool required,
-    const int position,
-    const list<string>& valueList
-)
-{
-    if (shortName.empty() && ArgumentType != ArgumentType::PARAMETER)
-        throw exception("ShortName is required");
-    if (longName.empty())
-        throw exception("LongName is required");
-
-    auto existingOption = GetOptionByName(shortName);
-    if (!existingOption.IsEmpty())
-        throw exception((string("Option already exists: ") + shortName).c_str());
-
-    existingOption = GetOptionByName(longName);
-    if (!existingOption.IsEmpty())
-        throw exception((string("Option already exists: ") + longName).c_str());
-
-    uint8_t realPosition = static_cast<uint8_t>(position);
-    string realShortName = shortName;
-
-    if (ArgumentType == ArgumentType::PARAMETER)
-    {
-        realPosition = static_cast<uint8_t>(GetArgumentsByType(ArgumentType::PARAMETER).size() + 1);
-        realShortName = to_string(position);
-
-        if (longName.empty())
-        {
-            throw exception((string("Parameter must have a long name: ") + shortName).c_str());
-        }
-    }
-    else
-    {
-        if (ValueConverter::IsInt(shortName))
-            throw exception((string("Invalid Option Name: ") + shortName).c_str());
-
-        if (position == 0)
-        {
-            const auto types = {ArgumentType::OPTION, ArgumentType::SWITCH };
-            realPosition = static_cast<int>(GetArgumentsByTypes(types).size() + 1);
-        }
-    }
-
-    const auto option = Argument(ArgumentType, valueType, realPosition, realShortName, longName, description, defaultValue, required, valueList);
-
-    _arguments[option.GetLongName()] = option;
-}
-
-void Arguments::AddSwitch(
-    const string& shortName,
-    const string& longName,
-    const string& defaultValue,
-    const string& description,
-    const bool required,
-    const int position
-)
-{
-    if (!ValueConverter::IsBool(defaultValue))
-        throw exception((string("Default Value is not a BOOL: ") + defaultValue).c_str());
-
-    int realPosition = position;
-    if (position == 0)
-    {
-        const auto types = { ArgumentType::OPTION, ArgumentType::SWITCH };
-        realPosition = static_cast<int>(GetArgumentsByTypes(types).size() + 1);
-    }
-
-    AddArgument(ArgumentType::SWITCH, ValueType::BOOL, shortName, longName, defaultValue, description, required, realPosition);
-}
-
-void Arguments::Reset()
-{
-    _last_position = 0;
-    _values.clear();
-    _errors.clear();
-}
-
 int Arguments::GetNextPosition() const
 {
     return _last_position + 1;
@@ -271,6 +263,54 @@ int Arguments::GetNextPosition() const
 void Arguments::AdvancePosition()
 {
     ++_last_position;
+}
+
+
+//-----------------------------------------------------------------------------
+// Public usage methods
+void Arguments::Reset()
+{
+    _last_position = 0;
+    _values.clear();
+    _errors.clear();
+}
+
+list<Argument> Arguments::GetArguments() const
+{
+    const auto types = ArgumentTypeText.GetAllValues();
+
+    return GetArgumentsByTypes(types);
+}
+
+list<Argument> Arguments::GetArgumentsByType(const ArgumentType ArgumentType) const
+{
+    list<Argument> filtered;
+
+    for (auto iter = _arguments.begin(); iter != _arguments.end(); ++iter)
+    {
+        if (iter->second.GetArgumentType() == ArgumentType)
+        {
+            filtered.push_back(iter->second);
+        }
+    }
+
+    return filtered;
+}
+
+list<Argument> Arguments::GetArgumentsByTypes(const list<ArgumentType>& ArgumentTypes) const
+{
+    list<Argument> filtered;
+
+    for (auto iter = _arguments.begin(); iter != _arguments.end(); ++iter)
+    {
+        const auto found = std::find(std::begin(ArgumentTypes), std::end(ArgumentTypes), iter->second.GetArgumentType()) != std::end(ArgumentTypes);
+        if (found)
+        {
+            filtered.push_back(iter->second);
+        }
+    }
+
+    return filtered;
 }
 
 list<string> Arguments::GetErrors() const

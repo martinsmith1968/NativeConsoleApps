@@ -44,16 +44,16 @@ namespace DNX::App
         map<string, string> _values{};
         list<string> _errors{};
 
-        void AddArgumentWithValues(
-            ArgumentType ArgumentType,
+        void AddArgumentComplete(
+            ArgumentType argumentType,
             ValueType valueType,
             const string& shortName,
-            const string& longName = "",
-            const string& defaultValue = "",
-            const string& description = "",
-            bool required = false,
-            int position = 0,
-            const string& valueListText = ""
+            const string& longName,
+            const string& defaultValue,
+            const string& description,
+            bool required,
+            int position,
+            const list<string>& valueList
         );
 
     protected:
@@ -62,8 +62,28 @@ namespace DNX::App
         void virtual PostParseValidate();
 
         void AddArgument(
-            ArgumentType ArgumentType,
+            ArgumentType argumentType,
             ValueType valueType,
+            const string& shortName,
+            const string& longName = "",
+            const string& defaultValue = "",
+            const string& description = "",
+            bool required = false,
+            int position = 0,
+            const list<string>& valueList = list<string>()
+        );
+
+        void AddParameter(
+            const ValueType valueType,
+            int position,
+            const string& longName = "",
+            const string& defaultValue = "",
+            const string& description = "",
+            bool required = true,
+            const list<string>& valueList = list<string>()
+        );
+        void AddOption(
+            const ValueType valueType,
             const string& shortName,
             const string& longName = "",
             const string& defaultValue = "",
@@ -83,7 +103,6 @@ namespace DNX::App
 
         void AddError(const string& text);
 
-        [[nodiscard]] list<Argument> GetArguments() const;
         Argument& GetOptionByLongName(const string& longName);
         Argument& GetOptionByShortName(const string& shortName);
         Argument& GetOptionByName(const string& name);
@@ -95,6 +114,9 @@ namespace DNX::App
         void SetOptionValue(const string& name, const string& value);
         bool HasOptionValue(const string& name);
 
+        [[nodiscard]] int GetNextPosition() const;
+        void AdvancePosition();
+
         friend class ArgumentsParser;
 
     public:
@@ -103,11 +125,10 @@ namespace DNX::App
 
         void Reset();
 
+        [[nodiscard]] list<Argument> GetArguments() const;
         [[nodiscard]] list<Argument> GetArgumentsByType(ArgumentType ArgumentType) const;
         [[nodiscard]] list<Argument> GetArgumentsByTypes(const list<ArgumentType>& ArgumentTypes) const;
 
-        [[nodiscard]] int GetNextPosition() const;
-        void AdvancePosition();
         [[nodiscard]] list<string> GetErrors() const;
         [[nodiscard]] bool IsValid() const;
         bool IsDebug();

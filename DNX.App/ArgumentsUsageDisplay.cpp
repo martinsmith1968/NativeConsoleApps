@@ -13,6 +13,8 @@
 using namespace DNX::App;
 using namespace DNX::Utils;
 
+string ArgumentsUsageDisplay::ErrorLinePrefix = "ERROR";
+
 void ArgumentsUsageDisplay::ShowUsage(const Arguments& arguments, const AppDetails& appDetails)
 {
     auto parameters = arguments.GetArgumentsByType(ArgumentType::PARAMETER);
@@ -140,7 +142,10 @@ void ArgumentsUsageDisplay::ShowUsage(const Arguments& arguments, const AppDetai
     }
     if (FileUtils::FileExists(AppDetails::GetLocalArgumentsFileName()))
     {
-        argument_file_lines.push_back("Local arguments file: " + AppDetails::GetLocalArgumentsFileName());
+        if (AppDetails::GetLocalArgumentsFileName() != AppDetails::GetDefaultArgumentsFileName())
+        {
+            argument_file_lines.push_back("Local arguments file: " + AppDetails::GetLocalArgumentsFileName());
+        }
     }
 
     if (!argument_file_lines.empty())
@@ -158,7 +163,7 @@ void ArgumentsUsageDisplay::ShowErrors(const Arguments& arguments, const int bla
     auto errors = arguments.GetErrors();
     for (auto iter = errors.begin(); iter != errors.end(); ++iter)
     {
-        cout << "Error: " << *iter << endl;
+        cout << ErrorLinePrefix << ": " << *iter << endl;
     }
 
     ConsoleUtils::ShowBlankLines(blankLinesAfter);

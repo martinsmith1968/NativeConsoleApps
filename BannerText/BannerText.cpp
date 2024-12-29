@@ -21,7 +21,7 @@ using namespace DNX::Utils;
 // Declarations
 namespace BannerText {
     static void Execute(AppArguments& arguments);  // NOLINT(misc-use-anonymous-namespace)
-};
+}
 
 //------------------------------------------------------------------------------
 // main
@@ -52,12 +52,12 @@ int main(const int argc, char* argv[])
     }
     catch (exception& ex)
     {
-        cerr << "ERROR: " << ex.what() << endl;
+        cerr << ArgumentsUsageDisplay::ErrorLinePrefix << ": " << ex.what() << endl;
         return 99;
     }
     catch (...)
     {
-        cerr << "ERROR: Unknown error occurred" << endl;
+        cerr << ArgumentsUsageDisplay::ErrorLinePrefix << ": Unknown error occurred" << endl;
         return 98;
     }
 }
