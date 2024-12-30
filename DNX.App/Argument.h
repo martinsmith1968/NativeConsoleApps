@@ -59,8 +59,8 @@ namespace DNX::App
             const list<string>& valueList = list<string>()
         );
 
-        static Argument _app_option;
-        static Argument& Empty() { return _app_option; }
+        static Argument _empty_argument;
+        static Argument& Empty() { return _empty_argument; }
 
         static bool CompareByPosition(const Argument& first, const Argument& second);
         static bool CompareByTypeAndPosition(const Argument& first, const Argument& second);
