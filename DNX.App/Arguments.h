@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "stdafx.h"
 #include "../DNX.Utils/FileUtils.h"
 #include "AppDetails.h"
@@ -31,8 +31,8 @@ namespace DNX::App
 
         const string DebugLongName                   = "debug";
         const string HelpLongName                    = "help";
-        const string UseDefaultArgumentsFileLongName = "use-default-Arguments-file";
-        const string UseLocalArgumentsFileLongName   = "use-local-Arguments-file";
+        const string UseDefaultArgumentsFileLongName = "use-default-arguments-file";
+        const string UseLocalArgumentsFileLongName   = "use-local-arguments-file";
 
         const string HelpDescription             = "Show Help screen";
         const string DebugDescription            = "Activate debug mode";
@@ -59,6 +59,7 @@ namespace DNX::App
     protected:
         ArgumentTypeText ArgumentTypeText;
 
+        void AddStandardArguments();
         void virtual PostParseValidate();
 
         void AddArgument(
@@ -111,6 +112,7 @@ namespace DNX::App
         [[nodiscard]] list<Argument> GetRequiredArguments() const;
 
         string GetOptionValue(const string& name);
+        bool GetSwitchValue(const string& name);
         void SetOptionValue(const string& name, const string& value);
         bool HasOptionValue(const string& name);
 
@@ -123,7 +125,11 @@ namespace DNX::App
         Arguments();
         virtual ~Arguments() = default;
 
+        [[nodiscard]] bool IsEmpty() const;
         void Reset();
+
+        static Arguments _empty_arguments;
+        static Arguments& Empty() { return _empty_arguments; }
 
         [[nodiscard]] list<Argument> GetArguments() const;
         [[nodiscard]] list<Argument> GetArgumentsByType(ArgumentType ArgumentType) const;

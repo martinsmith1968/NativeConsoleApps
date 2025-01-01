@@ -1,10 +1,7 @@
-﻿#include "stdafx.h"
-#include "Arguments.h"
-
-#include <complex>
-
-#include "../DNX.Utils/StringUtils.h"
+#include "stdafx.h"
 #include "Argument.h"
+#include "Arguments.h"
+#include <complex>
 
 // ReSharper disable CppInconsistentNaming
 // ReSharper disable CppTooWideScope
@@ -14,13 +11,7 @@ using namespace std;
 using namespace DNX::App;
 using namespace DNX::Utils;
 
-Arguments::Arguments()
-{
-    AddSwitch(DebugShortName,                   DebugLongName,                   "false", DebugDescription,                     false, INT_MAX - 3);
-    AddSwitch(HelpShortName,                    HelpLongName,                    "false", HelpDescription,                      false, INT_MAX - 2);
-    AddSwitch(UseDefaultArgumentsFileShortName, UseDefaultArgumentsFileLongName, "true",  useDefaultArgumentsFileDesc, false, INT_MAX - 1);
-    AddSwitch(UseLocalArgumentsFileShortName,   UseLocalArgumentsFileLongName,   "true",  useLocalArgumentsFileDesc,   false, INT_MAX);
-}
+Arguments Arguments::_empty_arguments = Arguments();
 
 //-----------------------------------------------------------------------------
 // Internal methods
@@ -237,6 +228,21 @@ string Arguments::GetOptionValue(const string& name)
     return option.GetDefaultValue();
 }
 
+bool Arguments::GetSwitchValue(const string& name)
+{
+    const auto& option = GetOptionByName(name);
+    if (option.IsEmpty())
+        throw exception((string("Unknown Argument: ") + name).c_str());
+    if (option.GetArgumentType() != ArgumentType::SWITCH)
+        throw exception((string("Argument is not a switch: ") + name).c_str());
+
+    const auto iter = _values.find(option.GetLongName());
+    if (iter != _values.end())
+        return ValueConverter::ToBool(iter->second);
+
+    return ValueConverter::ToBool(option.GetDefaultValue());
+}
+
 void Arguments::SetOptionValue(const string& name, const string& value)
 {
     const auto& option = GetOptionByName(name);
@@ -268,6 +274,32 @@ void Arguments::AdvancePosition()
 
 //-----------------------------------------------------------------------------
 // Public usage methods
+Arguments::Arguments()
+{
+    AddStandardArguments();
+}
+
+//void Arguments::CopyFrom(const Arguments& other)
+//{
+//    Reset();
+//
+//    for (auto& argument : other.GetArguments())
+//    {
+//        AddArgument(argument.GetArgumentType(), argument.GetValueType(), argument.GetShortName(), argument.GetLongName(), argument.GetDefaultValue(), argument.GetDescription(), argument.GetRequired(), argument.GetPosition(), argument.GetValueList());
+//    }
+//}
+
+void Arguments::AddStandardArguments()
+{
+    AddSwitch(HelpShortName, HelpLongName, "false", HelpDescription, false, INT_MAX - 2);
+    AddSwitch(UseDefaultArgumentsFileShortName, UseDefaultArgumentsFileLongName, "true", useDefaultArgumentsFileDesc, false, INT_MAX - 1);
+    AddSwitch(UseLocalArgumentsFileShortName, UseLocalArgumentsFileLongName, "true", useLocalArgumentsFileDesc, false, INT_MAX);
+}
+
+bool Arguments::IsEmpty() const
+{
+    return _arguments.empty();
+}
 void Arguments::Reset()
 {
     _last_position = 0;

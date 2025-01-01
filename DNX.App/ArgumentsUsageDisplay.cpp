@@ -17,6 +17,12 @@ string ArgumentsUsageDisplay::ErrorLinePrefix = "ERROR";
 
 void ArgumentsUsageDisplay::ShowUsage(const Arguments& arguments, const AppDetails& appDetails)
 {
+    cout << appDetails.GetHeaderLine() << std::endl;
+    if (!appDetails.Copyright.empty())
+    {
+        cout << appDetails.Copyright << std::endl;
+    }
+
     auto parameters = arguments.GetArgumentsByType(ArgumentType::PARAMETER);
     parameters.sort(Argument::CompareByPosition);
 
@@ -45,11 +51,6 @@ void ArgumentsUsageDisplay::ShowUsage(const Arguments& arguments, const AppDetai
         argumentText.append("[OPTIONS]");
     }
 
-    cout << appDetails.GetHeaderLine() << std::endl;
-    if (!appDetails.Copyright.empty())
-    {
-        cout << appDetails.Copyright << std::endl;
-    }
     cout << std::endl;
     cout << "Usage:" << std::endl;
     cout << AppDetails::GetApplicationName() << argumentText << std::endl;
@@ -59,9 +60,9 @@ void ArgumentsUsageDisplay::ShowUsage(const Arguments& arguments, const AppDetai
         cout << std::endl;
         cout << "OPTIONS:" << std::endl;
 
-        list<tuple<Argument, string, string>> optionDescriptions;
+        list<tuple<Argument, string, string>> argumentDescriptions;
 
-        size_t maxOptionDescriptionLength = 0;
+        size_t maxArgumentDescriptionLength = 0;
         for (auto iter = optionsAndSwitches.begin(); iter != optionsAndSwitches.end(); ++iter)
         {
             string optionDesc;
@@ -79,7 +80,7 @@ void ArgumentsUsageDisplay::ShowUsage(const Arguments& arguments, const AppDetai
             }
             optionDesc += " " + ValueTypeTextConverter.GetText(iter->GetValueType());
 
-            maxOptionDescriptionLength = std::max(optionDesc.length(), maxOptionDescriptionLength);
+            maxArgumentDescriptionLength = std::max(optionDesc.length(), maxArgumentDescriptionLength);
 
             auto textDesc = iter->GetDescription();
 
@@ -122,13 +123,12 @@ void ArgumentsUsageDisplay::ShowUsage(const Arguments& arguments, const AppDetai
 
             const auto optionAndDesc = tuple<Argument, string, string>(*iter, optionDesc, textDesc);
 
-            optionDescriptions.push_back(optionAndDesc);
+            argumentDescriptions.push_back(optionAndDesc);
         }
 
-        for (auto iter = optionDescriptions.begin(); iter != optionDescriptions.end(); ++iter)
+        const auto paddedWidth = maxArgumentDescriptionLength + 2;
+        for (auto iter = argumentDescriptions.begin(); iter != argumentDescriptions.end(); ++iter)
         {
-            auto paddedWidth = maxOptionDescriptionLength + 2;
-
             std::cout << std::left << std::setfill(' ') << std::setw(static_cast<streamsize>(paddedWidth)) << std::get<1>(*iter)
                 << std::get<2>(*iter)
                 << std::endl;
